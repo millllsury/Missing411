@@ -39,6 +39,9 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
+              "backgroundAnimation": "HouseAnimation",
+              "smoothBgReplacement": true,
+
               "animation": "laugh",
               "texts": [ "Especially with such a beautiful scenery!" ]
             },
@@ -47,7 +50,6 @@
               "speaker": "Chris",
               "character": "Chris",
               "animation": "laugh",
-              "backgroundAnimation": "RainAvg",
               "place": 2,
               "texts": [
                 "We don't get out together very often, but we have adventure every time.",
@@ -63,12 +65,15 @@
             },
             {
               "id": 7,
-              "place": 1
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "animation": "laugh",
+              "texts": [ "..." ]
             },
             {
               "id": 8,
               "speaker": "Chris",
-              "backgroundAnimation": "RainStartOfTheEnd",
               "character": "Chris",
               "place": 2,
               "texts": [
@@ -77,9 +82,8 @@
             },
             {
               "id": 9,
-              "speaker": "Сhris",
-              "character": "Chris",
-              "backgroundAnimation": "RainFinishedAnimation",
+              "speaker": "Alice",
+              "character": "Alice",
               "place": 1,
               "choices": [
                 {
@@ -95,7 +99,7 @@
                   "text": "Cheer up brother.",
                   "actions": [
                     {
-                      "key": "cheerUpBrother",
+                      "key": "cheerUp",
                       "value": true
                     }
                   ]
@@ -120,7 +124,7 @@
               "id": 11,
               "conditions": [
                 {
-                  "key": "cheerUpBrother",
+                  "key": "cheerUp",
                   "value": true
                 }
               ],
@@ -135,7 +139,7 @@
               "id": 12,
               "conditions": [
                 {
-                  "key": "cheerUpBrother",
+                  "key": "cheerUp",
                   "value": true
                 }
               ],
@@ -148,7 +152,7 @@
               "id": 13,
               "conditions": [
                 {
-                  "key": "cheerUpBrother",
+                  "key": "cheerUp",
                   "value": true
                 }
               ],
@@ -161,7 +165,7 @@
               "id": 14,
               "conditions": [
                 {
-                  "key": "cheerUpBrother",
+                  "key": "cheerUp",
                   "value": true
                 }
               ],
@@ -172,7 +176,7 @@
               "id": 15,
               "conditions": [
                 {
-                  "key": "cheerUpBrother",
+                  "key": "cheerUp",
                   "value": true
                 }
               ],
@@ -208,7 +212,7 @@
                   "text": "Invite Chris to sit down and rest.",
                   "actions": [
                     {
-                      "key": "inviteChrisToSit",
+                      "key": "inviteChrisSit",
                       "value": true
                     }
                   ]
@@ -217,7 +221,7 @@
                   "text": "Explore the neighborhood of the meadow together.",
                   "actions": [
                     {
-                      "key": "exploreTheNeighborhood",
+                      "key": "exploreNeighborhood",
                       "value": true
                     }
                   ]
@@ -228,7 +232,7 @@
               "id": 19,
               "conditions": [
                 {
-                  "key": "inviteChrisToSit",
+                  "key": "inviteChrisSit",
                   "value": true
                 }
               ],
@@ -241,20 +245,19 @@
               "id": 20,
               "conditions": [
                 {
-                  "key": "inviteChrisToSit",
+                  "key": "inviteChrisSit",
                   "value": true
                 }
               ],
               "isNarration": true,
-              "background": "background_meadow",
-              "smoothBgReplacement": true,
+              "background": "background_forest",
               "texts": [ "Alice smiled and pointed to a fallen tree trunk." ]
             },
             {
               "id": 21,
               "conditions": [
                 {
-                  "key": "inviteChrisToSit",
+                  "key": "inviteChrisSit",
                   "value": true
                 }
               ],
@@ -267,7 +270,7 @@
               "id": 22,
               "conditions": [
                 {
-                  "key": "inviteChrisToSit",
+                  "key": "inviteChrisSit",
                   "value": true
                 }
               ],
@@ -275,6 +278,539 @@
               "character": "Alice",
               "place": 1,
               "texts": [ "I think it's very cozy here. Don't you like to sit on a soft stump sometimes, connect with nature?" ]
+            },
+            {
+              "id": 23,
+              "conditions": [
+                {
+                  "key": "inviteChrisSit",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [ "I like to enjoy nature more without sitting on wet trees." ]
+            },
+            {
+              "id": 24,
+              "conditions": [
+                {
+                  "key": "inviteChrisSit",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "All right, Chris, you're on. Let’s go a little further, I know you will like it." ]
+            },
+            {
+              "id": 25,
+              "conditions": [
+                {
+                  "key": "exploreNeighborhood",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "Let's take a walk around the neighborhood first, shall we? I saw something interesting here last time." ]
+            },
+            {
+              "id": 26,
+              "conditions": [
+                {
+                  "key": "exploreNeighborhood",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+
+              "texts": [ "Looking around, brother and sister found a small, dilapidated gazebo and a nearby firepit, fenced in with large stones." ]
+            },
+            {
+              "id": 27,
+              "background": "background_meadow",
+              "smoothBgReplacement": true,
+              "conditions": [
+                {
+                  "key": "exploreNeighborhood",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [ "You’ve never brought me here before." ]
+            },
+            {
+              "id": 28,
+              "conditions": [
+                {
+                  "key": "exploreNeighborhood",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "backgroundAnimation": "RainFinishedAnimation",
+              "place": 1,
+              "texts": [
+                "I’ve only been here once. ",
+                "You know, when I first came to this place, I was seized by the feeling of déjà vu. Like I’ve been here dozens of times."
+              ]
+            },
+            {
+              "id": 29,
+              "isNarration": true,
+              "texts": [ "Leaving the backpacks in the gazebo, Chris walked over to the firepit." ]
+            },
+            {
+              "id": 30,
+              "speaker": "Chris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [ "It seems like I'm starving to death." ]
+            },
+            {
+              "id": 31,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "I suggest to look for dry branches. I brought a lighter, I think if we gather some firewood, we can start the fire." ]
+            },
+            {
+              "id": 32,
+              "speaker": "Chris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [ "Hope it doesn’t rain again, otherwise we’ll have to eat raw sausages." ]
+            },
+            {
+              "id": 33,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Search for branches separately.",
+                  "actions": [
+                    {
+                      "key": "separately",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Prepare a fire pit.",
+                  "actions": [
+                    {
+                      "key": "firepit",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 34,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Can we split up? I think it’s gonna be faster. "
+              ]
+            },
+            {
+              "id": 35,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Сhris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [
+                "All right, then meet back at the meadow in ten minutes. And don't be late, I know how you like to stare at a crawling snail for half an hour sometimes."
+              ]
+            },
+            {
+              "id": 36,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "See you!"
+              ]
+            },
+            {
+              "id": 37,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice smiled at her brother and, with her hair gathered in a thick tail, headed into the forest. ",
+                "After walking a few meters Alice heard Chris's voice behind her and looked round."
+              ]
+            },
+            {
+              "id": 38,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Сhris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [
+                "Alice! I love you, you know that, don't you?"
+              ]
+            },
+            {
+              "id": 39,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Chris looked very serious for some reason, and it made Alice anxious."
+              ]
+            },
+            {
+              "id": 40,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "How about you gather some branches and I'll make a fire and tidy up a bit?"
+              ]
+            },
+            {
+              "id": 41,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [
+                "Okay, I'll try to gather them quickly and get back to the meadow."
+              ]
+            },
+            {
+              "id": 42,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Thank you, dear!"
+              ]
+            },
+            {
+              "id": 43,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [
+                "Don't eat all the sausage while I'm gone!"
+              ]
+            },
+            {
+              "id": 44,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "I'll try my best."
+              ]
+            },
+            {
+              "id": 45,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice laughed and jokingly pushed her brother in the direction of the woods."
+              ]
+            },
+            {
+              "id": 46,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "animation": "laugh",
+              "place": 1,
+              "texts": [
+                "Hurry up, the sausages are looking more and more appetizing by the minute, I might not be able to contain myself."
+              ]
+            },
+            {
+              "id": 47,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "Chris",
+              "animation": "laugh",
+              "place": 2,
+              "texts": [
+                "I'll be there in 10 minutes."
+              ]
+            },
+            {
+              "id": 48,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Chris smiled broadly at his sister and headed out of the clearing with a quick step.",
+                "Alice had already begun to sort out the things she had brought from home for the picnic when she heard her brother's voice again, calling her."
+              ]
+            },
+            {
+              "id": 49,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "Chris",
+              "animation": "laugh",
+              "place": 1,
+              "texts": [
+                "Alice! I love you, you know that, don't you?"
+              ]
+            },
+            {
+              "id": 50,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Chris looked very serious for some reason, and it made Alice anxious."
+              ]
+            },
+            {
+              "id": 51,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Say something funny back.",
+                  "actions": [
+                    {
+                      "key": "funnyback",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Express your feelings in return.",
+                  "actions": [
+                    {
+                      "key": "expressfeel",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 52,
+              "conditions": [
+                {
+                  "key": "funnyback",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Sure, I know. Especially when you don’t take my last cookie!"
+              ]
+            },
+            {
+              "id": 53,
+              "conditions": [
+                {
+                  "key": "expressfeel",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Of course, dear. And I love you too."
+              ]
+            },
+            {
+              "id": 54,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Chris smiled and turned away, walking in the opposite direction from the sister.",
+                "Alice followed his example and began searching for dry twigs as well.",
+                "The cool wind blew pleasantly against her skin. The leaves rustled and the birds chirped softly. ",
+                "Alice hadn't felt so peaceful in a long time. All the thoughts that had been on repeat in her head had disappeared, and worries had faded into the background.",
+                "The girl's gaze locked on a squirrel that appeared out of nowhere, gracefully jumping from branch to branch, from tree to tree."
+              ]
+            },
+            {
+              "id": 55,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+
+              "backgroundAnimation": "SquirrelAnimation",
+              "place": 1,
+              "texts": [
+                "Such a beautiful squirrel."
+              ]
+            },
+            {
+              "id": 56,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "The squirrel, as if hearing the girl, climbed down the tree trunk to a lower branch, allowing a better view of herself, and continued on her way. And Alice unconsciously followed her.",
+                "As she followed the red-haired animal and stepped over the large branches that the recent storm had torn from the trees, Alice thought that in a way she even felt jealous of the squirrel."
+              ]
+            },
+            {
+              "id": 57,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "I would like to know what it’s like to live differently. What it’s like to be truly free."
+              ]
+            },
+            {
+              "id": 56,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Suddenly time slowed and her ears hissed as if Alice had been placed deep underwater. ",
+                "Losing her concentration, she stumbled over a large rock and flew downward, anticipating her face meeting the ground painfully."
+              ]
+            },
+            {
+              "id": 56,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "backgroundAnimation": "FallAnimation",
+              "texts": [
+                "Her eyes began to darken and her stomach twisted with excitement, as if she were falling into a kilometer-long chasm.",
+                "She lost consciousness."
+              ]
             }
           ]
         }

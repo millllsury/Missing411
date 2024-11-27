@@ -19,15 +19,13 @@ public class CharacterManager : MonoBehaviour
     private string currentLeftCharacter;
     private string currentRightCharacter;
 
-    [SerializeField] private Transform leftPosition;
-    [SerializeField] private Transform rightPosition;
-
     private bool isLeftAvatarAnimating = false;
     private bool isRightAvatarAnimating = false;
 
     public bool IsLeftAvatarAnimating => isLeftAvatarAnimating;
     public bool IsRightAvatarAnimating => isRightAvatarAnimating;
 
+    // Метод для установки персонажа
     public void SetCharacter(string speaker, int place, bool isNarration, string character)
     {
         Debug.Log("SetCharacter вызван для персонажа: " + speaker + " в позиции: " + place);
@@ -83,6 +81,8 @@ public class CharacterManager : MonoBehaviour
 
     private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)
     {
+
+
         if (avatar == null)
         {
             Debug.LogError("Avatar is null!");
@@ -114,12 +114,8 @@ public class CharacterManager : MonoBehaviour
             }
             else
             {
-                // Задаем координату Y в зависимости от того, левый это персонаж или правый
-                float targetX = isLeft ? -5f : 5f;  // Позиции по X
-                float targetY = isLeft ? -1.5f : -1f;  // Позиции по Y для левого и правого персонажа
-
-                // Передаем X и Y при вызове SmoothAppear
-                StartCoroutine(SmoothAppear(avatar, character, targetX, targetY));
+                float targetX = isLeft ? -5f : 5f;
+                StartCoroutine(SmoothAppear(avatar, character, targetX));
             }
 
             Debug.Log("Установлен спрайт для персонажа: " + character);
@@ -131,46 +127,49 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
-
-    private IEnumerator SmoothAppear(SpriteRenderer avatar, string character, float endPositionX, float endPositionY)
+    private IEnumerator SmoothAppear(SpriteRenderer avatar, string character, float endPositionX)
     {
-        // Ждем, пока анимация других персонажей не завершится
         while (isLeftAvatarAnimating || isRightAvatarAnimating)
         {
             yield return null;
         }
 
-        // Начинаем анимацию
         isLeftAvatarAnimating = true;
 
-        // Получаем текущую позицию персонажа и задаем целевую
         Vector3 startPosition = avatar.transform.position;
-        Vector3 endPosition = new Vector3(endPositionX, endPositionY, avatar.transform.position.z); // Учитываем и ось Y
+        Vector3 endPosition = new Vector3(endPositionX, avatar.transform.position.y, avatar.transform.position.z);
 
-        float duration = 0.5f; // Продолжительность анимации
-        float elapsedTime = 0f;
-
-        // Начальный цвет персонажа (прозрачность)
-        avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 0f);
         avatar.gameObject.SetActive(true);
 
-        // Плавное движение и изменение прозрачности
+        // Анимация появления
+        float duration = 0.5f;
+        float elapsedTime = 0f;
+
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
 
-            // Линейная интерполяция для позиции и альфа-канала
             avatar.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
             avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, Mathf.Lerp(0f, 1f, elapsedTime / duration));
 
             yield return null;
         }
 
-        // Устанавливаем финальную позицию и цвет
         avatar.transform.position = endPosition;
         avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 1f);
 
-        isLeftAvatarAnimating = false;
+        isLeftAvatarAnimating = false; // или isRightAvatarAnimating в зависимости от того, какой аватар обновляется
+    }
+
+    private IEnumerator SmoothDisappear(SpriteRenderer avatar)
+    {
+        while (isLeftAvatarAnimating || isRightAvatarAnimating)
+        {
+            yield return null;
+        }
+
+        avatar.gameObject.SetActive(false);
+        avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 0f); // Обнуляем прозрачность на случай повторного использования
     }
 
     private IEnumerator WaitAndShowNewAvatar(SpriteRenderer avatar, string character, bool isLeft)
@@ -180,38 +179,9 @@ public class CharacterManager : MonoBehaviour
             yield return null;
         }
 
-        // Задаем цели для X и Y в зависимости от того, левый или правый персонаж
-        float targetX = isLeft ? -5f : 5f; // Левый персонаж на -5, правый на 5
-        float targetY = isLeft ? -1.5f : -1f; // Левый на -1.5, правый на -1
-
-        // Вызываем анимацию для появления персонажа
-        yield return StartCoroutine(SmoothAppear(avatar, character, targetX, targetY));
+        float targetX = isLeft ? -5f : 5f;
+        yield return StartCoroutine(SmoothAppear(avatar, character, targetX));
     }
-
-
-    private IEnumerator SmoothDisappear(SpriteRenderer avatar)
-    {
-        while (isLeftAvatarAnimating || isRightAvatarAnimating)
-        {
-            yield return null;
-        }
-
-        float duration = 0.5f;
-        float elapsedTime = 0f;
-
-        Color startColor = avatar.color;
-
-        while (elapsedTime < duration)
-        {
-            elapsedTime += Time.deltaTime;
-            avatar.color = new Color(startColor.r, startColor.g, startColor.b, Mathf.Lerp(startColor.a, 0f, elapsedTime / duration));
-            yield return null;
-        }
-
-        avatar.gameObject.SetActive(false);
-    }
-
-
 
     public void HideAvatars()
     {
@@ -231,6 +201,7 @@ public class CharacterManager : MonoBehaviour
 
         Debug.Log("Скрыты все аватары и эмоции персонажей.");
     }
+
 
     private IEnumerator BlinkCoroutine(SpriteRenderer eyesImage, string character)
     {

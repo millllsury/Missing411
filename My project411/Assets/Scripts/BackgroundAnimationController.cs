@@ -26,8 +26,6 @@ public class BackgroundAnimationController : MonoBehaviour
         }
     }
 
-
-
     public void StartAnimation(List<Sprite> sprites, float delay, string animationName, int repeatCount = -1, bool keepLastFrame = false)
     {
         if (isAnimating)

@@ -11,7 +11,7 @@ public class SceneController : MonoBehaviour
 
     public bool IsTransitioning { get; private set; }
 
-    private CanvasGroup canvasGroup;
+    //private CanvasGroup canvasGroup;
 
     void Start()
     {
@@ -34,41 +34,47 @@ public class SceneController : MonoBehaviour
             }
         }
     }
+    private Coroutine currentTransitionCoroutine;
+    private string currentBackgroundName;
 
     public void SetBackgroundSmooth(string backgroundName, bool smoothTransition)
     {
+        if (currentBackgroundName == backgroundName) return; // Проверяем, что фон меняется
+        currentBackgroundName = backgroundName;
+
         if (smoothTransition)
         {
-            // Запускаем плавную смену фона
-            StartCoroutine(SmoothBackgroundTransition(backgroundName));
+            if (currentTransitionCoroutine != null)
+            {
+                StopCoroutine(currentTransitionCoroutine);
+            }
+            currentTransitionCoroutine = StartCoroutine(SmoothBackgroundTransition(backgroundName));
         }
         else
         {
-            // Просто меняем фон без анимации
             SetBackground(backgroundName);
         }
     }
+
 
     public Image darkOverlay;
     private IEnumerator SmoothBackgroundTransition(string backgroundName)
     {
         IsTransitioning = true;
 
-        // Длительность затемнения
+        // Затемнение до 50%
         float fadeDuration = 2f;
         float elapsedTime = 0f;
-
-        // Затемнение до 50%
         while (elapsedTime < fadeDuration)
         {
             Color overlayColor = darkOverlay.color;
-            overlayColor.a = Mathf.Lerp(0f, 0.5f, elapsedTime / fadeDuration); // Изменяем альфа-канал
+            overlayColor.a = Mathf.Lerp(0f, 0.5f, elapsedTime / fadeDuration);
             darkOverlay.color = overlayColor;
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        darkOverlay.color = new Color(0, 0, 0, 0.9f);
+        darkOverlay.color = new Color(0, 0, 0, 0.5f);
 
         // Меняем фон
         SetBackground(backgroundName);
@@ -78,15 +84,18 @@ public class SceneController : MonoBehaviour
         while (elapsedTime < fadeDuration)
         {
             Color overlayColor = darkOverlay.color;
-            overlayColor.a = Mathf.Lerp(0.9f, 0f, elapsedTime / fadeDuration); // Уменьшаем альфа-канал
+            overlayColor.a = Mathf.Lerp(0.5f, 0f, elapsedTime / fadeDuration);
             darkOverlay.color = overlayColor;
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
         darkOverlay.color = new Color(0, 0, 0, 0f);
+
         IsTransitioning = false;
+        currentTransitionCoroutine = null;
     }
+
 
 
     public void SetBackground(string backgroundName)

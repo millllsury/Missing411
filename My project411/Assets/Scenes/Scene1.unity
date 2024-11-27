@@ -3082,8 +3082,6 @@ MonoBehaviour:
   speakerPanelLeft: {fileID: 866966297}
   speakerPanelCenter: {fileID: 419364722}
   speakerPanelRight: {fileID: 1565075439}
-  leftPosition: {fileID: 0}
-  rightPosition: {fileID: 0}
 --- !u!114 &792445292
 MonoBehaviour:
   m_ObjectHideFlags: 0

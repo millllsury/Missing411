@@ -23,18 +23,20 @@ public class Animations : MonoBehaviour
     {
         characterManager = FindFirstObjectByType<CharacterManager>();
 
-        // Инициализация словарей
-        animators = new Dictionary<string, Animator> {
+        animators = new Dictionary<string, Animator>
+        {
             { "left", leftAnimator },
             { "right", rightAnimator }
         };
 
-        emotionRenderers = new Dictionary<string, SpriteRenderer> {
+        emotionRenderers = new Dictionary<string, SpriteRenderer>
+        {
             { "left", emotionImageLeft },
             { "right", emotionImageRight }
         };
 
-        eyesRenderers = new Dictionary<string, SpriteRenderer> {
+        eyesRenderers = new Dictionary<string, SpriteRenderer>
+        {
             { "left", eyesImageLeft },
             { "right", eyesImageRight }
         };
@@ -48,35 +50,22 @@ public class Animations : MonoBehaviour
             return;
         }
 
-        // Используем словари для получения соответствующих объектов
-        Animator animator = GetAnimator(characterPosition);
-        SpriteRenderer emotionRenderer = GetEmotionRenderer(characterPosition);
-        SpriteRenderer eyesRenderer = GetEyesRenderer(characterPosition);
+        if (!animators.TryGetValue(characterPosition, out var animator)) return;
+        if (!emotionRenderers.TryGetValue(characterPosition, out var emotionRenderer)) return;
+        if (!eyesRenderers.TryGetValue(characterPosition, out var eyesRenderer)) return;
 
-        if (animator != null)
+        if ((characterPosition == "left" && !characterManager.IsLeftAvatarAnimating) ||
+            (characterPosition == "right" && !characterManager.IsRightAvatarAnimating))
         {
-            Debug.Log($"Активируем анимацию: {animationName}");
-
-            emotionRenderer.gameObject.SetActive(false); // Отключаем изображение эмоции перед воспроизведением
-
-            if ((characterPosition == "left" && !characterManager.IsLeftAvatarAnimating) ||
-                (characterPosition == "right" && !characterManager.IsRightAvatarAnimating))
-            {
-                TriggerAnimation(animationName, animator, emotionRenderer, eyesRenderer, character);
-            }
+            emotionRenderer.gameObject.SetActive(false); // Отключаем изображение эмоции перед анимацией
+            TriggerAnimation(animationName, animator, emotionRenderer, eyesRenderer, character);
         }
     }
 
-    private Animator GetAnimator(string characterPosition) => animators.ContainsKey(characterPosition) ? animators[characterPosition] : null;
-
-    private SpriteRenderer GetEmotionRenderer(string characterPosition) => emotionRenderers.ContainsKey(characterPosition) ? emotionRenderers[characterPosition] : null;
-
-    private SpriteRenderer GetEyesRenderer(string characterPosition) => eyesRenderers.ContainsKey(characterPosition) ? eyesRenderers[characterPosition] : null;
-
     private void TriggerAnimation(string animationName, Animator animator, SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string character)
     {
-        string emotion = ""; // There will be the values for SetEmotionImage()
-        string eyes = "";
+        string emotion = null;
+        string eyes = null;
 
         switch (animationName.ToLower())
         {
@@ -87,10 +76,11 @@ public class Animations : MonoBehaviour
 
             case "sad":
                 animator.SetTrigger("SadTrigger");
+                emotion = "sad";
                 break;
 
             default:
-                Debug.LogWarning("Анимация не найдена: " + animationName);
+                Debug.LogWarning($"Анимация {animationName} не найдена.");
                 return;
         }
 
@@ -98,66 +88,50 @@ public class Animations : MonoBehaviour
         StartCoroutine(ShowEmotionForAnimationDuration(animator, emotionRenderer, eyesRenderer));
     }
 
-    private void SetEmotionImage(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string character, string emotion, string eyes = null)
+    private void SetEmotionImage(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string character, string emotion, string eyes)
     {
-        // Устанавливаем изображение эмоции
-        if (emotionRenderer != null)
+        SetSprite(emotionRenderer, $"Characters/{character}_{emotion}");
+        SetSprite(eyesRenderer, !string.IsNullOrEmpty(eyes) ? $"Characters/{character}_{eyes}" : null);
+    }
+
+    private void SetSprite(SpriteRenderer renderer, string path)
+    {
+        if (renderer == null) return;
+
+        if (string.IsNullOrEmpty(path))
         {
-            Sprite emotionSprite = Resources.Load<Sprite>($"Characters/{character}_{emotion}");
-            if (emotionSprite != null)
-            {
-                emotionRenderer.sprite = emotionSprite;
-                emotionRenderer.gameObject.SetActive(true);
-            }
-            else
-            {
-                Debug.LogWarning($"Эмоция не найдена: {character}_{emotion}");
-                emotionRenderer.gameObject.SetActive(false);
-            }
+            renderer.gameObject.SetActive(false);
+            return;
         }
 
-        // Устанавливаем изображение глаз
-        if (!string.IsNullOrEmpty(eyes) && eyesRenderer != null)
+        Sprite sprite = Resources.Load<Sprite>(path);
+        if (sprite != null)
         {
-            Sprite eyesSprite = Resources.Load<Sprite>($"Characters/{character}_{eyes}");
-            if (eyesSprite != null)
-            {
-                eyesRenderer.sprite = eyesSprite;
-                eyesRenderer.gameObject.SetActive(true);
-            }
-            else
-            {
-                Debug.LogWarning($"Глаза не найдены: {character}_{eyes}");
-                eyesRenderer.gameObject.SetActive(false);
-            }
+            renderer.sprite = sprite;
+            renderer.gameObject.SetActive(true);
         }
         else
         {
-            eyesRenderer?.gameObject.SetActive(false);
+            Debug.LogWarning($"Спрайт не найден по пути: {path}");
+            renderer.gameObject.SetActive(false);
         }
     }
 
     private IEnumerator ShowEmotionForAnimationDuration(Animator animator, SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer)
     {
-        // Ожидаем окончания анимации
-        yield return null;
-
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log($"Текущее состояние анимации: {stateInfo.shortNameHash}");
-
-        if (stateInfo.length > 0)
+        if (stateInfo.length == 0)
         {
-            float animationDuration = stateInfo.length;
-            yield return new WaitForSeconds(animationDuration + 1f);
-
-            emotionRenderer.gameObject.SetActive(false);
-            eyesRenderer?.gameObject.SetActive(false);
-
-            Debug.Log("Анимация завершена, эмоция скрыта.");
+            Debug.LogWarning("Не удалось получить длину анимации.");
+            yield break;
         }
-        else
-        {
-            Debug.LogWarning("Не удалось получить информацию о текущем анимационном клипе.");
-        }
+
+        float animationDuration = stateInfo.length;
+        yield return new WaitForSeconds(animationDuration + 1f);
+
+        emotionRenderer.gameObject.SetActive(false);
+        eyesRenderer?.gameObject.SetActive(false);
+
+        Debug.Log("Анимация завершена, эмоция скрыта.");
     }
 }
