@@ -1,0 +1,858 @@
+fileFormatVersion: 2
+guid: 224f59a10d943fa4a84a10526295ea7a
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8834347484585848288
+    second: RainFinished5_0
+  - first:
+      213: -2429436887148537994
+    second: RainFinished5_1
+  - first:
+      213: 1930065332978767850
+    second: RainFinished5_2
+  - first:
+      213: -7961973467556642387
+    second: RainFinished5_3
+  - first:
+      213: 689052751292966505
+    second: RainFinished5_4
+  - first:
+      213: 7446077879143343864
+    second: RainFinished5_5
+  - first:
+      213: -8302477910537550469
+    second: RainFinished5_6
+  - first:
+      213: 7739981028788269091
+    second: RainFinished5_7
+  - first:
+      213: -4137229639592182071
+    second: RainFinished5_8
+  - first:
+      213: -2483991901884255566
+    second: RainFinished5_9
+  - first:
+      213: -7675540693337236302
+    second: RainFinished5_10
+  - first:
+      213: 2787832275268320770
+    second: RainFinished5_11
+  - first:
+      213: 3492506372873919827
+    second: RainFinished5_12
+  - first:
+      213: -4133404785768903853
+    second: RainFinished5_13
+  - first:
+      213: 7020419821249332589
+    second: RainFinished5_14
+  - first:
+      213: -3486939984634410155
+    second: RainFinished5_15
+  - first:
+      213: 2721494704929411149
+    second: RainFinished5_16
+  - first:
+      213: 5594988061476310369
+    second: RainFinished5_17
+  - first:
+      213: 2759595035536428927
+    second: RainFinished5_18
+  - first:
+      213: 5910074181152826450
+    second: RainFinished5_19
+  - first:
+      213: 5113744805978379387
+    second: RainFinished5_20
+  - first:
+      213: -5785563255387147610
+    second: RainFinished5_21
+  - first:
+      213: 5431453230263541568
+    second: RainFinished5_22
+  - first:
+      213: 3338652419596859966
+    second: RainFinished5_23
+  - first:
+      213: -1636046466434977034
+    second: RainFinished5_24
+  - first:
+      213: -8427118375805662210
+    second: RainFinished5_25
+  - first:
+      213: 938233076358770977
+    second: RainFinished5_26
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Win64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: RainFinished5_0
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 240
+        width: 10
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0edea191b38e99a70800000000000000
+      internalID: 8834347484585848288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_1
+      rect:
+        serializedVersion: 2
+        x: 310
+        y: 76
+        width: 237
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 677d749d508e84ed0800000000000000
+      internalID: -2429436887148537994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_2
+      rect:
+        serializedVersion: 2
+        x: 567
+        y: 163
+        width: 17
+        height: 111
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae7de75c138f8ca10800000000000000
+      internalID: 1930065332978767850
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_3
+      rect:
+        serializedVersion: 2
+        x: 901
+        y: 246
+        width: 10
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da1833bc053618190800000000000000
+      internalID: -7961973467556642387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_4
+      rect:
+        serializedVersion: 2
+        x: 991
+        y: 179
+        width: 75
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 966a25893d1009900800000000000000
+      internalID: 689052751292966505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_5
+      rect:
+        serializedVersion: 2
+        x: 1342
+        y: 215
+        width: 42
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f6ab3c4168c55760800000000000000
+      internalID: 7446077879143343864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_6
+      rect:
+        serializedVersion: 2
+        x: 1659
+        y: 259
+        width: 8
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b75c1ea245ca7cc80800000000000000
+      internalID: -8302477910537550469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_7
+      rect:
+        serializedVersion: 2
+        x: 1721
+        y: 210
+        width: 15
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 320ff2dccbfe96b60800000000000000
+      internalID: 7739981028788269091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_8
+      rect:
+        serializedVersion: 2
+        x: 177
+        y: 238
+        width: 6
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cef3e1109b9596c0800000000000000
+      internalID: -4137229639592182071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_9
+      rect:
+        serializedVersion: 2
+        x: 1697
+        y: 195
+        width: 14
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b2fd37a686178dd0800000000000000
+      internalID: -2483991901884255566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_10
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 0
+        width: 51
+        height: 155
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bc149af7600b7590800000000000000
+      internalID: -7675540693337236302
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_11
+      rect:
+        serializedVersion: 2
+        x: 690
+        y: 46
+        width: 92
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 20ebcbc0fae50b620800000000000000
+      internalID: 2787832275268320770
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_12
+      rect:
+        serializedVersion: 2
+        x: 929
+        y: 160
+        width: 13
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35d10f2ca00e77030800000000000000
+      internalID: 3492506372873919827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_13
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 30
+        width: 22
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 35b485f3f3233a6c0800000000000000
+      internalID: -4133404785768903853
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_14
+      rect:
+        serializedVersion: 2
+        x: 1105
+        y: 0
+        width: 12
+        height: 69
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d658da3b1aa8d6160800000000000000
+      internalID: 7020419821249332589
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_15
+      rect:
+        serializedVersion: 2
+        x: 1136
+        y: 138
+        width: 40
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 55b82cefe86eb9fc0800000000000000
+      internalID: -3486939984634410155
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_16
+      rect:
+        serializedVersion: 2
+        x: 1271
+        y: 0
+        width: 13
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d409c69d301b4c520800000000000000
+      internalID: 2721494704929411149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_17
+      rect:
+        serializedVersion: 2
+        x: 1325
+        y: 84
+        width: 11
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 16dc8d69ff365ad40800000000000000
+      internalID: 5594988061476310369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_18
+      rect:
+        serializedVersion: 2
+        x: 1385
+        y: 158
+        width: 13
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f7f8419501d0c4620800000000000000
+      internalID: 2759595035536428927
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_19
+      rect:
+        serializedVersion: 2
+        x: 1479
+        y: 53
+        width: 14
+        height: 93
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25462d3a72dc40250800000000000000
+      internalID: 5910074181152826450
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_20
+      rect:
+        serializedVersion: 2
+        x: 1695
+        y: 15
+        width: 114
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b741758aecba7f640800000000000000
+      internalID: 5113744805978379387
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_21
+      rect:
+        serializedVersion: 2
+        x: 1807
+        y: 2
+        width: 30
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a2b8195fdc85bfa0800000000000000
+      internalID: -5785563255387147610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_22
+      rect:
+        serializedVersion: 2
+        x: 1874
+        y: 121
+        width: 15
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 04f91049fe5606b40800000000000000
+      internalID: 5431453230263541568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_23
+      rect:
+        serializedVersion: 2
+        x: 179
+        y: 13
+        width: 48
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3ab19acfa6455e20800000000000000
+      internalID: 3338652419596859966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_24
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 0
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f23c1c28689b49e0800000000000000
+      internalID: -1636046466434977034
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_25
+      rect:
+        serializedVersion: 2
+        x: 1289
+        y: 0
+        width: 29
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: efbcfe96c7cdc0b80800000000000000
+      internalID: -8427118375805662210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: RainFinished5_26
+      rect:
+        serializedVersion: 2
+        x: 1474
+        y: 9
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 121f2e01306450d00800000000000000
+      internalID: 938233076358770977
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      RainFinished5_0: 8834347484585848288
+      RainFinished5_1: -2429436887148537994
+      RainFinished5_10: -7675540693337236302
+      RainFinished5_11: 2787832275268320770
+      RainFinished5_12: 3492506372873919827
+      RainFinished5_13: -4133404785768903853
+      RainFinished5_14: 7020419821249332589
+      RainFinished5_15: -3486939984634410155
+      RainFinished5_16: 2721494704929411149
+      RainFinished5_17: 5594988061476310369
+      RainFinished5_18: 2759595035536428927
+      RainFinished5_19: 5910074181152826450
+      RainFinished5_2: 1930065332978767850
+      RainFinished5_20: 5113744805978379387
+      RainFinished5_21: -5785563255387147610
+      RainFinished5_22: 5431453230263541568
+      RainFinished5_23: 3338652419596859966
+      RainFinished5_24: -1636046466434977034
+      RainFinished5_25: -8427118375805662210
+      RainFinished5_26: 938233076358770977
+      RainFinished5_3: -7961973467556642387
+      RainFinished5_4: 689052751292966505
+      RainFinished5_5: 7446077879143343864
+      RainFinished5_6: -8302477910537550469
+      RainFinished5_7: 7739981028788269091
+      RainFinished5_8: -4137229639592182071
+      RainFinished5_9: -2483991901884255566
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

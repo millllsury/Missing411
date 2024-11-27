@@ -1,0 +1,366 @@
+Using pre-set license
+Built from '6000.0/staging' branch; Version is '6000.0.23f1 (1c4764c07fb4) revision 1853284'; Using compiler version '193933523'; Build Type 'Release'
+OS: 'Windows 10  (10.0.19045) 64bit Professional' Language: 'ru' Physical Memory: 15771 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 1
+
+COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\6000.0.23f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/Katya/My project — копия (2)
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+53007
+-job-worker-count
+5
+-background-job-worker-count
+8
+-asset-garbage-collectors
+1
+Successfully changed project path to: C:/Users/Katya/My project — копия (2)
+C:/Users/Katya/My project — копия (2)
+[UnityMemory] Configuration Parameters - Can be set up in boot.config
+    "memorysetup-bucket-allocator-granularity=16"
+    "memorysetup-bucket-allocator-bucket-count=8"
+    "memorysetup-bucket-allocator-block-size=33554432"
+    "memorysetup-bucket-allocator-block-count=8"
+    "memorysetup-main-allocator-block-size=16777216"
+    "memorysetup-thread-allocator-block-size=16777216"
+    "memorysetup-gfx-main-allocator-block-size=16777216"
+    "memorysetup-gfx-thread-allocator-block-size=16777216"
+    "memorysetup-cache-allocator-block-size=4194304"
+    "memorysetup-typetree-allocator-block-size=2097152"
+    "memorysetup-profiler-bucket-allocator-granularity=16"
+    "memorysetup-profiler-bucket-allocator-bucket-count=8"
+    "memorysetup-profiler-bucket-allocator-block-size=33554432"
+    "memorysetup-profiler-bucket-allocator-block-count=8"
+    "memorysetup-profiler-allocator-block-size=16777216"
+    "memorysetup-profiler-editor-allocator-block-size=1048576"
+    "memorysetup-temp-allocator-size-main=16777216"
+    "memorysetup-job-temp-allocator-block-size=2097152"
+    "memorysetup-job-temp-allocator-block-size-background=1048576"
+    "memorysetup-job-temp-allocator-reduction-small-platforms=262144"
+    "memorysetup-allocator-temp-initial-block-size-main=262144"
+    "memorysetup-allocator-temp-initial-block-size-worker=262144"
+    "memorysetup-temp-allocator-size-background-worker=32768"
+    "memorysetup-temp-allocator-size-job-worker=262144"
+    "memorysetup-temp-allocator-size-preload-manager=33554432"
+    "memorysetup-temp-allocator-size-nav-mesh-worker=65536"
+    "memorysetup-temp-allocator-size-audio-worker=65536"
+    "memorysetup-temp-allocator-size-cloud-worker=32768"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gi-baking-worker=262144"
+    "memorysetup-temp-allocator-size-gfx=262144"
+Player connection [8400]  Target information:
+
+Player connection [8400]  * "[IP] 172.31.0.1 [Port] 0 [Flags] 2 [Guid] 1779206243 [EditorId] 1779206243 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-DUM36F1) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [8400]  * "[IP] 192.168.0.15 [Port] 0 [Flags] 2 [Guid] 1779206243 [EditorId] 1779206243 [Version] 1048832 [Id] WindowsEditor(7,DESKTOP-DUM36F1) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+
+Player connection [8400] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [8400] Host joined alternative multi-casting on [225.0.0.222:34997]...
+JobSystem: Creating JobQueue using job-worker-count value 5
+[Physics::Module] Initialized fallback backend.
+[Physics::Module] Id: 0xdecafbad
+Library Redirect Path: Library/
+[Physics::Module] Selected backend.
+[Physics::Module] Name: PhysX
+[Physics::Module] Id: 0xf2b8ea05
+[Physics::Module] SDK Version: 4.1.2
+[Physics::Module] Integration Version: 1.0.0
+[Physics::Module] Threading Mode: Multi-Threaded
+Refreshing native plugins compatible for Editor in 3.41 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 6000.0.23f1 (1c4764c07fb4)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/6000.0.23f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/Katya/My project — копия (2)/Assets
+GfxDevice: creating device client; kGfxThreadingModeNonThreaded
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: Radeon RX 5500M (ID=0x7340)
+    Vendor:   ATI
+    VRAM:     4055 MB
+    Driver:   31.0.12027.9001
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/6000.0.23f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/6000.0.23f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/6000.0.23f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56040
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.0.23f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.0.23f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/6000.0.23f1/Editor/Data/PlaybackEngines/MetroSupport/UnityEditor.UWP.Extensions.dll
+Registered in 0.004848 seconds.
+- Loaded All Assemblies, in  0.571 seconds
+Native extension for UWP target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  0.779 seconds
+Domain Reload Profiling: 1345ms
+	BeginReloadAssembly (165ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (0ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (1ms)
+	RebuildCommonClasses (51ms)
+	RebuildNativeTypeToScriptingClass (23ms)
+	initialDomainReloadingComplete (70ms)
+	LoadAllAssembliesAndSetupDomain (257ms)
+		LoadAssemblies (163ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (252ms)
+			TypeCache.Refresh (250ms)
+				TypeCache.ScanAssembly (234ms)
+			BuildScriptInfoCaches (0ms)
+			ResolveRequiredComponents (0ms)
+	FinalizeReload (780ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (714ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (94ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (11ms)
+			ProcessInitializeOnLoadAttributes (462ms)
+			ProcessInitializeOnLoadMethodAttributes (135ms)
+			AfterProcessingInitializeOnLoad (5ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (0ms)
+========================================================================
+Worker process is ready to serve import requests
+Import Worker Mode flag is 0x00
+Begin MonoManager ReloadAssembly
+- Loaded All Assemblies, in  1.471 seconds
+Refreshing native plugins compatible for Editor in 1.42 ms, found 4 plugins.
+Native extension for UWP target not found
+Native extension for WindowsStandalone target not found
+Native extension for WebGL target not found
+[MODES] ModeService[none].Initialize
+[MODES] ModeService[none].LoadModes
+[MODES] Loading mode Default (0) for mode-current-id-My project
+Mono: successfully reloaded assembly
+- Finished resetting the current domain, in  1.826 seconds
+Domain Reload Profiling: 3291ms
+	BeginReloadAssembly (511ms)
+		ExecutionOrderSort (0ms)
+		DisableScriptedObjects (9ms)
+		BackupInstance (0ms)
+		ReleaseScriptingObjects (0ms)
+		CreateAndSetChildDomain (43ms)
+	RebuildCommonClasses (57ms)
+	RebuildNativeTypeToScriptingClass (17ms)
+	initialDomainReloadingComplete (56ms)
+	LoadAllAssembliesAndSetupDomain (823ms)
+		LoadAssemblies (516ms)
+		RebuildTransferFunctionScriptingTraits (0ms)
+		AnalyzeDomain (426ms)
+			TypeCache.Refresh (296ms)
+				TypeCache.ScanAssembly (274ms)
+			BuildScriptInfoCaches (116ms)
+			ResolveRequiredComponents (10ms)
+	FinalizeReload (1827ms)
+		ReleaseScriptCaches (0ms)
+		RebuildScriptCaches (0ms)
+		SetupLoadedEditorAssemblies (1521ms)
+			LogAssemblyErrors (0ms)
+			InitializePlatformSupportModulesInManaged (18ms)
+			SetLoadedEditorAssemblies (7ms)
+			BeforeProcessingInitializeOnLoad (113ms)
+			ProcessInitializeOnLoadAttributes (1223ms)
+			ProcessInitializeOnLoadMethodAttributes (147ms)
+			AfterProcessingInitializeOnLoad (11ms)
+			EditorAssembliesLoaded (0ms)
+		ExecutionOrderSort2 (0ms)
+		AwakeInstancesAfterBackupRestoration (7ms)
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.01 seconds
+Refreshing native plugins compatible for Editor in 2.30 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 96 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 6443 unused Assets / (7.4 MB). Loaded Objects now: 7076.
+Memory consumption went from 159.1 MB to 151.7 MB.
+Total: 20.989400 ms (FindLiveObjects: 1.373400 ms CreateObjectMapping: 1.907600 ms MarkObjects: 10.760800 ms  DeleteObjects: 6.945100 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 1297031.198357 seconds.
+  path: Assets/Fonts/Urbanist/static/Urbanist-Bold SDF.asset
+  artifactKey: Guid(ed41cf7e7a15c9942a05cf428f1ef8d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Urbanist/static/Urbanist-Bold SDF.asset using Guid(ed41cf7e7a15c9942a05cf428f1ef8d4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'de7c2315bf15d70c7f26ac1063646620') in 0.1726738 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/Fonts/Urbanist/static/Urbanist-Medium SDF.asset
+  artifactKey: Guid(b5c8d37589dce3f4d8204930af72cbd4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Urbanist/static/Urbanist-Medium SDF.asset using Guid(b5c8d37589dce3f4d8204930af72cbd4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '007a3c76f91e99f718e71017419478f8') in 0.0469386 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000021 seconds.
+  path: Assets/Fonts/Urbanist/static/Urbanist-BlackItalic SDF.asset
+  artifactKey: Guid(add14543cbfdf614abc921b3ad661632) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/Urbanist/static/Urbanist-BlackItalic SDF.asset using Guid(add14543cbfdf614abc921b3ad661632) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '594d7d0293a7b750362860bea245f3d3') in 0.0332314 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000032 seconds.
+  path: Assets/Fonts/WorkSans/WorkSans-SemiBold SDF.asset
+  artifactKey: Guid(c73479cd477d408459b2b3606c565f0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/WorkSans/WorkSans-SemiBold SDF.asset using Guid(c73479cd477d408459b2b3606c565f0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8d494fbeba13281e084a65bae6b89746') in 0.0563535 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000036 seconds.
+  path: Assets/Fonts/TT2020/TT2020StyleF-Regular SDF.asset
+  artifactKey: Guid(d9f60731015865d4ca1280ff7d6b649d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/TT2020/TT2020StyleF-Regular SDF.asset using Guid(d9f60731015865d4ca1280ff7d6b649d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '6edb840f4c8618fedbfec8b9855626a7') in 0.1928842 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000029 seconds.
+  path: Assets/Fonts/TT2020/TT2020StyleD-Regular SDF.asset
+  artifactKey: Guid(15ab7defce318c34eb5850969d301a0d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/TT2020/TT2020StyleD-Regular SDF.asset using Guid(15ab7defce318c34eb5850969d301a0d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '839e979baafb491266e87b34d0748409') in 0.0174005 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000034 seconds.
+  path: Assets/Fonts/WorkSans/WorkSans-Italic-VariableFont_wght SDF.asset
+  artifactKey: Guid(6641eb37aeee5994a980e1d250cf8b3e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/WorkSans/WorkSans-Italic-VariableFont_wght SDF.asset using Guid(6641eb37aeee5994a980e1d250cf8b3e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e453b1166745701dfbfb12cb21ab474f') in 0.0190553 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000022 seconds.
+  path: Assets/Fonts/WorkSans/WorkSans-ExtraLightItalic SDF.asset
+  artifactKey: Guid(fa4324b870c629e41961c2f609e46042) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Fonts/WorkSans/WorkSans-ExtraLightItalic SDF.asset using Guid(fa4324b870c629e41961c2f609e46042) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '23ee34d6c77e9d947c26d0861485b0dc') in 0.0477012 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 346.527301 seconds.
+  path: Assets/Resources/Characters
+  artifactKey: Guid(67468e432b54fe74eb102482415acb70) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters using Guid(67468e432b54fe74eb102482415acb70) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '13d781a5f859ab53ed12b7e93d98984c') in 0.0007531 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 0
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.435437 seconds.
+  path: Assets/Resources/Characters/Chris.png
+  artifactKey: Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris.png using Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '8c1ed4987fc778d17fcdb00373d931be') in 0.0324412 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 37.471291 seconds.
+  path: Assets/Resources/Characters/Chris.png
+  artifactKey: Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris.png using Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'c13af664f5d2afac93a9e38671b9a801') in 0.0128097 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 13.261781 seconds.
+  path: Assets/Resources/Characters/Chris.png
+  artifactKey: Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris.png using Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '95fa5ccb6043e503023bb3f222db4531') in 0.0107972 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 12.442133 seconds.
+  path: Assets/Resources/Characters/Chris.png
+  artifactKey: Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris.png using Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'd104d1e85466e8dc2db21f00c5952222') in 0.0138554 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 18.726851 seconds.
+  path: Assets/Resources/Characters/Chris.png
+  artifactKey: Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris.png using Guid(f3231fd20d552d044b885ae796e352ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e1ed53d910fb00cbd913060631bd419b') in 0.009831 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 26.973697 seconds.
+  path: Assets/Resources/Characters/Chris_BlinkEye.png
+  artifactKey: Guid(1a3362afc723ad641b681d86202100f0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris_BlinkEye.png using Guid(1a3362afc723ad641b681d86202100f0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'e82c4e86b38d08b9fcf40c23ec992cf3') in 0.0186042 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000031 seconds.
+  path: Assets/Resources/Characters/Chris_happy.png
+  artifactKey: Guid(5925312c5331d154ebe94213dba4f356) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris_happy.png using Guid(5925312c5331d154ebe94213dba4f356) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ece436892fcf0f1e4d2e04cd8a0f219f') in 0.0197044 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000037 seconds.
+  path: Assets/Resources/Characters/Chris_EyesToTheSide.png
+  artifactKey: Guid(91790d1193470ea46a965779e5c2a283) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris_EyesToTheSide.png using Guid(91790d1193470ea46a965779e5c2a283) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: 'ad329ec4938574bfe406b458d7966999') in 0.0169914 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 3
+
+========================================================================
+Received Import Request.
+  Time since last request: 67.206622 seconds.
+  path: Assets/Resources/Characters/Chris_BlinkEye.png
+  artifactKey: Guid(1a3362afc723ad641b681d86202100f0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris_BlinkEye.png using Guid(1a3362afc723ad641b681d86202100f0) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '570960e5743e75b5df495cef12a9fa80') in 0.0173331 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 4
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000067 seconds.
+  path: Assets/Resources/Characters/Chris_happy.png
+  artifactKey: Guid(5925312c5331d154ebe94213dba4f356) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris_happy.png using Guid(5925312c5331d154ebe94213dba4f356) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '24f41dfc8ae933e938cd2e1f5aec039c') in 0.0194539 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 6
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000025 seconds.
+  path: Assets/Resources/Characters/Chris_happy_ClosedEyes.png
+  artifactKey: Guid(ac958a037baaf8f499e0d6c0aeb5d53a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris_happy_ClosedEyes.png using Guid(ac958a037baaf8f499e0d6c0aeb5d53a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '53f1f2baa957f09dd6b2149cb6375ba8') in 0.0171366 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 5
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000024 seconds.
+  path: Assets/Resources/Characters/Chris_EyesToTheSide.png
+  artifactKey: Guid(91790d1193470ea46a965779e5c2a283) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/Characters/Chris_EyesToTheSide.png using Guid(91790d1193470ea46a965779e5c2a283) Importer(815301076,1909f56bfc062723c751e8b465ee728b) (PreviewImporter) -> (artifact id: '78d840c25464afaf1dce0875f238e62b') in 0.013214 seconds
+Number of updated asset objects reloaded before import = 0Number of asset objects unloaded after import = 4
+
+Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
+AssetImportWorker is now disconnected from the server
+Process exiting
+Exiting without the bug reporter. Application will terminate with return code 0

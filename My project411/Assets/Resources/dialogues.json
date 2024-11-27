@@ -1,0 +1,284 @@
+{
+  "episodes": [
+    {
+      "episodeId": 1,
+      "episodeName": "Episode 1: \"The Immersion\"",
+      "backgroundImage": "Backgrounds/background_forest",
+      "scenes": [
+        {
+          "sceneId": 1,
+          "background": "background_forest",
+          "dialogues": [
+            {
+              "id": 1,
+              "isNarration": true,
+              "texts": [
+                "The surrounding area of Blissville is known for its fabulous forests, which were wrapped in thick fog for most of the year.",
+                "Alice and her brother, Chris, walk along a trail damp from the rain, snaking their way deeper into the woods along the spreading trees."
+              ]
+            },
+            {
+              "id": 2,
+              "backgroundAnimation": "RainAnimation",
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Come on, don't be so sour! We don't get out together that much."
+              ]
+            },
+            {
+              "id": 3,
+              "isNarration": true,
+              "texts": [
+                "The girl waved her hands, pointing to the space around them."
+              ]
+            },
+            {
+              "id": 4,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "animation": "laugh",
+              "texts": [ "Especially with such a beautiful scenery!" ]
+            },
+            {
+              "id": 5,
+              "speaker": "Chris",
+              "character": "Chris",
+              "animation": "laugh",
+              "backgroundAnimation": "RainAvg",
+              "place": 2,
+              "texts": [
+                "We don't get out together very often, but we have adventure every time.",
+                " Listen, are you serious? Going into the woods in this weather?"
+              ]
+            },
+            {
+              "id": 6,
+              "isNarration": true,
+              "texts": [
+                "Chris sighed and stopped, looking around and caught a mocking look from his sister."
+              ]
+            },
+            {
+              "id": 7,
+              "place": 1
+            },
+            {
+              "id": 8,
+              "speaker": "Chris",
+              "backgroundAnimation": "RainStartOfTheEnd",
+              "character": "Chris",
+              "place": 2,
+              "texts": [
+                "Oh. Don't make that face. The last time you looked at me like that, we got lost and people were searching for us with dogs for hours!"
+              ]
+            },
+            {
+              "id": 9,
+              "speaker": "Сhris",
+              "character": "Chris",
+              "backgroundAnimation": "RainFinishedAnimation",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Keep going.",
+                  "actions": [
+                    {
+                      "key": "keepGoing",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Cheer up brother.",
+                  "actions": [
+                    {
+                      "key": "cheerUpBrother",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 10,
+              "conditions": [
+                {
+                  "key": "keepGoing",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice, ignoring her brother's complaints, continued her way deeper into the forest, looking at the nature that surrounded her.",
+                "The girl knew that no matter what, her brother would still follow her wherever she went."
+              ]
+            },
+            {
+              "id": 11,
+              "conditions": [
+                {
+                  "key": "cheerUpBrother",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Keep up!"
+              ]
+            },
+            {
+              "id": 12,
+              "conditions": [
+                {
+                  "key": "cheerUpBrother",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "The girl slowed down a bit and waited for Chris to catch up with her."
+              ]
+            },
+            {
+              "id": 13,
+              "conditions": [
+                {
+                  "key": "cheerUpBrother",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "You know, since then I’ve been checking the route several times. No one will get lost today, I promise!" ]
+            },
+            {
+              "id": 14,
+              "conditions": [
+                {
+                  "key": "cheerUpBrother",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [ "Alice smiled and nodded at the path." ]
+            },
+            {
+              "id": 15,
+              "conditions": [
+                {
+                  "key": "cheerUpBrother",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "There's not much left to go." ]
+            },
+            {
+              "id": 16,
+              "isNarration": true,
+              "texts": [
+                "Alice always liked to make spontaneous trips. A busy schedule didn’t allow her to do this often, but at least once a month she tried to spend time alone with her brother.",
+                "Chris and Alice were close, and despite the difference in their age, they were always comfortable together.",
+                "The trail led further and further into the forest, the shadows of the trees thickening and the scent of leaves and damp earth in the air. ",
+                "They were approaching a wide clearing, sheltered on all sides by forest vegetation."
+              ]
+            },
+            {
+              "id": 17,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "This time, to your good fortune, no adventure. Just wanted to walk with you, clear my head." ]
+            },
+            {
+              "id": 18,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Invite Chris to sit down and rest.",
+                  "actions": [
+                    {
+                      "key": "inviteChrisToSit",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Explore the neighborhood of the meadow together.",
+                  "actions": [
+                    {
+                      "key": "exploreTheNeighborhood",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 19,
+              "conditions": [
+                {
+                  "key": "inviteChrisToSit",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "We are in place! Sit down." ]
+            },
+            {
+              "id": 20,
+              "conditions": [
+                {
+                  "key": "inviteChrisToSit",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "background": "background_meadow",
+              "smoothBgReplacement": true,
+              "texts": [ "Alice smiled and pointed to a fallen tree trunk." ]
+            },
+            {
+              "id": 21,
+              "conditions": [
+                {
+                  "key": "inviteChrisToSit",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "Chris",
+              "place": 2,
+              "texts": [ "Yeah, you have a very distorted notion of comfort..." ]
+            },
+            {
+              "id": 22,
+              "conditions": [
+                {
+                  "key": "inviteChrisToSit",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [ "I think it's very cozy here. Don't you like to sit on a soft stump sometimes, connect with nature?" ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

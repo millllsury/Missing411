@@ -1,0 +1,60 @@
+{
+  "presets": [
+    {
+      "name": "RainAnimation",
+      "preset": {
+        "frameDelay": 0.1,
+        "keepLastFrame": false,
+        "repeatCount": -1
+      }
+    },
+    {
+      "name": "SquirrelAnimation",
+      "preset": {
+        "frameDelay": 0.2,
+        "keepLastFrame": true,
+        "repeatCount": 1
+      }
+    },
+    {
+      "name": "RainAvg",
+      "preset": {
+        "frameDelay": 0.1,
+        "keepLastFrame": false,
+        "repeatCount": -1
+      }
+    },
+    {
+      "name": "RainStartOfTheEnd",
+      "preset": {
+        "frameDelay": 0.12,
+        "keepLastFrame": false,
+        "repeatCount": -1
+      }
+    },
+    {
+      "name": "RainFinishedAnimation",
+      "preset": {
+        "frameDelay": 0.1,
+        "keepLastFrame": false,
+        "repeatCount": 1
+      }
+    },
+    {
+      "name": "FallAnimation",
+      "preset": {
+        "frameDelay": 0.08,
+        "keepLastFrame": true,
+        "repeatCount": 1
+      }
+    },
+    {
+      "name": "HouseAnimation",
+      "preset": {
+        "frameDelay": 0.5,
+        "keepLastFrame": true,
+        "repeatCount": 1
+      }
+    }
+  ]
+}
