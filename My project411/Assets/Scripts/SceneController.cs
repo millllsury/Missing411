@@ -114,10 +114,11 @@ public class SceneController : MonoBehaviour
     public void StartBackgroundAnimation(string animationFolder, float delay, int repeatCount = -1, bool keepLastFrame = false)
     {
         if (backgroundAnimationController != null && backgroundAnimationController.IsAnimating)
-        {
-            Debug.Log($"Останавливаем текущую анимацию {backgroundAnimationController.CurrentAnimation} перед запуском новой {animationFolder}.");
-            backgroundAnimationController.StopAnimation();
-        }
+    {
+        Debug.Log($"Останавливаем текущую анимацию {backgroundAnimationController.CurrentAnimation} перед запуском новой {animationFolder}.");
+        backgroundAnimationController.StopAnimation();
+    }
+
 
         Sprite[] sprites = Resources.LoadAll<Sprite>("Backgrounds/" + animationFolder);
 

@@ -15,6 +15,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject QuitConfirmationPanel;
     [SerializeField] private GameObject SaveConfirmationPanel;
     [SerializeField] private Button toMainMenuButton;
+    [SerializeField]private Button backButton;
 
     public EpisodeNameScreen episodeScreen;
     [SerializeField] private Animations animations;
@@ -34,6 +35,10 @@ public class DialogueManager : MonoBehaviour
     private bool isChoosing = false;
     private bool isEpisodeScreenActive = false;
     private bool inputUnavailable = false;
+
+
+    private Stack<(int? currentDialogueId, int textCounter)> dialogueHistory = new Stack<(int?, int)>();    // Стек для отслеживания диалогов
+
 
     void Start()
     {
@@ -124,13 +129,18 @@ public class DialogueManager : MonoBehaviour
         InitializeDialogue();
     }
 
+    
+
     private void ShowEpisodeName()
     {
+        
+        
         if (isEpisodeScreenActive) return;
 
         Sprite backgroundImage = Resources.Load<Sprite>(currentEpisode.backgroundImage);
         isEpisodeScreenActive = true;
         episodeScreen.ShowEpisodeScreen(currentEpisode.episodeName, backgroundImage);
+        
     }
 
     public void SetEpisodeScreenActive(bool isActive)
@@ -161,8 +171,7 @@ public class DialogueManager : MonoBehaviour
     {
         var dialogue = GetCurrentDialogue();
         if (dialogue == null) return;
-
-        HandleDialogueAnimation(dialogue);
+        Debug.Log($"Dialogue: {currentDialogueId} and textCounter: {textCounter}");
         DisplayDialogueText(dialogue);
     }
 
@@ -182,11 +191,23 @@ public class DialogueManager : MonoBehaviour
             sceneController.SetBackgroundSmooth(dialogue.background, dialogue.smoothBgReplacement);
         }
 
-        if (!string.IsNullOrEmpty(dialogue.animation))
+        // Проверка, была ли уже проиграна анимация
+        if (!string.IsNullOrEmpty(dialogue.animation) && !dialogue.isAnimationPlayed)
         {
             animations.PlayAnimation(GetCharacterPosition(dialogue.place), dialogue.animation, dialogue.character);
+
+            // Устанавливаем флаг, что анимация проиграна
+            dialogue.isAnimationPlayed = true;
         }
+
     }
+
+    // Если нужно сбросить флаг в другом месте, например, после завершения диалога
+    public void ResetAnimationFlag(Dialogue dialogue)
+    {
+        dialogue.isAnimationPlayed = false;
+    }
+
 
     private void StartBackgroundAnimation(Dialogue dialogue)
     {
@@ -212,21 +233,41 @@ public class DialogueManager : MonoBehaviour
 
     private void DisplayDialogueText(Dialogue dialogue)
     {
+
         characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
 
-        if (textCounter < dialogue.texts.Count)
+        if (dialogue.texts != null && dialogue.texts.Count > 0)
         {
-            dialogueText.text = dialogue.texts[textCounter++];
+            if (textCounter < dialogue.texts.Count)
+            {
+                dialogueText.text = dialogue.texts[textCounter];
+
+                textCounter++; // увеличиваем textCounter после показа текста
+            }
+            else
+            {
+                // Если все тексты выведены, переходим к выбору или следующему диалогу
+                dialogueHistory.Push((currentDialogueId, textCounter - 1)); // сохраняем предыдущий текст
+                Debug.Log($"Сохранилось в стек: currentDialogueId: {currentDialogueId} и textCounter: {textCounter}");
+                HandleDialogueEnd(dialogue);
+            }
         }
         else
         {
-            HandleDialogueEnd(dialogue);
+            // Если в диалоге нет текстов, значит это диалог с выбором
+            if (dialogue.choices != null && dialogue.choices.Count > 0)
+            {
+                ShowChoices(dialogue.choices); // Показываем выбор
+            }
         }
+        canGoBack = true;
     }
+
 
     private void HandleDialogueEnd(Dialogue dialogue)
     {
         textCounter = 0;
+        ResetAnimationFlag(dialogue);
 
         if (dialogue.choices != null && dialogue.choices.Any())
         {
@@ -243,12 +284,91 @@ public class DialogueManager : MonoBehaviour
         var nextDialogue = FindNextDialogue();
         if (nextDialogue != null)
         {
+            // Сохраняем текущее состояние в стек перед сбросом textCounter
+           
+
+            // Сбрасываем текстовый счётчик для нового диалога
+            textCounter = 0;
+
+            // Устанавливаем новый текущий диалог
             currentDialogueId = nextDialogue.id;
+
+            // Сбрасываем флаг анимации для следующего диалога
+            nextDialogue.isAnimationPlayed = false;
+
+            // Обрабатываем анимацию перед показом текста
+            HandleDialogueAnimation(nextDialogue);
+
+            // Показываем текст следующего диалога
             ShowNextDialogueText();
         }
         else
         {
             Debug.LogWarning("Не найден следующий диалог. Конец сцены?");
+        }
+    }
+
+
+
+    private bool canGoBack = true; // Разрешение на возврат
+
+    public void GoBackOneStep(GameObject clickedObject)
+    {
+        if (!canGoBack) return;
+
+        if (clickedObject == backButton.gameObject)
+        {
+            if (sceneController.IsTransitioning || inputUnavailable) return;
+
+            if (isChoosing)
+            {
+                HideChoices(); // если мы выбираем
+
+            }
+
+            // Если мы находимся в середине текущего диалога, уменьшаем textCounter
+            if (textCounter > 0)
+            {
+                textCounter--;
+                var dialogue = GetCurrentDialogue();
+                if (dialogue != null)
+                {
+                    dialogueText.text = dialogue.texts[textCounter];
+
+                }
+
+            }
+
+            // Иначе возвращаемся к предыдущему диалогу
+            if (dialogueHistory.Count > 0)
+            {
+                var previousState = dialogueHistory.Pop();
+
+
+                // Если достигли метки
+                if (previousState.currentDialogueId == null)
+                {
+                    Debug.Log("Достигнут первый диалог после выбора. Возврат невозможен.");
+                    canGoBack = false;
+
+                    return;
+                }
+
+                currentDialogueId = previousState.currentDialogueId.Value;
+                textCounter = previousState.textCounter;
+
+                var dialogue = GetCurrentDialogue();
+                if (dialogue != null)
+                {
+                    dialogueText.text = dialogue.texts[textCounter];
+                    characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
+                    HandleDialogueAnimation(dialogue);
+                }
+            }
+            else
+            {
+                Debug.Log("Нет предыдущих диалогов для возврата.");
+            }
         }
     }
 
@@ -297,7 +417,7 @@ public class DialogueManager : MonoBehaviour
                 flagsManager.SetFlag(action.key, action.value);
             }
         }
-
+        dialogueHistory.Push((null, 0));
         HideChoices();
         AdvanceToNextDialogue();
     }

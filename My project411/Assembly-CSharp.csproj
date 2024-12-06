@@ -92,6 +92,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\EpisodeNameScreen.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
+    <Compile Include="Assets\Scripts\ButtonHoverEffect.cs" />
     <Compile Include="Assets\Scripts\GameFlagsManager.cs" />
     <Compile Include="Assets\Scripts\Animation.cs" />
     <Compile Include="Assets\Scripts\MainMenuController.cs" />

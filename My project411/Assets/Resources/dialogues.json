@@ -39,17 +39,14 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
-              "backgroundAnimation": "HouseAnimation",
-              "smoothBgReplacement": true,
-
-              "animation": "laugh",
+              "animation": "happy",
               "texts": [ "Especially with such a beautiful scenery!" ]
             },
             {
               "id": 5,
               "speaker": "Chris",
               "character": "Chris",
-              "animation": "laugh",
+              "animation": "happy",
               "place": 2,
               "texts": [
                 "We don't get out together very often, but we have adventure every time.",
@@ -68,13 +65,15 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
-              "animation": "laugh",
+              "animation": "happy",
               "texts": [ "..." ]
             },
             {
               "id": 8,
               "speaker": "Chris",
               "character": "Chris",
+              "animation": "eyesToTheSide",
+              "backgroundAnimation": "RainAvg",
               "place": 2,
               "texts": [
                 "Oh. Don't make that face. The last time you looked at me like that, we got lost and people were searching for us with dogs for hours!"
@@ -188,6 +187,7 @@
             {
               "id": 16,
               "isNarration": true,
+              "backgroundAnimation": "RainStartOfTheEnd",
               "texts": [
                 "Alice always liked to make spontaneous trips. A busy schedule didn’t allow her to do this often, but at least once a month she tried to spend time alone with her brother.",
                 "Chris and Alice were close, and despite the difference in their age, they were always comfortable together.",
@@ -340,13 +340,26 @@
                   "value": true
                 }
               ],
+              "isNarration": true,
+              "texts": [ "..." ]
+            },
+            {
+              "id": 28,
+              "background": "background_meadow",
+              "smoothBgReplacement": true,
+              "conditions": [
+                {
+                  "key": "exploreNeighborhood",
+                  "value": true
+                }
+              ],
               "speaker": "Chris",
               "character": "Chris",
               "place": 2,
               "texts": [ "You’ve never brought me here before." ]
             },
             {
-              "id": 28,
+              "id": 29,
               "conditions": [
                 {
                   "key": "exploreNeighborhood",
@@ -355,7 +368,6 @@
               ],
               "speaker": "Alice",
               "character": "Alice",
-              "backgroundAnimation": "RainFinishedAnimation",
               "place": 1,
               "texts": [
                 "I’ve only been here once. ",
@@ -363,33 +375,34 @@
               ]
             },
             {
-              "id": 29,
+              "id": 30,
+              "backgroundAnimation": "RainFinishedAnimation",
               "isNarration": true,
               "texts": [ "Leaving the backpacks in the gazebo, Chris walked over to the firepit." ]
             },
             {
-              "id": 30,
+              "id": 31,
               "speaker": "Chris",
               "character": "Chris",
               "place": 2,
               "texts": [ "It seems like I'm starving to death." ]
             },
             {
-              "id": 31,
+              "id": 32,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
               "texts": [ "I suggest to look for dry branches. I brought a lighter, I think if we gather some firewood, we can start the fire." ]
             },
             {
-              "id": 32,
+              "id": 33,
               "speaker": "Chris",
               "character": "Chris",
               "place": 2,
               "texts": [ "Hope it doesn’t rain again, otherwise we’ll have to eat raw sausages." ]
             },
             {
-              "id": 33,
+              "id": 34,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -415,7 +428,7 @@
               ]
             },
             {
-              "id": 34,
+              "id": 35,
               "conditions": [
                 {
                   "key": "separately",
@@ -430,7 +443,7 @@
               ]
             },
             {
-              "id": 35,
+              "id": 36,
               "conditions": [
                 {
                   "key": "separately",
@@ -445,7 +458,7 @@
               ]
             },
             {
-              "id": 36,
+              "id": 37,
               "conditions": [
                 {
                   "key": "separately",
@@ -460,7 +473,7 @@
               ]
             },
             {
-              "id": 37,
+              "id": 38,
               "conditions": [
                 {
                   "key": "separately",
@@ -474,7 +487,7 @@
               ]
             },
             {
-              "id": 38,
+              "id": 39,
               "conditions": [
                 {
                   "key": "separately",
@@ -489,7 +502,7 @@
               ]
             },
             {
-              "id": 39,
+              "id": 40,
               "conditions": [
                 {
                   "key": "separately",
@@ -502,7 +515,7 @@
               ]
             },
             {
-              "id": 40,
+              "id": 41,
               "conditions": [
                 {
                   "key": "firepit",
@@ -517,7 +530,7 @@
               ]
             },
             {
-              "id": 41,
+              "id": 42,
               "conditions": [
                 {
                   "key": "firepit",
@@ -532,7 +545,7 @@
               ]
             },
             {
-              "id": 42,
+              "id": 43,
               "conditions": [
                 {
                   "key": "firepit",
@@ -547,7 +560,7 @@
               ]
             },
             {
-              "id": 43,
+              "id": 44,
               "conditions": [
                 {
                   "key": "firepit",
@@ -562,7 +575,7 @@
               ]
             },
             {
-              "id": 44,
+              "id": 45,
               "conditions": [
                 {
                   "key": "firepit",
@@ -577,7 +590,7 @@
               ]
             },
             {
-              "id": 45,
+              "id": 46,
               "conditions": [
                 {
                   "key": "firepit",
@@ -590,7 +603,7 @@
               ]
             },
             {
-              "id": 46,
+              "id": 47,
               "conditions": [
                 {
                   "key": "firepit",
@@ -606,7 +619,7 @@
               ]
             },
             {
-              "id": 47,
+              "id": 48,
               "conditions": [
                 {
                   "key": "firepit",
@@ -622,7 +635,7 @@
               ]
             },
             {
-              "id": 48,
+              "id": 49,
               "conditions": [
                 {
                   "key": "firepit",
@@ -636,7 +649,7 @@
               ]
             },
             {
-              "id": 49,
+              "id": 50,
               "conditions": [
                 {
                   "key": "firepit",
@@ -652,7 +665,7 @@
               ]
             },
             {
-              "id": 50,
+              "id": 51,
               "conditions": [
                 {
                   "key": "firepit",
@@ -665,7 +678,7 @@
               ]
             },
             {
-              "id": 51,
+              "id": 52,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -691,7 +704,7 @@
               ]
             },
             {
-              "id": 52,
+              "id": 53,
               "conditions": [
                 {
                   "key": "funnyback",
@@ -706,7 +719,7 @@
               ]
             },
             {
-              "id": 53,
+              "id": 54,
               "conditions": [
                 {
                   "key": "expressfeel",
@@ -721,7 +734,7 @@
               ]
             },
             {
-              "id": 54,
+              "id": 55,
               "conditions": [
                 {
                   "key": "separately",
@@ -730,28 +743,7 @@
               ],
               "isNarration": true,
               "texts": [
-                "Chris smiled and turned away, walking in the opposite direction from the sister.",
-                "Alice followed his example and began searching for dry twigs as well.",
-                "The cool wind blew pleasantly against her skin. The leaves rustled and the birds chirped softly. ",
-                "Alice hadn't felt so peaceful in a long time. All the thoughts that had been on repeat in her head had disappeared, and worries had faded into the background.",
-                "The girl's gaze locked on a squirrel that appeared out of nowhere, gracefully jumping from branch to branch, from tree to tree."
-              ]
-            },
-            {
-              "id": 55,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
-              "speaker": "Alice",
-              "character": "Alice",
-
-              "backgroundAnimation": "SquirrelAnimation",
-              "place": 1,
-              "texts": [
-                "Such a beautiful squirrel."
+                "Chris smiled and turned away, walking in the opposite direction from the sister."
               ]
             },
             {
@@ -762,14 +754,64 @@
                   "value": true
                 }
               ],
+              "speaker": "Chris",
+              "character": "",
+              "place": 2,
+              "texts": [
+                "..."
+              ]
+            },
+            {
+              "id": 57,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
               "isNarration": true,
+              "background": "background_forest",
+              "smoothBgReplacement": true,
+              "texts": [
+                "Alice followed his example and began searching for dry twigs as well.",
+                "The cool wind blew pleasantly against her skin. The leaves rustled and the birds chirped softly. ",
+                "Alice hadn't felt so peaceful in a long time. All the thoughts that had been on repeat in her head had disappeared, and worries had faded into the background.",
+                "The girl's gaze locked on a squirrel that appeared out of nowhere, gracefully jumping from branch to branch, from tree to tree."
+              ]
+            },
+            {
+              "id": 58,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+
+              "place": 1,
+              "texts": [
+                "Such a beautiful squirrel."
+              ]
+            },
+            {
+              "id": 59,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "backgroundAnimation": "SquirrelAnimation",
               "texts": [
                 "The squirrel, as if hearing the girl, climbed down the tree trunk to a lower branch, allowing a better view of herself, and continued on her way. And Alice unconsciously followed her.",
                 "As she followed the red-haired animal and stepped over the large branches that the recent storm had torn from the trees, Alice thought that in a way she even felt jealous of the squirrel."
               ]
             },
             {
-              "id": 57,
+              "id": 60,
               "conditions": [
                 {
                   "key": "separately",
@@ -784,7 +826,7 @@
               ]
             },
             {
-              "id": 56,
+              "id": 61,
               "conditions": [
                 {
                   "key": "separately",
@@ -798,7 +840,7 @@
               ]
             },
             {
-              "id": 56,
+              "id": 62,
               "conditions": [
                 {
                   "key": "separately",
@@ -808,8 +850,36 @@
               "isNarration": true,
               "backgroundAnimation": "FallAnimation",
               "texts": [
-                "Her eyes began to darken and her stomach twisted with excitement, as if she were falling into a kilometer-long chasm.",
+                "Her eyes began to darken and her stomach twisted with excitement, as if she were falling into a kilometer-long chasm."
+              ]
+            },
+            {
+              "id": 63,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
                 "She lost consciousness."
+              ]
+            },
+            {
+              "id": 64,
+              "conditions": [
+                {
+                  "key": "separately",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "animation": "emotionClosedEyes",
+              "texts": [
+                "..."
               ]
             }
           ]

@@ -12,6 +12,7 @@ public class BackgroundAnimationController : MonoBehaviour
 
     private Coroutine animationCoroutine;
 
+    private bool hasAnimationPlayed = false; // Флаг для отслеживания состояния анимации
     public string CurrentAnimation { get; private set; }
 
     private bool isAnimating = false;
@@ -28,12 +29,14 @@ public class BackgroundAnimationController : MonoBehaviour
 
     public void StartAnimation(List<Sprite> sprites, float delay, string animationName, int repeatCount = -1, bool keepLastFrame = false)
     {
+        hasAnimationPlayed = false; // Сбрасываем флаг
+
         if (isAnimating)
         {
             Debug.LogWarning("Попытка запустить новую анимацию, пока предыдущая ещё выполняется.");
             StopAnimation();
         }
-
+        
         CurrentAnimation = animationName; // Устанавливаем имя текущей анимации
         animationSprites = sprites;
         frameDelay = delay;
@@ -113,7 +116,8 @@ public class BackgroundAnimationController : MonoBehaviour
         }
 
         isAnimating = false;
+        hasAnimationPlayed = true;
         animationCoroutine = null;
     }
-
+    public bool HasAnimationPlayed() => hasAnimationPlayed;
 }

@@ -30,6 +30,7 @@ public class Dialogue
     public List<Choice> choices;
 
     public string emotion;
+    public bool isAnimationPlayed = false;
     public string animation;
    
     public string background;
@@ -43,9 +44,8 @@ public class Dialogue
 
     public List<Condition> conditions; // Условия для показа диалога
 
-    public Vector2 startPosition; // Позиция появления
-    public Vector2 endPosition;   // Позиция перемещения
-    public bool hideAvatar = false;
+    public float endPositionX;
+    public bool hideCharacter = false;
 }
 
 [System.Serializable]

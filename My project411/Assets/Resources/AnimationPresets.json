@@ -11,7 +11,7 @@
     {
       "name": "SquirrelAnimation",
       "preset": {
-        "frameDelay": 0.2,
+        "frameDelay": 0.3,
         "keepLastFrame": true,
         "repeatCount": 1
       }

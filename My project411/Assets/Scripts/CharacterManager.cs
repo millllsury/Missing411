@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -19,11 +20,10 @@ public class CharacterManager : MonoBehaviour
     private string currentLeftCharacter;
     private string currentRightCharacter;
 
+    [SerializeField] private Animations animations;
     private bool isLeftAvatarAnimating = false;
     private bool isRightAvatarAnimating = false;
 
-    public bool IsLeftAvatarAnimating => isLeftAvatarAnimating;
-    public bool IsRightAvatarAnimating => isRightAvatarAnimating;
 
     // Метод для установки персонажа
     public void SetCharacter(string speaker, int place, bool isNarration, string character)
@@ -114,7 +114,7 @@ public class CharacterManager : MonoBehaviour
             }
             else
             {
-                float targetX = isLeft ? -5f : 5f;
+                float targetX = isLeft ? -3f : 3f;
                 StartCoroutine(SmoothAppear(avatar, character, targetX));
             }
 
@@ -179,7 +179,7 @@ public class CharacterManager : MonoBehaviour
             yield return null;
         }
 
-        float targetX = isLeft ? -5f : 5f;
+        float targetX = isLeft ? -3f : 3f;
         yield return StartCoroutine(SmoothAppear(avatar, character, targetX));
     }
 
@@ -205,9 +205,15 @@ public class CharacterManager : MonoBehaviour
 
     private IEnumerator BlinkCoroutine(SpriteRenderer eyesImage, string character)
     {
+        if (string.IsNullOrEmpty(character))
+        {
+           Debug.LogWarning("Character is null or empty. Blink animation will not start.");
+            yield break; // Выходим из корутины, если character равен null или пустой строке
+        }
+
         while (true)
         {
-            if (!isLeftAvatarAnimating && !isRightAvatarAnimating) // Проверяем, не идет ли анимация
+            if ((!isLeftAvatarAnimating && !isRightAvatarAnimating) && (!animations.IsLeftAvatarAnimating && !animations.IsRightAvatarAnimating)) // Проверяем, не идет ли анимация
             {
                 Sprite closedEyesSprite = Resources.Load<Sprite>("Characters/" + character + "_ClosedEyes");
                 if (closedEyesSprite != null)
@@ -233,3 +239,5 @@ public class CharacterManager : MonoBehaviour
         }
     }
 }
+
+

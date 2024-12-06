@@ -354,7 +354,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -421,9 +421,9 @@ TextureImporter:
       name: Chris_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 538
         y: 1519
-        width: 1
+        width: 4
         height: 401
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -509,7 +509,7 @@ TextureImporter:
       name: Chris
       rect:
         serializedVersion: 2
-        x: 165
+        x: 162
         y: 0
         width: 814
         height: 1452

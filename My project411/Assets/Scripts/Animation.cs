@@ -4,31 +4,23 @@ using System.Collections.Generic;
 
 public class Animations : MonoBehaviour
 {
-    [SerializeField] private Animator leftAnimator;
-    [SerializeField] private Animator rightAnimator;
-
     [SerializeField] private SpriteRenderer emotionImageLeft;
     [SerializeField] private SpriteRenderer emotionImageRight;
-
     [SerializeField] private SpriteRenderer eyesImageLeft;
     [SerializeField] private SpriteRenderer eyesImageRight;
 
-    private CharacterManager characterManager;
-
-    private Dictionary<string, Animator> animators;
     private Dictionary<string, SpriteRenderer> emotionRenderers;
     private Dictionary<string, SpriteRenderer> eyesRenderers;
 
+    private bool isLeftAvatarAnimation = false;
+    private bool isRightAvatarAnimation = false;
+
+    public bool IsLeftAvatarAnimating => isLeftAvatarAnimation;
+    public bool IsRightAvatarAnimating => isRightAvatarAnimation;
+
+
     private void Start()
     {
-        characterManager = FindFirstObjectByType<CharacterManager>();
-
-        animators = new Dictionary<string, Animator>
-        {
-            { "left", leftAnimator },
-            { "right", rightAnimator }
-        };
-
         emotionRenderers = new Dictionary<string, SpriteRenderer>
         {
             { "left", emotionImageLeft },
@@ -44,53 +36,69 @@ public class Animations : MonoBehaviour
 
     public void PlayAnimation(string characterPosition, string animationName, string character)
     {
+        
+
         if (string.IsNullOrEmpty(characterPosition) || string.IsNullOrEmpty(animationName) || string.IsNullOrEmpty(character))
         {
             Debug.LogWarning("Недостаточно данных для воспроизведения анимации.");
             return;
         }
 
-        if (!animators.TryGetValue(characterPosition, out var animator)) return;
-        if (!emotionRenderers.TryGetValue(characterPosition, out var emotionRenderer)) return;
-        if (!eyesRenderers.TryGetValue(characterPosition, out var eyesRenderer)) return;
-
-        if ((characterPosition == "left" && !characterManager.IsLeftAvatarAnimating) ||
-            (characterPosition == "right" && !characterManager.IsRightAvatarAnimating))
+        if (!emotionRenderers.TryGetValue(characterPosition, out var emotionRenderer) ||
+            !eyesRenderers.TryGetValue(characterPosition, out var eyesRenderer))
         {
-            emotionRenderer.gameObject.SetActive(false); // Отключаем изображение эмоции перед анимацией
-            TriggerAnimation(animationName, animator, emotionRenderer, eyesRenderer, character);
+            return;
         }
-    }
 
-    private void TriggerAnimation(string animationName, Animator animator, SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string character)
-    {
+        SpriteNull(emotionRenderer);
+        SpriteNull(eyesRenderer);
+
+        bool isAvatarAnimating = (characterPosition == "left") ? isLeftAvatarAnimation : isRightAvatarAnimation;
+        if (isAvatarAnimating) return;
+
         string emotion = null;
         string eyes = null;
 
         switch (animationName.ToLower())
         {
             case "laugh":
-                animator.SetTrigger("LaughTrigger");
                 emotion = "happy";
+                //eyes = "eyesToTheSide";
                 break;
-
             case "sad":
-                animator.SetTrigger("SadTrigger");
                 emotion = "sad";
                 break;
-
+            case "happy":
+               emotion = "happy";
+                eyes = "eyesToTheSide";
+                break;
+            case "eyesToTheSide":
+                eyes = "eyesToTheSide";             
+                break;
+            case "emotionClosedEyes":
+                emotion = "emotionClosedEyes";
+                break;
             default:
                 Debug.LogWarning($"Анимация {animationName} не найдена.");
                 return;
         }
 
         SetEmotionImage(emotionRenderer, eyesRenderer, character, emotion, eyes);
-        StartCoroutine(ShowEmotionForAnimationDuration(animator, emotionRenderer, eyesRenderer));
+
+        if (characterPosition == "left") isLeftAvatarAnimation = true;
+        else if (characterPosition == "right") isRightAvatarAnimation = true;
+
+        StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f));
+    }
+
+    private void SpriteNull(SpriteRenderer renderer)
+    {
+        renderer.sprite = null;
     }
 
     private void SetEmotionImage(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string character, string emotion, string eyes)
     {
-        SetSprite(emotionRenderer, $"Characters/{character}_{emotion}");
+        SetSprite(emotionRenderer, !string.IsNullOrEmpty(emotion) ? $"Characters/{character}_{emotion}" : null);
         SetSprite(eyesRenderer, !string.IsNullOrEmpty(eyes) ? $"Characters/{character}_{eyes}" : null);
     }
 
@@ -112,26 +120,59 @@ public class Animations : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Спрайт не найден по пути: {path}");
+            Debug.Log($"Спрайт не найден по пути: {path}");
             renderer.gameObject.SetActive(false);
         }
     }
 
-    private IEnumerator ShowEmotionForAnimationDuration(Animator animator, SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer)
+    private IEnumerator ShowEmotionForDuration(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string characterPosition, float duration)
     {
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.length == 0)
-        {
-            Debug.LogWarning("Не удалось получить длину анимации.");
-            yield break;
-        }
+        yield return FadeIn(emotionRenderer);
+        yield return FadeIn(eyesRenderer);
 
-        float animationDuration = stateInfo.length;
-        yield return new WaitForSeconds(animationDuration + 1f);
+        yield return new WaitForSeconds(duration);
 
-        emotionRenderer.gameObject.SetActive(false);
-        eyesRenderer?.gameObject.SetActive(false);
+        yield return FadeOut(emotionRenderer);
+       
+
+        // После завершения анимации, сбрасываем флаг
+        if (characterPosition == "left") isLeftAvatarAnimation = false;
+        else if (characterPosition == "right") isRightAvatarAnimation = false;
 
         Debug.Log("Анимация завершена, эмоция скрыта.");
     }
+
+    private IEnumerator FadeIn(SpriteRenderer renderer)
+    {
+        if (renderer == null) yield break;
+
+        for (float alpha = 0f; alpha <= 1f; alpha += Time.deltaTime * 5) // Регулируем скорость
+        {
+            SetAlpha(renderer, alpha);
+            yield return null;
+        }
+        SetAlpha(renderer, 1f); // Убедимся, что значение точно 1
+    }
+
+    private IEnumerator FadeOut(SpriteRenderer renderer)
+    {
+        if (renderer == null) yield break;
+
+        for (float alpha = 1f; alpha >= 0f; alpha -= Time.deltaTime * 5)
+        {
+            SetAlpha(renderer, alpha);
+            yield return null;
+        }
+        SetAlpha(renderer, 0f); // Убедимся, что значение точно 0
+    }
+
+    private void SetAlpha(SpriteRenderer renderer, float alpha)
+    {
+        if (renderer == null) return;
+
+        Color color = renderer.color;
+        color.a = alpha;
+        renderer.color = color;
+    }
 }
+
