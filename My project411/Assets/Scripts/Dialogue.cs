@@ -16,6 +16,17 @@ public class Action
     public bool value;
 }
 
+[System.Serializable]
+public class GameProgress
+{
+    public string currentScene;    // Текущая сцена
+    public string currentDialogue; // Текущий диалог
+    public int textCounter;        // Счетчик текста для диалогов
+    public int currentHairIndex;   // Индекс текущих волос
+    public int currentClothesIndex; // Индекс текущей одежды
+    public Dictionary<string, bool> gameFlags; // Флаги игры (например, события, которые были выполнены)
+}
+
 
 [System.Serializable]
 public class Dialogue
@@ -43,6 +54,8 @@ public class Dialogue
     public bool stopBackgroundAnimation = false;
 
     public List<Condition> conditions; // Условия для показа диалога
+
+    public string soundTrigger;
 
     public float endPositionX;
     public bool hideCharacter = false;

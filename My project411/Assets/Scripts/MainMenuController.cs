@@ -14,11 +14,40 @@ public class MainMenuController : MonoBehaviour
     private float progress = 0f;             // Прогресс загрузки (0-1)
     private float maxWidth;                  // Ширина прогресс-бара
 
+    public CanvasGroup menuCanvasGroup;      // CanvasGroup для плавного появления
+    public float fadeInDuration = 1.5f;
+
     private void Start()
     {
         loadingScreen.SetActive(false);
         maxWidth = ((RectTransform)progressFill.transform.parent).rect.width;
         loadingScreen.SetActive(false);      // Скрываем экран загрузки в начале
+
+        // Начинаем с полностью прозрачного меню
+        menuCanvasGroup.alpha = 0f;
+        menuCanvasGroup.interactable = false;
+        menuCanvasGroup.blocksRaycasts = false;
+
+        // Запускаем эффект плавного появления
+        StartCoroutine(FadeInMenu());
+    }
+
+    private IEnumerator FadeInMenu()
+    {
+        float elapsed = 0f;
+
+        while (elapsed < fadeInDuration)
+        {
+            elapsed += Time.deltaTime;
+            float alpha = Mathf.Clamp01(elapsed / fadeInDuration);
+            menuCanvasGroup.alpha = alpha;
+            yield return null;
+        }
+
+        // После появления делаем меню интерактивным
+        menuCanvasGroup.alpha = 1f;
+        menuCanvasGroup.interactable = true;
+        menuCanvasGroup.blocksRaycasts = true;
     }
 
     public void NewGame()

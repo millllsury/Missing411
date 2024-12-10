@@ -96,7 +96,7 @@ public class CharacterManager : MonoBehaviour
             return;
         }
 
-        Sprite loadedSprite = Resources.Load<Sprite>("Characters/" + character);
+        Sprite loadedSprite = Resources.Load<Sprite>("Characters/" + character + "/" + character);
         if (loadedSprite == null)
         {
             Debug.LogError($"Спрайт для {character} не найден в Resources/Characters!");
@@ -215,7 +215,7 @@ public class CharacterManager : MonoBehaviour
         {
             if ((!isLeftAvatarAnimating && !isRightAvatarAnimating) && (!animations.IsLeftAvatarAnimating && !animations.IsRightAvatarAnimating)) // Проверяем, не идет ли анимация
             {
-                Sprite closedEyesSprite = Resources.Load<Sprite>("Characters/" + character + "_ClosedEyes");
+                Sprite closedEyesSprite = Resources.Load<Sprite>("Characters/" + character + "/" + character + "_ClosedEyes");
                 if (closedEyesSprite != null)
                 {
                     eyesImage.sprite = closedEyesSprite;

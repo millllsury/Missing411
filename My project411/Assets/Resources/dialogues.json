@@ -22,6 +22,7 @@
               "backgroundAnimation": "RainAnimation",
               "speaker": "Alice",
               "character": "Alice",
+              "soundTrigger": "play:rain",
               "place": 1,
               "texts": [
                 "Come on, don't be so sour! We don't get out together that much."
@@ -30,6 +31,7 @@
             {
               "id": 3,
               "isNarration": true,
+              "soundTrigger": "play:owl",
               "texts": [
                 "The girl waved her hands, pointing to the space around them."
               ]
@@ -46,6 +48,7 @@
               "id": 5,
               "speaker": "Chris",
               "character": "Chris",
+              "soundTrigger": "mute:owl",
               "animation": "happy",
               "place": 2,
               "texts": [

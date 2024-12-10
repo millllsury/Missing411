@@ -98,8 +98,8 @@ public class Animations : MonoBehaviour
 
     private void SetEmotionImage(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string character, string emotion, string eyes)
     {
-        SetSprite(emotionRenderer, !string.IsNullOrEmpty(emotion) ? $"Characters/{character}_{emotion}" : null);
-        SetSprite(eyesRenderer, !string.IsNullOrEmpty(eyes) ? $"Characters/{character}_{eyes}" : null);
+        SetSprite(emotionRenderer, !string.IsNullOrEmpty(emotion) ? $"Characters/{character}/{character}_{emotion}" : null);
+        SetSprite(eyesRenderer, !string.IsNullOrEmpty(eyes) ? $"Characters/{character}/{character}_{eyes}" : null);
     }
 
     private void SetSprite(SpriteRenderer renderer, string path)

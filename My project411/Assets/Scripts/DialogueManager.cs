@@ -20,10 +20,15 @@ public class DialogueManager : MonoBehaviour
     public EpisodeNameScreen episodeScreen;
     [SerializeField] private Animations animations;
 
+    public string mainSceneName;
+
     private DataLoader dataLoader;
     private SceneController sceneController;
     private CharacterManager characterManager;
     private GameFlagsManager flagsManager;
+    private WardrobeManager wardrobeManager;
+    [SerializeField] private SoundManager soundManager;
+
 
     private VisualNovelData visualNovelData;
     private Episode currentEpisode;
@@ -122,7 +127,7 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError($"Сцена с ID {sceneId} не найдена!");
             return;
         }
-
+       
         HideChoices();
         ShowEpisodeName();
         HandleSceneBackground();
@@ -279,14 +284,22 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    public string wardrobeSceneName = "WardrobeScene";
+    
+    public void OpenWardrobe()
+    {
+        string mainSceneName = SceneManager.GetActiveScene().name;
+        PlayerPrefs.SetString("MainSceneName", mainSceneName);
+        PlayerPrefs.Save();
+        SceneManager.LoadScene(wardrobeSceneName);
+    }
+
     private void AdvanceToNextDialogue()
     {
         var nextDialogue = FindNextDialogue();
         if (nextDialogue != null)
         {
-            // Сохраняем текущее состояние в стек перед сбросом textCounter
            
-
             // Сбрасываем текстовый счётчик для нового диалога
             textCounter = 0;
 
@@ -299,12 +312,21 @@ public class DialogueManager : MonoBehaviour
             // Обрабатываем анимацию перед показом текста
             HandleDialogueAnimation(nextDialogue);
 
+            HandleDialogueSound(nextDialogue);
             // Показываем текст следующего диалога
             ShowNextDialogueText();
         }
         else
         {
             Debug.LogWarning("Не найден следующий диалог. Конец сцены?");
+        }
+    }
+
+    private void HandleDialogueSound(Dialogue dialogue)
+    {
+        if (!string.IsNullOrEmpty(dialogue.soundTrigger))
+        {
+            soundManager.HandleSoundTrigger(dialogue.soundTrigger);
         }
     }
 
