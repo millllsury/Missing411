@@ -3,121 +3,352 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BackgroundAnimationController : MonoBehaviour
+public class BackgroundController : MonoBehaviour
 {
+    [Header("Background Settings")]
+    [SerializeField] private SpriteRenderer backgroundImage; // SpriteRenderer для фона
+    [SerializeField] private Image darkOverlay;
+
+    [Header("Background Animation Settings")]
     [SerializeField] private Image animationFrame;
     [SerializeField] private float frameDelay = 3f; // Пауза между кадрами
     [SerializeField] private int repeatCount = -1;
-    [SerializeField] private List<Sprite> animationSprites;
 
+    private Coroutine currentTransitionCoroutine;
     private Coroutine animationCoroutine;
+    private List<Sprite> animationSprites;
+    private bool isAnimatingBackground = false;
+    private bool keepLastFrame = false;
+    private string currentBackgroundName;
+    private string currentAnimationName;
+    private bool hasAnimationPlayed = false;
 
-    private bool hasAnimationPlayed = false; // Флаг для отслеживания состояния анимации
-    public string CurrentAnimation { get; private set; }
+    public bool IsTransitioning { get; private set; }
+    public bool IsAnimatingBackground => isAnimatingBackground;
 
-    private bool isAnimating = false;
-    public bool IsAnimating => isAnimating;
+    public string GetCurrentAnimationName() => currentAnimationName;
 
-    [SerializeField] private bool keepLastFrame = false;
-    void Start()
+    public float GetCurrentFrameDelay() => frameDelay;
+
+    public int GetCurrentRepeatCount() => repeatCount;
+
+    public bool GetKeepLastFrame() => keepLastFrame;
+
+    private CharacterManager characterManager;  
+
+
+    [SerializeField] private CanvasGroup uiElements; // CanvasGroup для UI элементов
+    [SerializeField] private GameObject charactersParent; // Родительский объект для персонажей
+
+
+    #region Background Management
+    public void SetBackgroundSmooth(string backgroundName, bool smoothTransition)
     {
-        if (animationFrame == null)
-        {
-            animationFrame = GetComponent<Image>();
-        }
-    }
+        if (currentBackgroundName == backgroundName) return; // Проверяем, что фон меняется
+        currentBackgroundName = backgroundName;
 
-    public void StartAnimation(List<Sprite> sprites, float delay, string animationName, int repeatCount = -1, bool keepLastFrame = false)
-    {
-        hasAnimationPlayed = false; // Сбрасываем флаг
-
-        if (isAnimating)
+        if (smoothTransition)
         {
-            Debug.LogWarning("Попытка запустить новую анимацию, пока предыдущая ещё выполняется.");
-            StopAnimation();
-        }
-        
-        CurrentAnimation = animationName; // Устанавливаем имя текущей анимации
-        animationSprites = sprites;
-        frameDelay = delay;
-        this.repeatCount = repeatCount;
-        this.keepLastFrame = keepLastFrame;
-
-        if (animationSprites != null && animationSprites.Count > 0)
-        {
-            isAnimating = true;
-            animationCoroutine = StartCoroutine(PlayAnimation());
+            if (currentTransitionCoroutine != null)
+            {
+                StopCoroutine(currentTransitionCoroutine);
+            }
+            currentTransitionCoroutine = StartCoroutine(SmoothBackgroundTransitionWithElements(backgroundName));
         }
         else
         {
-            Debug.LogError("Список спрайтов для анимации пуст.");
+            SetBackground(backgroundName);
+        }
+    }
+
+    private IEnumerator SmoothBackgroundTransitionWithElements(string backgroundName)
+    {
+        IsTransitioning = true;
+
+        // 1. Отключаем UI и персонажей
+        ToggleElements(false);
+
+        // 2. Плавное затемнение экрана (до 50%)
+        float fadeDuration = 2f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            Color overlayColor = darkOverlay.color;
+            overlayColor.a = Mathf.Lerp(0f, 0.8f, elapsedTime / fadeDuration);
+            darkOverlay.color = overlayColor;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        darkOverlay.color = new Color(0, 0, 0, 0.8f);
+
+        // 3. Меняем фон
+        SetBackground(backgroundName);
+
+        // 4. Плавное осветление экрана (до 0%)
+        elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            Color overlayColor = darkOverlay.color;
+            overlayColor.a = Mathf.Lerp(0.8f, 0f, elapsedTime / fadeDuration);
+            darkOverlay.color = overlayColor;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        darkOverlay.color = new Color(0, 0, 0, 0f);
+
+        // 5. Плавное включение элементов
+        yield return StartCoroutine(FadeInElements());
+
+        IsTransitioning = false;
+        currentTransitionCoroutine = null;
+    }
+
+
+    private void ToggleElements(bool isActive)
+    {
+        // Отключаем UI
+        if (uiElements != null)
+        {
+            uiElements.alpha = isActive ? 1f : 0f;
+            uiElements.interactable = isActive;
+            uiElements.blocksRaycasts = isActive;
+        }
+
+        // Плавное скрытие персонажей
+        if (charactersParent != null && !isActive)
+        {
+            StartCoroutine(FadeOutCharacters(charactersParent));
         }
     }
 
 
-    public void StopAnimation()
+    private IEnumerator FadeInElements()
+    {
+        float duration = 1.5f;
+        float elapsedTime = 0f;
+
+        // Плавное появление UI
+        if (uiElements != null)
+        {
+            while (elapsedTime < duration)
+            {
+                uiElements.alpha = Mathf.Lerp(0f, 1f, elapsedTime / duration);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            uiElements.alpha = 1f;
+        }
+
+        // Плавное появление персонажей
+        if (charactersParent != null)
+        {
+            yield return StartCoroutine(FadeInCharacters(charactersParent));
+        }
+    }
+
+    private IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 1.5f)
+    {
+        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            foreach (var character in characters)
+            {
+                if (character != null)
+                {
+                    Color color = character.color;
+                    color.a = Mathf.Lerp(1f, 0f, elapsedTime / duration);
+                    character.color = color;
+                }
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Гарантируем полную прозрачность
+        foreach (var character in characters)
+        {
+            if (character != null)
+            {
+                Color color = character.color;
+                color.a = 0f;
+                character.color = color;
+            }
+        }
+    }
+
+    private IEnumerator FadeInCharacters(Transform charactersParent, float duration = 1.5f)
+    {
+        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            foreach (var character in characters)
+            {
+                if (character != null)
+                {
+                    Color color = character.color;
+                    color.a = Mathf.Lerp(0f, 1f, elapsedTime / duration);
+                    character.color = color;
+                }
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Гарантируем полную непрозрачность
+        foreach (var character in characters)
+        {
+            if (character != null)
+            {
+                Color color = character.color;
+                color.a = 1f;
+                character.color = color;
+            }
+        }
+    }
+
+    public void SetBackground(string backgroundName)
+    {
+        Sprite bgSprite = Resources.Load<Sprite>("Backgrounds/" + backgroundName);
+        if (bgSprite != null)
+        {
+            backgroundImage.sprite = bgSprite; // Устанавливаем спрайт
+        }
+        else
+        {
+            Debug.LogError($"Фон {backgroundName} не найден в папке Resources/Backgrounds.");
+        }
+    }
+
+    /*private IEnumerator SmoothBackgroundTransition(string backgroundName)
+    {
+        IsTransitioning = true;
+
+        // Затемнение до 50%
+        float fadeDuration = 2f;
+        float elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            Color overlayColor = darkOverlay.color;
+            overlayColor.a = Mathf.Lerp(0f, 0.5f, elapsedTime / fadeDuration);
+            darkOverlay.color = overlayColor;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        darkOverlay.color = new Color(0, 0, 0, 0.5f);
+
+        // Меняем фон
+        SetBackground(backgroundName);
+
+        // Осветление до полной видимости
+        elapsedTime = 0f;
+        while (elapsedTime < fadeDuration)
+        {
+            Color overlayColor = darkOverlay.color;
+            overlayColor.a = Mathf.Lerp(0.5f, 0f, elapsedTime / fadeDuration);
+            darkOverlay.color = overlayColor;
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        darkOverlay.color = new Color(0, 0, 0, 0f);
+
+        IsTransitioning = false;
+        currentTransitionCoroutine = null;
+    }
+
+*/
+    #endregion
+
+    #region Background Animation
+    public void StartBackgroundAnimation(string animationFolder, float delay, int repeatCount = -1, bool keepLastFrame = false)
+    {
+        if (isAnimatingBackground)
+        {
+            //Debug.Log($"Попытка запустить новую анимацию {animationFolder}, пока предыдущая ещё выполняется ({currentAnimationName}).");
+            StopBackgroundAnimation();
+        }
+
+        Sprite[] sprites = Resources.LoadAll<Sprite>("Backgrounds/" + animationFolder);
+        if (sprites.Length > 0)
+        {
+            animationSprites = new List<Sprite>(sprites);
+            frameDelay = delay;
+            this.repeatCount = repeatCount;
+            this.keepLastFrame = keepLastFrame;
+            currentAnimationName = animationFolder;
+
+            isAnimatingBackground = true;
+            animationCoroutine = StartCoroutine(PlayBackgroundAnimation());
+        }
+        else
+        {
+            Debug.LogError($"Анимация не найдена в папке Resources/Backgrounds/{animationFolder}");
+        }
+    }
+
+    public void StopBackgroundAnimation()
     {
         if (animationCoroutine != null)
         {
             StopCoroutine(animationCoroutine);
             animationCoroutine = null;
         }
-        isAnimating = false;
+        isAnimatingBackground = false;
+        animationFrame.gameObject.SetActive(false);
     }
 
-    private IEnumerator PlayAnimation()
+    private IEnumerator PlayBackgroundAnimation()
     {
         if (animationSprites == null || animationSprites.Count == 0)
         {
             Debug.LogError("Список спрайтов для анимации пуст.");
-            yield break; // Прерываем выполнение анимации, если список пуст
-        }
-
-        if (animationFrame == null)
-        {
-            Debug.LogError("Компонент Image не найден. Убедитесь, что он прикреплён к объекту.");
-            yield break; // Прерываем выполнение анимации, если animationFrame не инициализирован
+            yield break;
         }
 
         int currentFrame = 0;
-        int playedCount = 0; // Счётчик завершённых циклов
-        int lastFrameIndex = 0; // Переменная для хранения последнего кадра, который нужно показать
+        int playedCount = 0;
+        int lastFrameIndex = 0;
+
+        animationFrame.gameObject.SetActive(true);
 
         while (repeatCount == -1 || playedCount < repeatCount)
         {
-            // Показываем текущий кадр анимации
             animationFrame.sprite = animationSprites[currentFrame];
-            //Debug.Log($"Frame {currentFrame}, repeatCount: {repeatCount}, playedCount: {playedCount}");
-
-            // Обновляем lastFrameIndex каждый раз, когда показываем новый кадр
             lastFrameIndex = currentFrame;
 
             currentFrame = (currentFrame + 1) % animationSprites.Count;
-
             if (currentFrame == 0)
             {
-                playedCount++; // Увеличиваем счётчик повторений при завершении цикла
+                playedCount++;
             }
 
             yield return new WaitForSeconds(frameDelay);
         }
 
-        // После завершения цикла, проверяем флаг keepLastFrame
         if (keepLastFrame)
         {
-            Debug.Log($"Animation finished. Showing last frame: {lastFrameIndex} and playedCount: {playedCount}");
             animationFrame.sprite = animationSprites[lastFrameIndex];
         }
         else
         {
-            // Выключаем объект анимации после завершения, если keepLastFrame == false
-            Debug.Log("Disabling background animation object.");
-            gameObject.SetActive(false);
+            animationFrame.gameObject.SetActive(false);
         }
 
-        isAnimating = false;
+        isAnimatingBackground = false;
         hasAnimationPlayed = true;
         animationCoroutine = null;
     }
+
     public bool HasAnimationPlayed() => hasAnimationPlayed;
+    #endregion
 }

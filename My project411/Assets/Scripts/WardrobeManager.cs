@@ -1,13 +1,16 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 
 public class WardrobeManager : MonoBehaviour
 {
     // Названия сцен
     public string wardrobeSceneName = "WardrobeScene";
-    private DialogueManager dialogueManager;
 
+    [SerializeField] private BlinkingManager blinkingManager;
+    
     // Ссылки на дочерние объекты персонажа
     public SpriteRenderer hairRenderer;    // Hair объект
     public SpriteRenderer clothesRenderer; // Clothes объект
@@ -23,59 +26,42 @@ public class WardrobeManager : MonoBehaviour
     public Button hairButton;
     public Button clothesButton;
 
+    private CharacterManager characterManager;
+    public SpriteRenderer eyesImage;
+
+
     private void Awake()
     {
-
+        blinkingManager.StartBlinking("Alice", eyesImage);
         currentCategory = "Hair"; // По умолчанию выбрана категория "Hair"
         SetButtonState(hairButton, true);
         SetButtonState(clothesButton, false);
-
-        // Восстановить состояние персонажа, если есть сохраненные данные
-        if (hairRenderer != null && clothesRenderer != null)
-        {
-            int savedHairIndex = PlayerPrefs.GetInt("CurrentHairIndex", 0);
-            int savedClothesIndex = PlayerPrefs.GetInt("CurrentClothesIndex", 0);
-
-            hairRenderer.sprite = hairOptions[savedHairIndex];
-            clothesRenderer.sprite = clothesOptions[savedClothesIndex];
-        }
+        var (savedHairIndex, savedClothesIndex) = GameStateManager.Instance.LoadAppearance();
+        hairRenderer.sprite = hairOptions[savedHairIndex];
+        clothesRenderer.sprite = clothesOptions[savedClothesIndex];
     }
 
-    // Перейти в сцену гардероба
-    public void OpenWardrobe()
-    {
-        //mainSceneName = SceneManager.GetActiveScene().name;
-        //Debug.Log($"Текущая сцена: {mainSceneName}");
-        // Сохранить текущие индексы в PlayerPrefs
-        PlayerPrefs.SetInt("CurrentHairIndex", GetCurrentSpriteIndex(hairRenderer.sprite, hairOptions));
-        PlayerPrefs.SetInt("CurrentClothesIndex", GetCurrentSpriteIndex(clothesRenderer.sprite, clothesOptions));
-        PlayerPrefs.Save();
-
-        // Загрузить сцену гардероба
-        //SceneManager.LoadScene(wardrobeSceneName);
-    }
-
-    // Закрыть гардероб и вернуться в основную сцену
     public void CloseWardrobe()
     {
-        // Сохранить текущий выбор
-       
-        PlayerPrefs.SetInt("CurrentHairIndex", currentIndex);
-        PlayerPrefs.SetInt("CurrentClothesIndex", currentIndex);
-        PlayerPrefs.Save();
-        string mainSceneName = PlayerPrefs.GetString("MainSceneName", "DefaultScene");
-        Debug.Log(mainSceneName);
-        // Загрузить основную сцену
+        // Сохраняем текущие индексы в GameStateManager
+        int currentHairIndex = GetCurrentSpriteIndex(hairRenderer.sprite, hairOptions);
+        int currentClothesIndex = GetCurrentSpriteIndex(clothesRenderer.sprite, clothesOptions);
 
+        GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
+        GameStateManager.Instance.SaveGame();
+        Debug.Log($"Индексы сохранены: Волосы={currentHairIndex}, Одежда={currentClothesIndex}");
+
+        // Переходим на основную сцену
+        string mainSceneName = PlayerPrefs.GetString("MainSceneName", "DefaultScene");
         SceneManager.LoadScene(mainSceneName);
     }
+
 
     // Выбрать категорию "Hair"
     public void SelectHair()
     {
         currentCategory = "Hair";
         currentIndex = GetCurrentSpriteIndex(hairRenderer.sprite, hairOptions);
-        //UpdateHair();
         SetButtonState(hairButton, true);
         SetButtonState(clothesButton, false);
     }
@@ -85,7 +71,6 @@ public class WardrobeManager : MonoBehaviour
     {
         currentCategory = "Clothes";
         currentIndex = GetCurrentSpriteIndex(clothesRenderer.sprite, clothesOptions);
-        //UpdateClothes();
         SetButtonState(clothesButton, true);
         SetButtonState(hairButton, false);
     }
@@ -111,26 +96,30 @@ public class WardrobeManager : MonoBehaviour
         if (currentCategory == "Hair")
         {
             currentIndex = (currentIndex - 1 + hairOptions.Length) % hairOptions.Length;
-            UpdateHair();
+           UpdateHair();
         }
         else if (currentCategory == "Clothes")
         {
             currentIndex = (currentIndex - 1 + clothesOptions.Length) % clothesOptions.Length;
-            UpdateClothes();
+           UpdateClothes();
         }
     }
 
     // Обновить волосы
     private void UpdateHair()
     {
+        string hairSpriteName = hairOptions[currentIndex].name;
         hairRenderer.sprite = hairOptions[currentIndex];
+        GameStateManager.Instance.SaveAppearance(currentIndex, PlayerPrefs.GetInt("CurrentClothesIndex", 0));
     }
 
-    // Обновить одежду
     private void UpdateClothes()
     {
+        string clothesSpriteName = clothesOptions[currentIndex].name;
         clothesRenderer.sprite = clothesOptions[currentIndex];
+        GameStateManager.Instance.SaveAppearance(PlayerPrefs.GetInt("CurrentHairIndex", 0), currentIndex);
     }
+
 
     // Получить индекс текущего спрайта
     private int GetCurrentSpriteIndex(Sprite currentSprite, Sprite[] options)
@@ -145,18 +134,33 @@ public class WardrobeManager : MonoBehaviour
         return 0; // Если текущий спрайт не найден, возвращаем 0
     }
 
+
     // Установить состояние кнопки
     private void SetButtonState(Button button, bool isActive)
     {
         ColorBlock colors = button.colors;
+
         if (isActive)
         {
-            colors.normalColor = new Color(0.7f, 0.7f, 0.7f); // Серый цвет, указывает на активность
+            colors.normalColor = new Color(0.6f, 0.6f, 0.6f);  // Серый цвет для активного состояния
+            colors.highlightedColor = new Color(0.6f, 0.6f, 0.6f); // Такой же цвет для наведения
+            colors.pressedColor = new Color(0.5f, 0.5f, 0.5f);     // Темнее для нажатия
+            colors.selectedColor = new Color(0.6f, 0.6f, 0.6f);    // Совпадает с активным состоянием
         }
         else
         {
-            colors.normalColor = new Color(1f, 1f, 1f); // Белый цвет для неактивной кнопки
+            colors.normalColor = new Color(1f, 1f, 1f);           // Белый цвет для неактивного состояния
+            colors.highlightedColor = new Color(0.9f, 0.9f, 0.9f); // Светло-серый для наведения
+            colors.pressedColor = new Color(0.8f, 0.8f, 0.8f);     // Немного темнее для нажатия
+            colors.selectedColor = new Color(1f, 1f, 1f);         // Совпадает с неактивным состоянием
         }
+
         button.colors = colors;
+
+        // Программно устанавливаем кнопку выбранной
+        if (isActive)
+        {
+            EventSystem.current.SetSelectedGameObject(button.gameObject);
+        }
     }
 }

@@ -82,9 +82,27 @@ public class SoundManager : MonoBehaviour
         source.loop = sound.loop;
         source.Play();
 
+        if (!sound.loop)
+        {
+            StartCoroutine(RemoveSourceAfterPlayback(source, sound.name));
+        }
+
         activeSounds[sound.name] = source;
         Debug.Log($"Playing sound: {sound.name}");
     }
+
+    private System.Collections.IEnumerator RemoveSourceAfterPlayback(AudioSource source, string soundName)
+    {
+        yield return new WaitUntil(() => !source.isPlaying);
+
+        if (activeSounds.ContainsKey(soundName))
+        {
+            activeSounds.Remove(soundName);
+            Destroy(source);
+            Debug.Log($"Sound '{soundName}' finished playing and was removed.");
+        }
+    }
+
 
     private void MuteSoundByName(string soundName)
     {

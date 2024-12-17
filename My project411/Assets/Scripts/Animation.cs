@@ -15,6 +15,7 @@ public class Animations : MonoBehaviour
     private bool isLeftAvatarAnimation = false;
     private bool isRightAvatarAnimation = false;
 
+    private BlinkingManager blinkingManager;
     public bool IsLeftAvatarAnimating => isLeftAvatarAnimation;
     public bool IsRightAvatarAnimating => isRightAvatarAnimation;
 
@@ -32,11 +33,18 @@ public class Animations : MonoBehaviour
             { "left", eyesImageLeft },
             { "right", eyesImageRight }
         };
+
+        blinkingManager = FindAnyObjectByType<BlinkingManager>();
+        if (blinkingManager == null)
+        {
+            Debug.LogError("BlinkingManager не найден в сцене!");
+        }
+
     }
 
     public void PlayAnimation(string characterPosition, string animationName, string character)
     {
-        
+
 
         if (string.IsNullOrEmpty(characterPosition) || string.IsNullOrEmpty(animationName) || string.IsNullOrEmpty(character))
         {
@@ -58,22 +66,22 @@ public class Animations : MonoBehaviour
 
         string emotion = null;
         string eyes = null;
-
+        Debug.Log($"Получено animationName: {animationName}");
         switch (animationName.ToLower())
         {
             case "laugh":
                 emotion = "happy";
-                //eyes = "eyesToTheSide";
+                //eyes = "eyesToTheSideBase";
                 break;
             case "sad":
                 emotion = "sad";
                 break;
             case "happy":
-               emotion = "happy";
-                eyes = "eyesToTheSide";
+                emotion = "happy";
+                eyes = "eyesToTheSideBase";
                 break;
-            case "eyesToTheSide":
-                eyes = "eyesToTheSide";             
+            case "tothesidebase":
+                eyes = "tothesidebase";
                 break;
             case "emotionClosedEyes":
                 emotion = "emotionClosedEyes";
@@ -127,20 +135,42 @@ public class Animations : MonoBehaviour
 
     private IEnumerator ShowEmotionForDuration(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string characterPosition, float duration)
     {
+        blinkingManager.StopBlinking(characterPosition);
+
+
+        // Ожидание завершения анимации
         yield return FadeIn(emotionRenderer);
         yield return FadeIn(eyesRenderer);
 
         yield return new WaitForSeconds(duration);
 
+        // Ожидание завершения анимации перед морганием
         yield return FadeOut(emotionRenderer);
-       
+        // yield return FadeOut(eyesRenderer);
 
-        // После завершения анимации, сбрасываем флаг
+        // Завершаем анимацию
         if (characterPosition == "left") isLeftAvatarAnimation = false;
         else if (characterPosition == "right") isRightAvatarAnimation = false;
 
         Debug.Log("Анимация завершена, эмоция скрыта.");
+
+        // Проверка перед запуском моргания
+        if (blinkingManager != null && eyesRenderers.ContainsKey(characterPosition) && eyesRenderers[characterPosition] != null)
+        {
+            blinkingManager.StartBlinking(characterPosition, eyesRenderers[characterPosition]);
+        }
+        else
+        {
+            Debug.LogWarning($"Не удалось запустить моргание для позиции {characterPosition}. Проверьте настройки.");
+        }
+
+        if (blinkingManager != null)
+        {
+            blinkingManager.StopBlinking(characterPosition);
+            blinkingManager.StartBlinking(characterPosition, eyesRenderer); ///////////////
+        }
     }
+
 
     private IEnumerator FadeIn(SpriteRenderer renderer)
     {
@@ -175,4 +205,5 @@ public class Animations : MonoBehaviour
         renderer.color = color;
     }
 }
+
 

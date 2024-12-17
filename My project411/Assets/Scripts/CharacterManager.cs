@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 
 public class CharacterManager : MonoBehaviour
 {
+    [SerializeField] private BlinkingManager blinkingManager;
     [SerializeField] private SpriteRenderer leftAvatar;
     [SerializeField] private SpriteRenderer rightAvatar;
 
@@ -24,6 +25,69 @@ public class CharacterManager : MonoBehaviour
     private bool isLeftAvatarAnimating = false;
     private bool isRightAvatarAnimating = false;
 
+    [SerializeField]  private SpriteRenderer hairRenderer;
+    [SerializeField]  private SpriteRenderer clothesRenderer;
+
+    private void Start()
+    {
+       LoadAppearance();
+        //LoadCharacters();
+    }
+
+    public void LoadCharacters()
+    {
+        var (leftCharacter, rightCharacter) = GameStateManager.Instance.LoadCharacterNames();
+
+        Debug.Log($"Загружаем персонажей: Left = {leftCharacter}, Right = {rightCharacter}");
+
+        // Восстанавливаем только если имя персонажа задано
+        if (!string.IsNullOrEmpty(leftCharacter))
+            SetCharacter(leftCharacter, 1, false, leftCharacter);
+
+        if (!string.IsNullOrEmpty(rightCharacter))
+            SetCharacter(rightCharacter, 2, false, rightCharacter);
+    }
+
+
+
+    public void LoadAppearance()
+    {
+        var (hairIndex, clothesIndex) = GameStateManager.Instance.LoadAppearance();
+
+        Debug.Log($"Загрузка внешнего вида: HairIndex = {hairIndex}, ClothesIndex = {clothesIndex}");
+
+        // Загружаем спрайты по пути
+        string hairPath = $"Characters/Alice/Hair/hair{hairIndex}";
+        string clothesPath = $"Characters/Alice/Clothes/clothes{clothesIndex}";
+
+        Sprite hairSprite = Resources.Load<Sprite>(hairPath);
+        Sprite clothesSprite = Resources.Load<Sprite>(clothesPath);
+
+        Debug.Log($"Пути к ресурсам: Hair = {hairPath}, Clothes = {clothesPath}");
+
+        if (hairSprite != null)
+        {
+            hairRenderer.sprite = hairSprite;
+            Debug.Log("Спрайт для волос успешно загружен.");
+        }
+        else
+        {
+            Debug.LogError($"Спрайт для волос не найден: {hairPath}");
+        }
+
+        if (clothesSprite != null)
+        {
+            clothesRenderer.sprite = clothesSprite;
+            Debug.Log("Спрайт для одежды успешно загружен.");
+        }
+        else
+        {
+            Debug.LogError($"Спрайт для одежды не найден: {clothesPath}");
+        }
+    }
+
+
+
 
     // Метод для установки персонажа
     public void SetCharacter(string speaker, int place, bool isNarration, string character)
@@ -37,14 +101,18 @@ public class CharacterManager : MonoBehaviour
         GameObject activePanel = null;
 
         if (place == 1)
-        {
+        { 
+            // Передаем leftEyesImage и указываем isLeft = true
             UpdateCharacter(ref currentLeftCharacter, leftAvatar, ref leftBlinkCoroutine, leftEyesImage, character, true);
             activePanel = speakerPanelLeft;
+            
         }
         else if (place == 2)
         {
+            
             UpdateCharacter(ref currentRightCharacter, rightAvatar, ref rightBlinkCoroutine, rightEyesImage, character, false);
             activePanel = speakerPanelRight;
+            
         }
         else if (isNarration)
         {
@@ -65,19 +133,25 @@ public class CharacterManager : MonoBehaviour
         }
     }
 
+
     private void UpdateCharacter(ref string currentCharacter, SpriteRenderer avatar, ref Coroutine blinkCoroutine, SpriteRenderer eyesImage, string character, bool isLeft)
     {
         if (currentCharacter != character)
         {
+            // Остановить моргание для предыдущего персонажа
+            if (!string.IsNullOrEmpty(currentCharacter))
+            {
+                blinkingManager.StopBlinking(currentCharacter); // Исправленный вызов
+            }
+
             currentCharacter = character;
             UpdateAvatar(avatar, character, isLeft);
 
-            if (blinkCoroutine != null)
-                StopCoroutine(blinkCoroutine);
-
-            blinkCoroutine = StartCoroutine(BlinkCoroutine(eyesImage, character));
+            // Запустить моргание для нового персонажа
+            blinkingManager.StartBlinking(character, eyesImage);
         }
     }
+
 
     private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)
     {
@@ -125,7 +199,10 @@ public class CharacterManager : MonoBehaviour
             StartCoroutine(SmoothDisappear(avatar));
             Debug.LogWarning("Спрайт не найден для персонажа: " + character);
         }
+
     }
+
+
 
     private IEnumerator SmoothAppear(SpriteRenderer avatar, string character, float endPositionX)
     {
@@ -172,6 +249,8 @@ public class CharacterManager : MonoBehaviour
         avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 0f); // Обнуляем прозрачность на случай повторного использования
     }
 
+ 
+
     private IEnumerator WaitAndShowNewAvatar(SpriteRenderer avatar, string character, bool isLeft)
     {
         while (isLeftAvatarAnimating || isRightAvatarAnimating)
@@ -202,42 +281,28 @@ public class CharacterManager : MonoBehaviour
         Debug.Log("Скрыты все аватары и эмоции персонажей.");
     }
 
-
-    private IEnumerator BlinkCoroutine(SpriteRenderer eyesImage, string character)
+    private void OnDisable()
     {
-        if (string.IsNullOrEmpty(character))
-        {
-           Debug.LogWarning("Character is null or empty. Blink animation will not start.");
-            yield break; // Выходим из корутины, если character равен null или пустой строке
-        }
-
-        while (true)
-        {
-            if ((!isLeftAvatarAnimating && !isRightAvatarAnimating) && (!animations.IsLeftAvatarAnimating && !animations.IsRightAvatarAnimating)) // Проверяем, не идет ли анимация
-            {
-                Sprite closedEyesSprite = Resources.Load<Sprite>("Characters/" + character + "/" + character + "_ClosedEyes");
-                if (closedEyesSprite != null)
-                {
-                    eyesImage.sprite = closedEyesSprite;
-                    eyesImage.gameObject.SetActive(true);
-                }
-                else
-                {
-                    Debug.LogWarning($"Спрайт закрытых глаз не найден для: {character}");
-                }
-
-                // Моргание (короткая пауза)
-                yield return new WaitForSeconds(0.2f);
-
-                eyesImage.gameObject.SetActive(false);
-                yield return new WaitForSeconds(Random.Range(3f, 5f));
-            }
-            else
-            {
-                yield return null;
-            }
-        }
+        // Остановить все моргания при отключении
+        blinkingManager.StopAllBlinking();
     }
+
+    public string GetCurrentLeftCharacter()
+    {
+        return string.IsNullOrEmpty(currentLeftCharacter) ? null : currentLeftCharacter;
+    }
+
+    public string GetCurrentRightCharacter()
+    {
+        return string.IsNullOrEmpty(currentRightCharacter) ? null : currentRightCharacter;
+    }
+
+
+   
+
+
 }
+
+
 
 

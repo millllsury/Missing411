@@ -5,7 +5,7 @@ using UnityEngine;
 public class Choice
 {
     public string text;
-    public List<Action> actions; // Действия, выполняемые при выборе
+    public List<Action> actions;
 
 }
 
@@ -16,22 +16,11 @@ public class Action
     public bool value;
 }
 
-[System.Serializable]
-public class GameProgress
-{
-    public string currentScene;    // Текущая сцена
-    public string currentDialogue; // Текущий диалог
-    public int textCounter;        // Счетчик текста для диалогов
-    public int currentHairIndex;   // Индекс текущих волос
-    public int currentClothesIndex; // Индекс текущей одежды
-    public Dictionary<string, bool> gameFlags; // Флаги игры (например, события, которые были выполнены)
-}
-
 
 [System.Serializable]
 public class Dialogue
 {
-    public int id;  // Сделаем это публичным полем для корректной сериализации
+    public int id;  
     public string speaker;
     public string character;
     public int place;
@@ -57,8 +46,7 @@ public class Dialogue
 
     public string soundTrigger;
 
-    public float endPositionX;
-    public bool hideCharacter = false;
+    public float? targetPosition;
 }
 
 [System.Serializable]
@@ -82,7 +70,23 @@ public class SceneData
 [System.Serializable]
 public class VisualNovelData
 {
-    public List<Episode> episodes;  // Список эпизодов
+    public List<Episode> episodes;
+
+    public SceneData GetSceneById(int sceneId)
+    {
+        foreach (var episode in episodes)
+        {
+            foreach (var scene in episode.scenes)
+            {
+                if (scene.sceneId == sceneId)
+                {
+                    return scene;
+                }
+            }
+        }
+        Debug.LogError($"Сцена с ID {sceneId} не найдена!");
+        return null;
+    }
 }
 
 [System.Serializable]

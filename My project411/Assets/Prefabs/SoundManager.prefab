@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1151278406311463028
+--- !u!1 &2078619043097114300
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,9 +8,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5520659881134812438}
-  - component: {fileID: 6494756750797305730}
-  - component: {fileID: 1151780535145503871}
+  - component: {fileID: 3029596419720591689}
+  - component: {fileID: 3698635872521895674}
+  - component: {fileID: 2853885314238974937}
   m_Layer: 0
   m_Name: SoundManager
   m_TagString: Untagged
@@ -18,13 +18,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5520659881134812438
+--- !u!4 &3029596419720591689
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151278406311463028}
+  m_GameObject: {fileID: 2078619043097114300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1502.2771, y: 295.49744, z: 10.14733}
@@ -33,26 +33,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &6494756750797305730
+--- !u!82 &3698635872521895674
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151278406311463028}
+  m_GameObject: {fileID: 2078619043097114300}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.267
+  m_Volume: 0.2
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -130,16 +130,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1151780535145503871
+--- !u!114 &2853885314238974937
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1151278406311463028}
+  m_GameObject: {fileID: 2078619043097114300}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f00f3930e911cea4490e4226c027a51d, type: 3}
+  m_Script: {fileID: 11500000, guid: bf3cb27bb757d4b49a93abc5ea8b418b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sounds:
@@ -148,4 +148,16 @@ MonoBehaviour:
     loop: 1
   - name: owl
     clip: {fileID: 8300000, guid: cbee4c4e459873944aeb8c85a633a3f8, type: 3}
+    loop: 0
+  - name: Winter
+    clip: {fileID: 8300000, guid: 926a7546c38beb245aaaa740bc0d6d29, type: 3}
+    loop: 1
+  - name: woman_laugh
+    clip: {fileID: 8300000, guid: 78b59b7bf1cd0e348a37ea1aa99a0981, type: 3}
+    loop: 0
+  - name: woman_short_laugh
+    clip: {fileID: 8300000, guid: 7d61cb40d9b0f08498ff25fa98593f35, type: 3}
+    loop: 0
+  - name: male-sigh
+    clip: {fileID: 8300000, guid: eab1107602e1c9e4ebc8556f5fda2f04, type: 3}
     loop: 0
