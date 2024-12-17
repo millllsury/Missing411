@@ -297,8 +297,82 @@ public class CharacterManager : MonoBehaviour
         return string.IsNullOrEmpty(currentRightCharacter) ? null : currentRightCharacter;
     }
 
+    public IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 1.5f)
+    {
+        if (blinkingManager != null)
+        {
+            blinkingManager.StopAllBlinking();
+        }
+        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
+        float elapsedTime = 0f;
+        
 
-   
+        while (elapsedTime < duration)
+        {
+            foreach (var character in characters)
+            {
+                if (character != null)
+                {
+                    Color color = character.color;
+                    color.a = Mathf.Lerp(1f, 0f, elapsedTime / duration);
+                    character.color = color;
+                }
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Устанавливаем полную прозрачность
+        foreach (var character in characters)
+        {
+            if (character != null)
+            {
+                Color color = character.color;
+                color.a = 0f;
+                character.color = color;
+            }
+        }
+    }
+
+    public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 1.5f)
+    {
+        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            foreach (var character in characters)
+            {
+                if (character != null)
+                {
+                    Color color = character.color;
+                    color.a = Mathf.Lerp(0f, 1f, elapsedTime / duration);
+                    character.color = color;
+                }
+            }
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Устанавливаем полную непрозрачность
+        foreach (var character in characters)
+        {
+            if (character != null)
+            {
+                Color color = character.color;
+                color.a = 1f;
+                character.color = color;
+            }
+        }
+        if (blinkingManager != null)
+        {
+            blinkingManager.StartBlinking(currentLeftCharacter, leftEyesImage);
+            blinkingManager.StartBlinking(currentRightCharacter, rightEyesImage);
+        }
+    }
+
 
 
 }

@@ -57,6 +57,7 @@ public class BlinkingManager : MonoBehaviour
                 StopCoroutine(coroutine);
             }
         }
+
         blinkingCoroutines.Clear();
     }
 

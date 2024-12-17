@@ -766,6 +766,7 @@ MonoBehaviour:
   animationFrame: {fileID: 1483044624354887686}
   frameDelay: 3
   repeatCount: -1
+  characterManager: {fileID: 0}
   uiElements: {fileID: 0}
   charactersParent: {fileID: 0}
 --- !u!114 &369524293343724854
@@ -3592,6 +3593,7 @@ MonoBehaviour:
   animationFrame: {fileID: 1483044624354887686}
   frameDelay: 3
   repeatCount: -1
+  characterManager: {fileID: 1256994933876070138}
   uiElements: {fileID: 8924923705897243612}
   charactersParent: {fileID: 1234617544}
 --- !u!114 &5804102548487052959

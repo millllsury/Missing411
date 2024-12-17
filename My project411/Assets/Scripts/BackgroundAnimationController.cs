@@ -34,7 +34,7 @@ public class BackgroundController : MonoBehaviour
 
     public bool GetKeepLastFrame() => keepLastFrame;
 
-    private CharacterManager characterManager;  
+    [SerializeField] private CharacterManager characterManager;  
 
 
     [SerializeField] private CanvasGroup uiElements; // CanvasGroup для UI элементов
@@ -109,7 +109,6 @@ public class BackgroundController : MonoBehaviour
 
     private void ToggleElements(bool isActive)
     {
-        // Отключаем UI
         if (uiElements != null)
         {
             uiElements.alpha = isActive ? 1f : 0f;
@@ -117,11 +116,10 @@ public class BackgroundController : MonoBehaviour
             uiElements.blocksRaycasts = isActive;
         }
 
-        // Плавное скрытие персонажей
-        if (charactersParent != null && !isActive)
-        {
-            StartCoroutine(FadeOutCharacters(charactersParent));
-        }
+        
+        
+         characterManager.StartCoroutine(characterManager.FadeOutCharacters(charactersParent.transform));
+        
     }
 
 
@@ -130,7 +128,6 @@ public class BackgroundController : MonoBehaviour
         float duration = 1.5f;
         float elapsedTime = 0f;
 
-        // Плавное появление UI
         if (uiElements != null)
         {
             while (elapsedTime < duration)
@@ -142,78 +139,16 @@ public class BackgroundController : MonoBehaviour
             uiElements.alpha = 1f;
         }
 
-        // Плавное появление персонажей
-        if (charactersParent != null)
-        {
-            yield return StartCoroutine(FadeInCharacters(charactersParent));
-        }
+        
+        
+         yield return characterManager.StartCoroutine(characterManager.FadeInCharacters(charactersParent.transform));
+        
     }
 
-    private IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 1.5f)
-    {
-        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
-        float elapsedTime = 0f;
 
-        while (elapsedTime < duration)
-        {
-            foreach (var character in characters)
-            {
-                if (character != null)
-                {
-                    Color color = character.color;
-                    color.a = Mathf.Lerp(1f, 0f, elapsedTime / duration);
-                    character.color = color;
-                }
-            }
 
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+   
 
-        // Гарантируем полную прозрачность
-        foreach (var character in characters)
-        {
-            if (character != null)
-            {
-                Color color = character.color;
-                color.a = 0f;
-                character.color = color;
-            }
-        }
-    }
-
-    private IEnumerator FadeInCharacters(Transform charactersParent, float duration = 1.5f)
-    {
-        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
-        float elapsedTime = 0f;
-
-        while (elapsedTime < duration)
-        {
-            foreach (var character in characters)
-            {
-                if (character != null)
-                {
-                    Color color = character.color;
-                    color.a = Mathf.Lerp(0f, 1f, elapsedTime / duration);
-                    character.color = color;
-                }
-            }
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        // Гарантируем полную непрозрачность
-        foreach (var character in characters)
-        {
-            if (character != null)
-            {
-                Color color = character.color;
-                color.a = 1f;
-                character.color = color;
-            }
-        }
-    }
 
     public void SetBackground(string backgroundName)
     {
