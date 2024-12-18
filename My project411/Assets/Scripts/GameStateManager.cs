@@ -5,9 +5,11 @@ using UnityEngine;
 [System.Serializable]
 public class GameState
 {
+    public string currentEpisode;
     public string currentScene;             // Текущая сцена
     public string currentDialogue;          // Текущий диалог
     public int textCounter;                 // Счетчик текста
+    public bool episodeNameShowed;
     public Dictionary<string, bool> flags;  // Флаги игры
     public int hairIndex;                   // Индекс волос персонажа
     public int clothesIndex;                // Индекс одежды персонажа
@@ -48,20 +50,22 @@ public class GameStateManager : MonoBehaviour
 
     #region Управление состоянием
 
-    public void UpdateSceneState(string scene, string dialogue, int textIndex)
+    public void UpdateSceneState(string episode, string scene, string dialogue, int textIndex, bool episodeNameShowed)
     {
         if (string.IsNullOrEmpty(scene) || string.IsNullOrEmpty(dialogue))
         {
             Debug.LogWarning("Попытка обновить состояние с пустыми значениями.");
             return;
         }
-
+        currentState.currentEpisode = episode;
         currentState.currentScene = scene;
         currentState.currentDialogue = dialogue;
         currentState.textCounter = textIndex;
+        currentState.episodeNameShowed = episodeNameShowed;
 
-        Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}");
+        Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe={episodeNameShowed}");
     }
+
 
 
 
@@ -94,12 +98,14 @@ public class GameStateManager : MonoBehaviour
         Debug.LogWarning("Файл сохранения не найден! Создаем дефолтное состояние.");
         currentState = new GameState
         {
-            currentScene = "1",     // ID начальной сцены
-            currentDialogue = "0",  // ID первого диалога
+            currentEpisode = "1",
+            currentScene = "1",
+            currentDialogue = "0",
             textCounter = 0,
             flags = new Dictionary<string, bool>(),
             hairIndex = 0,
-            clothesIndex = 0
+            clothesIndex = 0,
+            episodeNameShowed = false // По умолчанию эпизод не показан
         };
 
         return false;

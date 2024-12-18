@@ -69,7 +69,7 @@ public class BackgroundController : MonoBehaviour
         ToggleElements(false);
 
         // 2. Плавное затемнение экрана (до 50%)
-        float fadeDuration = 2f;
+        float fadeDuration = 3f;
         float elapsedTime = 0f;
 
         while (elapsedTime < fadeDuration)
@@ -116,8 +116,6 @@ public class BackgroundController : MonoBehaviour
             uiElements.blocksRaycasts = isActive;
         }
 
-        
-        
          characterManager.StartCoroutine(characterManager.FadeOutCharacters(charactersParent.transform));
         
     }
@@ -136,18 +134,18 @@ public class BackgroundController : MonoBehaviour
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
+
+            // Гарантируем полную видимость
             uiElements.alpha = 1f;
+            uiElements.interactable = true;
+            uiElements.blocksRaycasts = true;
         }
 
-        
-        
-         yield return characterManager.StartCoroutine(characterManager.FadeInCharacters(charactersParent.transform));
-        
+        if (charactersParent != null)
+        {
+            yield return characterManager.StartCoroutine(characterManager.FadeInCharacters(charactersParent.transform));
+        }
     }
-
-
-
-   
 
 
     public void SetBackground(string backgroundName)
@@ -163,45 +161,7 @@ public class BackgroundController : MonoBehaviour
         }
     }
 
-    /*private IEnumerator SmoothBackgroundTransition(string backgroundName)
-    {
-        IsTransitioning = true;
-
-        // Затемнение до 50%
-        float fadeDuration = 2f;
-        float elapsedTime = 0f;
-        while (elapsedTime < fadeDuration)
-        {
-            Color overlayColor = darkOverlay.color;
-            overlayColor.a = Mathf.Lerp(0f, 0.5f, elapsedTime / fadeDuration);
-            darkOverlay.color = overlayColor;
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        darkOverlay.color = new Color(0, 0, 0, 0.5f);
-
-        // Меняем фон
-        SetBackground(backgroundName);
-
-        // Осветление до полной видимости
-        elapsedTime = 0f;
-        while (elapsedTime < fadeDuration)
-        {
-            Color overlayColor = darkOverlay.color;
-            overlayColor.a = Mathf.Lerp(0.5f, 0f, elapsedTime / fadeDuration);
-            darkOverlay.color = overlayColor;
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        darkOverlay.color = new Color(0, 0, 0, 0f);
-
-        IsTransitioning = false;
-        currentTransitionCoroutine = null;
-    }
-
-*/
+   
     #endregion
 
     #region Background Animation

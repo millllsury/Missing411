@@ -38,7 +38,7 @@ public class DialogueManager : MonoBehaviour
     public bool isEpisodeScreenActive = false;
     public bool inputUnavailable = false;
 
-    private bool EpisodeNameShowed = false; // По умолчанию не показана
+    private bool episodeNameShowed = false; // По умолчанию не показана
 
 
 
@@ -148,7 +148,7 @@ public class DialogueManager : MonoBehaviour
 
     private void ShowEpisodeName()
     {
-        if (EpisodeNameShowed) return; // Если уже показывали, не показываем снова
+        if (episodeNameShowed) return; // Если уже показывали, не показываем снова
 
         if (isEpisodeScreenActive) return; // Проверяем, активен ли уже экран
 
@@ -156,7 +156,7 @@ public class DialogueManager : MonoBehaviour
         isEpisodeScreenActive = true;
         UIManager.ShowEpisodeScreen(currentEpisode.episodeName, backgroundImage);
 
-        EpisodeNameShowed = true; // Устанавливаем флаг, что экран был показан
+        episodeNameShowed = true; // Устанавливаем флаг, что экран был показан
     }
 
 
@@ -471,10 +471,11 @@ public class DialogueManager : MonoBehaviour
     {
         int currentTextCounter = textCounter - 1;
         GameStateManager.Instance.UpdateSceneState(
+            currentEpisode.episodeId.ToString(),
             currentScene.sceneId.ToString(),
             currentDialogueId.ToString(),
-            currentTextCounter 
-
+            currentTextCounter,
+            episodeNameShowed
         );
         GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
 
