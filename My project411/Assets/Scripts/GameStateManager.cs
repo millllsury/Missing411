@@ -50,20 +50,20 @@ public class GameStateManager : MonoBehaviour
 
     #region Управление состоянием
 
-    public void UpdateSceneState(string episode, string scene, string dialogue, int textIndex, bool episodeNameShowed)
+    public void UpdateSceneState(/*string episode,*/ string scene, string dialogue, int textIndex/*, bool episodeNameShowed*/)
     {
         if (string.IsNullOrEmpty(scene) || string.IsNullOrEmpty(dialogue))
         {
             Debug.LogWarning("Попытка обновить состояние с пустыми значениями.");
             return;
         }
-        currentState.currentEpisode = episode;
+        //currentState.currentEpisode = episode;
         currentState.currentScene = scene;
         currentState.currentDialogue = dialogue;
         currentState.textCounter = textIndex;
-        currentState.episodeNameShowed = episodeNameShowed;
+        /// currentState.episodeNameShowed = episodeNameShowed;
 
-        Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe={episodeNameShowed}");
+        Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe=");
     }
 
 
@@ -98,7 +98,7 @@ public class GameStateManager : MonoBehaviour
         Debug.LogWarning("Файл сохранения не найден! Создаем дефолтное состояние.");
         currentState = new GameState
         {
-            currentEpisode = "1",
+            //currentEpisode = "1",
             currentScene = "1",
             currentDialogue = "0",
             textCounter = 0,

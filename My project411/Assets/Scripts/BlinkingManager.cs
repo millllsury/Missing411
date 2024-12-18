@@ -16,6 +16,8 @@ public class BlinkingManager : MonoBehaviour
     public AnimationCheckDelegate IsExternalAnimationPlaying;
 
 
+
+
     public void StartBlinking(string characterName, SpriteRenderer eyesImage)
     {
         if (string.IsNullOrEmpty(characterName) || eyesImage == null)
@@ -33,6 +35,7 @@ public class BlinkingManager : MonoBehaviour
         // Запуск новой корутины
         Coroutine coroutine = StartCoroutine(BlinkCoroutine(eyesImage, characterName));
         blinkingCoroutines[characterName] = coroutine;
+        Debug.LogWarning("корутина");
     }
 
 

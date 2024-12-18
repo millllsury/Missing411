@@ -1,0 +1,1456 @@
+fileFormatVersion: 2
+guid: 7a36e873e4df0684eb1f33207eb3acfa
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1659956063603049639
+    second: Meruem_0
+  - first:
+      213: 6747880911060749599
+    second: Meruem_1
+  - first:
+      213: -973935331572828310
+    second: Meruem_2
+  - first:
+      213: 4859331737829690052
+    second: Meruem_3
+  - first:
+      213: 3402574404392045700
+    second: Meruem_4
+  - first:
+      213: 3175394598406867061
+    second: Meruem_5
+  - first:
+      213: 4511114140576895544
+    second: Meruem_6
+  - first:
+      213: 2280565427628128180
+    second: Meruem_7
+  - first:
+      213: 3125316592209375606
+    second: Meruem_8
+  - first:
+      213: -9131553831885212031
+    second: Meruem_9
+  - first:
+      213: 3202475799377814059
+    second: Meruem_10
+  - first:
+      213: 2596688389587351638
+    second: Meruem_11
+  - first:
+      213: -7385883575303973120
+    second: Meruem_12
+  - first:
+      213: 4071644614633781437
+    second: Meruem_13
+  - first:
+      213: 2081164196986365676
+    second: Meruem_14
+  - first:
+      213: 1327774744161545317
+    second: Meruem_15
+  - first:
+      213: 7569975282465368383
+    second: Meruem_16
+  - first:
+      213: -5499613126873683953
+    second: Meruem_17
+  - first:
+      213: -8765697570752175925
+    second: Meruem_18
+  - first:
+      213: 4679353440700594986
+    second: Meruem_19
+  - first:
+      213: 5366479489062778544
+    second: Meruem_20
+  - first:
+      213: 6456037878799465431
+    second: Meruem_21
+  - first:
+      213: 8355728510297920124
+    second: Meruem_22
+  - first:
+      213: -3336756305509878263
+    second: Meruem_23
+  - first:
+      213: 8384091082536922341
+    second: Meruem_24
+  - first:
+      213: 3285312145492769726
+    second: Meruem_25
+  - first:
+      213: -2745267417273577409
+    second: Meruem_26
+  - first:
+      213: 7661808206587759844
+    second: Meruem_27
+  - first:
+      213: -5779996877780872945
+    second: Meruem_28
+  - first:
+      213: 8423877773312510498
+    second: Meruem_29
+  - first:
+      213: 7393110156874302712
+    second: Meruem_30
+  - first:
+      213: -3380422832785296684
+    second: Meruem_31
+  - first:
+      213: -8309707594905330338
+    second: Meruem_32
+  - first:
+      213: -4979805109223322328
+    second: Meruem_33
+  - first:
+      213: 4488540599926438697
+    second: Meruem_34
+  - first:
+      213: 1767478532886008676
+    second: Meruem_35
+  - first:
+      213: -4786713331773559365
+    second: Meruem_36
+  - first:
+      213: -4428600826065588838
+    second: Meruem_37
+  - first:
+      213: -7980593978750278976
+    second: Meruem_38
+  - first:
+      213: 6155323402689145003
+    second: Meruem_39
+  - first:
+      213: 2829248801970930588
+    second: Meruem_40
+  - first:
+      213: 4586199061188555776
+    second: Meruem_41
+  - first:
+      213: 8731632577924145200
+    second: Meruem_42
+  - first:
+      213: -2075537787371997551
+    second: Meruem_43
+  - first:
+      213: -3861791937682130889
+    second: Meruem_44
+  - first:
+      213: 409329397310710083
+    second: Meruem_45
+  - first:
+      213: -4199577107052368522
+    second: Meruem_46
+  - first:
+      213: -2160170782748963408
+    second: Meruem_47
+  - first:
+      213: 5677821294344985071
+    second: Meruem_48
+  - first:
+      213: 6589972420937555462
+    second: Meruem_49
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 170
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Win64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Meruem_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1080
+        height: 1604
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95b3f2641c6a6f8e0800000000000000
+      internalID: -1659956063603049639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_1
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1421
+        width: 137
+        height: 326
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1d4a62dfe945ad50800000000000000
+      internalID: 6747880911060749599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_2
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 1569
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a67366fd9f2eb72f0800000000000000
+      internalID: -973935331572828310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_3
+      rect:
+        serializedVersion: 2
+        x: 126
+        y: 1601
+        width: 179
+        height: 156
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4cace1f3870df6340800000000000000
+      internalID: 4859331737829690052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_4
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 1524
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48ccf97a46f583f20800000000000000
+      internalID: 3402574404392045700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_5
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 1624
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5784cb33094411c20800000000000000
+      internalID: 3175394598406867061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_6
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 1641
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 832d352f862ba9e30800000000000000
+      internalID: 4511114140576895544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_7
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 1625
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b7bfc86c2236af10800000000000000
+      internalID: 2280565427628128180
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_8
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 1601
+        width: 155
+        height: 149
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6713649c1ea5f5b20800000000000000
+      internalID: 3125316592209375606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_9
+      rect:
+        serializedVersion: 2
+        x: 398
+        y: 1642
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 186ff13cb24364180800000000000000
+      internalID: -9131553831885212031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_10
+      rect:
+        serializedVersion: 2
+        x: 410
+        y: 1659
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b2223b7a5ca717c20800000000000000
+      internalID: 3202475799377814059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_11
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 1590
+        width: 11
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6583cbd155a490420800000000000000
+      internalID: 2596688389587351638
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_12
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 1226
+        width: 116
+        height: 421
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0075d953502108990800000000000000
+      internalID: -7385883575303973120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_13
+      rect:
+        serializedVersion: 2
+        x: 999
+        y: 1449
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db8f0ea5433618830800000000000000
+      internalID: 4071644614633781437
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_14
+      rect:
+        serializedVersion: 2
+        x: 1011
+        y: 1466
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce622a88fc7c1ec10800000000000000
+      internalID: 2081164196986365676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_15
+      rect:
+        serializedVersion: 2
+        x: 1027
+        y: 1524
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56ceb7f48143d6210800000000000000
+      internalID: 1327774744161545317
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_16
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 1396
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f39e5d57964fd0960800000000000000
+      internalID: 7569975282465368383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_17
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 784
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f086e92dff27da3b0800000000000000
+      internalID: -5499613126873683953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_18
+      rect:
+        serializedVersion: 2
+        x: 124
+        y: 158
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc0efc6808cf95680800000000000000
+      internalID: -8765697570752175925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_19
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 739
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2bf57b792760f040800000000000000
+      internalID: 4679353440700594986
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_20
+      rect:
+        serializedVersion: 2
+        x: 954
+        y: 227
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b6b10899a0997a40800000000000000
+      internalID: 5366479489062778544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_21
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 756
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7dbfe46ce34789950800000000000000
+      internalID: 6456037878799465431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_22
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 244
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7259ef3fc285f370800000000000000
+      internalID: 8355728510297920124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_23
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 930
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 906f90ca1d571b1d0800000000000000
+      internalID: -3336756305509878263
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_24
+      rect:
+        serializedVersion: 2
+        x: 969
+        y: 418
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ec22233b664a5470800000000000000
+      internalID: 8384091082536922341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_25
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 947
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebb7f507df5c79d20800000000000000
+      internalID: 3285312145492769726
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_26
+      rect:
+        serializedVersion: 2
+        x: 981
+        y: 435
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f3054fb34d9d6e9d0800000000000000
+      internalID: -2745267417273577409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_27
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 814
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ec06da48f5345a60800000000000000
+      internalID: 7661808206587759844
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_28
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 302
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f011101a67359cfa0800000000000000
+      internalID: -5779996877780872945
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_29
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 154
+        width: 84
+        height: 999
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22ac9950430a7e470800000000000000
+      internalID: 8423877773312510498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_30
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 1005
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f443dd648a999660800000000000000
+      internalID: 7393110156874302712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_31
+      rect:
+        serializedVersion: 2
+        x: 997
+        y: 493
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4d2763508535611d0800000000000000
+      internalID: -3380422832785296684
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_32
+      rect:
+        serializedVersion: 2
+        x: 1033
+        y: 648
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5d5d4a18fcfdac80800000000000000
+      internalID: -8309707594905330338
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_33
+      rect:
+        serializedVersion: 2
+        x: 1036
+        y: 766
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82d811623ad24eab0800000000000000
+      internalID: -4979805109223322328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_34
+      rect:
+        serializedVersion: 2
+        x: 1036
+        y: 254
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 92bb882f4ef7a4e30800000000000000
+      internalID: 4488540599926438697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_35
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 1058
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4639cc47c58578810800000000000000
+      internalID: 1767478532886008676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_36
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 546
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbda20af59d229db0800000000000000
+      internalID: -4786713331773559365
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_37
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 511
+        width: 8
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9deb5e23037a82c0800000000000000
+      internalID: -4428600826065588838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_38
+      rect:
+        serializedVersion: 2
+        x: 1055
+        y: 1075
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c2e7ff2f0c3f3190800000000000000
+      internalID: -7980593978750278976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_39
+      rect:
+        serializedVersion: 2
+        x: 1055
+        y: 563
+        width: 8
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba86feeb50a1c6550800000000000000
+      internalID: 6155323402689145003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_40
+      rect:
+        serializedVersion: 2
+        x: 1069
+        y: 621
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c934dae9bc2834720800000000000000
+      internalID: 2829248801970930588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_41
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 140
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 004bf575fb375af30800000000000000
+      internalID: 4586199061188555776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_42
+      rect:
+        serializedVersion: 2
+        x: 1038
+        y: 140
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 030a564419dfc2970800000000000000
+      internalID: 8731632577924145200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_43
+      rect:
+        serializedVersion: 2
+        x: 47
+        y: 109
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 196bac901653233e0800000000000000
+      internalID: -2075537787371997551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_44
+      rect:
+        serializedVersion: 2
+        x: 1069
+        y: 109
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7383dfd71b8286ac0800000000000000
+      internalID: -3861791937682130889
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_45
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 61
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 34164da0bea3ea500800000000000000
+      internalID: 409329397310710083
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_46
+      rect:
+        serializedVersion: 2
+        x: 31
+        y: 51
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67de7471fda18b5c0800000000000000
+      internalID: -4199577107052368522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_47
+      rect:
+        serializedVersion: 2
+        x: 1055
+        y: 51
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0bd02104e188502e0800000000000000
+      internalID: -2160170782748963408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_48
+      rect:
+        serializedVersion: 2
+        x: 19
+        y: 34
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe9d493826cabce40800000000000000
+      internalID: 5677821294344985071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Meruem_49
+      rect:
+        serializedVersion: 2
+        x: 1043
+        y: 34
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60e9a9d6009447b50800000000000000
+      internalID: 6589972420937555462
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Meruem_0: -1659956063603049639
+      Meruem_1: 6747880911060749599
+      Meruem_10: 3202475799377814059
+      Meruem_11: 2596688389587351638
+      Meruem_12: -7385883575303973120
+      Meruem_13: 4071644614633781437
+      Meruem_14: 2081164196986365676
+      Meruem_15: 1327774744161545317
+      Meruem_16: 7569975282465368383
+      Meruem_17: -5499613126873683953
+      Meruem_18: -8765697570752175925
+      Meruem_19: 4679353440700594986
+      Meruem_2: -973935331572828310
+      Meruem_20: 5366479489062778544
+      Meruem_21: 6456037878799465431
+      Meruem_22: 8355728510297920124
+      Meruem_23: -3336756305509878263
+      Meruem_24: 8384091082536922341
+      Meruem_25: 3285312145492769726
+      Meruem_26: -2745267417273577409
+      Meruem_27: 7661808206587759844
+      Meruem_28: -5779996877780872945
+      Meruem_29: 8423877773312510498
+      Meruem_3: 4859331737829690052
+      Meruem_30: 7393110156874302712
+      Meruem_31: -3380422832785296684
+      Meruem_32: -8309707594905330338
+      Meruem_33: -4979805109223322328
+      Meruem_34: 4488540599926438697
+      Meruem_35: 1767478532886008676
+      Meruem_36: -4786713331773559365
+      Meruem_37: -4428600826065588838
+      Meruem_38: -7980593978750278976
+      Meruem_39: 6155323402689145003
+      Meruem_4: 3402574404392045700
+      Meruem_40: 2829248801970930588
+      Meruem_41: 4586199061188555776
+      Meruem_42: 8731632577924145200
+      Meruem_43: -2075537787371997551
+      Meruem_44: -3861791937682130889
+      Meruem_45: 409329397310710083
+      Meruem_46: -4199577107052368522
+      Meruem_47: -2160170782748963408
+      Meruem_48: 5677821294344985071
+      Meruem_49: 6589972420937555462
+      Meruem_5: 3175394598406867061
+      Meruem_6: 4511114140576895544
+      Meruem_7: 2280565427628128180
+      Meruem_8: 3125316592209375606
+      Meruem_9: -9131553831885212031
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

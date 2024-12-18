@@ -146,7 +146,7 @@ public class Animations : MonoBehaviour
 
         // Ожидание завершения анимации перед морганием
         yield return FadeOut(emotionRenderer);
-        // yield return FadeOut(eyesRenderer);
+        yield return FadeOut(eyesRenderer);
 
         // Завершаем анимацию
         if (characterPosition == "left") isLeftAvatarAnimation = false;

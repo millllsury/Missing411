@@ -193,6 +193,7 @@ public class CharacterManager : MonoBehaviour
             }
 
             Debug.Log("Установлен спрайт для персонажа: " + character);
+
         }
         else
         {
