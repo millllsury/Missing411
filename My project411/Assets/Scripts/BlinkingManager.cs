@@ -68,40 +68,38 @@ public class BlinkingManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(characterName))
         {
-            Debug.LogWarning("Character is null or empty. Blink animation will not start.");
-            yield break; // Выходим из корутины, если character равен null или пустой строке
+            Debug.LogWarning("Character name is null or empty. Blink animation will not start.");
+            yield break;
         }
-
 
         while (true)
         {
             if ((!IsLeftAvatarAnimating && !IsRightAvatarAnimating) &&
                 (IsExternalAnimationPlaying == null || !IsExternalAnimationPlaying()))
             {
-                // Запуск моргания
                 Sprite closedEyesSprite = Resources.Load<Sprite>($"Characters/{characterName}/{characterName}_ClosedEyes");
                 if (closedEyesSprite == null)
-                {                   
-                    yield break;
+                {
+                    Debug.LogWarning($"Closed eyes sprite for {characterName} not found. Retrying...");
+                    yield return new WaitForSeconds(1f);
+                    continue;
                 }
 
-                // Показ закрытых глаз
+                // Показ закрытых глаз.
                 eyesImage.sprite = closedEyesSprite;
                 eyesImage.gameObject.SetActive(true);
+                yield return new WaitForSeconds(0.2f);
 
-                yield return new WaitForSeconds(0.2f); // Длительность закрытых глаз
-
-                // Скрыть глаза
+                // Скрытие глаз.
                 eyesImage.gameObject.SetActive(false);
-
-                // Пауза перед следующим морганием
                 yield return new WaitForSeconds(Random.Range(3f, 5f));
             }
             else
             {
-                yield return null; // Ждем, пока не завершится анимация
+                yield return null;
             }
         }
     }
+
 
 }

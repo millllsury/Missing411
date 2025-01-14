@@ -138,19 +138,19 @@ public class CharacterManager : MonoBehaviour
     {
         if (currentCharacter != character)
         {
-            // Остановить моргание для предыдущего персонажа
             if (!string.IsNullOrEmpty(currentCharacter))
             {
-                blinkingManager.StopBlinking(currentCharacter); // Исправленный вызов
+                blinkingManager.StopBlinking(currentCharacter); // Останавливаем моргание для предыдущего персонажа.
             }
 
             currentCharacter = character;
             UpdateAvatar(avatar, character, isLeft);
 
-            // Запустить моргание для нового персонажа
+            // Запуск моргания для нового персонажа.
             blinkingManager.StartBlinking(character, eyesImage);
         }
     }
+
 
 
     private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)

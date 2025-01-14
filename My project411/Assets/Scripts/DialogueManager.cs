@@ -32,7 +32,7 @@ public class DialogueManager : MonoBehaviour
     private SceneData currentScene;
 
     private int currentDialogueId;
-    private int textCounter;
+    private int textCounter=-1;
 
     public bool isChoosing = false;
     public bool isEpisodeScreenActive = false;
@@ -41,7 +41,7 @@ public class DialogueManager : MonoBehaviour
     private bool EpisodeNameShowed = false; // По умолчанию не показана
 
 
-
+    private bool canGoBack = true; // Разрешение на возврат
     private Stack<(int? currentDialogueId, int textCounter)> dialogueHistory = new Stack<(int?, int)>();    // Стек для отслеживания диалогов
 
 
@@ -271,36 +271,40 @@ public class DialogueManager : MonoBehaviour
 
     private void DisplayDialogueText(Dialogue dialogue)
     {
-
         characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
 
         if (dialogue.texts != null && dialogue.texts.Count > 0)
         {
+            
             if (textCounter < dialogue.texts.Count)
             {
-                dialogueText.text = dialogue.texts[textCounter];
-
-                textCounter++; // увеличиваем textCounter после показа текста
+                if(textCounter == 0)
+                {
+                    dialogueText.text = dialogue.texts[textCounter++];
+                }
+                else {
+                    dialogueHistory.Push((currentDialogueId, textCounter - 1));
+                    Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter-1}");
+                    dialogueText.text = dialogue.texts[textCounter++];
+                    UpdateBackButtonState(true);
+                }               
             }
             else
             {
-                // Если все тексты выведены, переходим к выбору или следующему диалогу
-                dialogueHistory.Push((currentDialogueId, textCounter - 1)); // сохраняем предыдущий текст
-                Debug.Log($"Сохранилось в стек: currentDialogueId: {currentDialogueId} и textCounter: {textCounter}");
+                // Сохраняем состояние перед переходом к следующему диалогу
+                dialogueHistory.Push((currentDialogueId, textCounter - 1));
+                Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter - 1}");
+
                 HandleDialogueEnd(dialogue);
             }
         }
-        else
+        else if (dialogue.choices != null && dialogue.choices.Count > 0)
         {
-            // Если в диалоге нет текстов, значит это диалог с выбором
-            if (dialogue.choices != null && dialogue.choices.Count > 0)
-            {
-                ShowChoices(dialogue.choices); // Показываем выбор
-            }
+            ShowChoices(dialogue.choices);
         }
-        canGoBack = true;
-    }
 
+        canGoBack = true; // Разрешаем возврат после обработки текста
+    }
 
     private void HandleDialogueEnd(Dialogue dialogue)
     {
@@ -336,6 +340,8 @@ public class DialogueManager : MonoBehaviour
             HandleDialogueAnimation(nextDialogue);
 
             HandleDialogueSound(nextDialogue);
+            UpdateBackButtonState(true);
+
             // Показываем текст следующего диалога
             ShowNextDialogueText();
         }
@@ -354,11 +360,11 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-      private bool canGoBack = true; // Разрешение на возврат
+
 
     public void GoBackOneStep(GameObject clickedObject)
     {
-        if (!canGoBack) return;
+        if (!canGoBack) return; // Если возврат невозможен, ничего не делаем.
 
         if (clickedObject == backButton.gameObject)
         {
@@ -366,55 +372,61 @@ public class DialogueManager : MonoBehaviour
 
             if (isChoosing)
             {
-                HideChoices(); // если мы выбираем
-
+                HideChoices();
+                return;
             }
 
-            // Если мы находимся в середине текущего диалога, уменьшаем textCounter
-            if (textCounter > 0)
+            if (dialogueHistory.Count == 0)
             {
-                textCounter--;
-                var dialogue = GetCurrentDialogue();
-                if (dialogue != null)
-                {
-                    dialogueText.text = dialogue.texts[textCounter];
-
-                }
-
+                Debug.Log("История пуста. Возврат невозможен.");
+                UpdateBackButtonState(false);
+                return;
             }
 
-            // Иначе возвращаемся к предыдущему диалогу
-            if (dialogueHistory.Count > 0)
+            // Извлекаем предыдущее состояние из стека
+            var previousState = dialogueHistory.Pop();
+
+            // Проверяем, был ли предыдущий диалог первым после выбора
+            if (previousState.currentDialogueId == null && previousState.textCounter == 0)
             {
-                var previousState = dialogueHistory.Pop();
-
-
-                // Если достигли метки
-                if (previousState.currentDialogueId == null)
-                {
-                    Debug.Log("Достигнут первый диалог после выбора. Возврат невозможен.");
-                    canGoBack = false;
-
-                    return;
-                }
-
-                currentDialogueId = previousState.currentDialogueId.Value;
-                textCounter = previousState.textCounter;
-
-                var dialogue = GetCurrentDialogue();
-                if (dialogue != null)
-                {
-                    dialogueText.text = dialogue.texts[textCounter];
-                    characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
-                    HandleDialogueAnimation(dialogue);
-                }
+                Debug.Log("Достигнут первый диалог после выбора. Отключаем кнопку возврата.");
+                UpdateBackButtonState(false);
+                return;
             }
-            else
-            {
-                Debug.Log("Нет предыдущих диалогов для возврата.");
-            }
+
+            // Восстанавливаем состояние диалога
+            currentDialogueId = previousState.currentDialogueId.Value;
+            textCounter = previousState.textCounter;
+
+            Debug.Log($"Восстановлено состояние: previousDialogueId={currentDialogueId}, textCounter={textCounter}");
+
+            // Синхронизируем текст и персонажей
+            UpdateDialogueText();
+
+            // Обновляем состояние кнопки
+            UpdateBackButtonState(dialogueHistory.Count > 0);
         }
     }
+
+
+
+    private void UpdateDialogueText()
+    {
+        var dialogue = GetCurrentDialogue();
+        if (dialogue != null)
+        {
+            dialogueText.text = dialogue.texts[textCounter];
+            characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
+            HandleDialogueAnimation(dialogue);
+        }
+    }
+
+    public void UpdateBackButtonState(bool state)
+    {
+        backButton.interactable = state;
+        canGoBack = state;
+    }
+
 
     private Dialogue FindNextDialogue()
     {
@@ -461,7 +473,14 @@ public class DialogueManager : MonoBehaviour
                 flagsManager.SetFlag(action.key, action.value);
             }
         }
-        dialogueHistory.Push((null, 0));
+
+        // Очищаем стек истории
+        dialogueHistory.Clear();
+
+        // Сохраняем текущее состояние как "точку выбора"
+        //dialogueHistory.Push((null, 0)); // Указываем, что выбор был сделан
+        Debug.Log("Стек истории очищен и добавлена точка выбора.");
+
         HideChoices();
         AdvanceToNextDialogue();
     }

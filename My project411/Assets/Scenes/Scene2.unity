@@ -633,6 +633,9 @@ MonoBehaviour:
   animationFrame: {fileID: 86636286}
   frameDelay: 3
   repeatCount: -1
+  characterManager: {fileID: 0}
+  uiElements: {fileID: 0}
+  charactersParent: {fileID: 0}
 --- !u!95 &86636289
 Animator:
   serializedVersion: 7
@@ -1814,7 +1817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adba81c620283194f8e16b8fa77f01fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blinkingManager: {fileID: 0}
+  blinkingManager: {fileID: 1209994537}
   leftAvatar: {fileID: 1209994533}
   rightAvatar: {fileID: 534582463}
   leftEyesImage: {fileID: 544141183}
@@ -1823,6 +1826,8 @@ MonoBehaviour:
   speakerPanelCenter: {fileID: 352415063}
   speakerPanelRight: {fileID: 1786967460}
   animations: {fileID: 542732324}
+  hairRenderer: {fileID: 0}
+  clothesRenderer: {fileID: 0}
 --- !u!1 &544141182
 GameObject:
   m_ObjectHideFlags: 0
@@ -2593,6 +2598,7 @@ GameObject:
   - component: {fileID: 1209994535}
   - component: {fileID: 1209994534}
   - component: {fileID: 1209994533}
+  - component: {fileID: 1209994537}
   m_Layer: 0
   m_Name: CharacterAvatarLeft
   m_TagString: Untagged
@@ -2696,6 +2702,18 @@ RectTransform:
   m_AnchoredPosition: {x: 634.4, y: 366.95667}
   m_SizeDelta: {x: 4.4148, y: 6.7591}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1209994537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209994532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c80129bf30ccf004db6ecb10367bbcf5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1273073989
 GameObject:
   m_ObjectHideFlags: 0
@@ -3036,6 +3054,9 @@ MonoBehaviour:
   animationFrame: {fileID: 86636286}
   frameDelay: 3
   repeatCount: -1
+  characterManager: {fileID: 0}
+  uiElements: {fileID: 0}
+  charactersParent: {fileID: 0}
 --- !u!225 &1312641547
 CanvasGroup:
   m_ObjectHideFlags: 0
