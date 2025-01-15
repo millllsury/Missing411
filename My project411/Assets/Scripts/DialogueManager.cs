@@ -17,8 +17,6 @@ public class DialogueManager : MonoBehaviour
 
     public UIManager UIManager;
     [SerializeField] private Animations animations;
-   
-
 
     private DataLoader dataLoader;
     private BackgroundController backgroundController;
@@ -105,8 +103,6 @@ public class DialogueManager : MonoBehaviour
         return EventSystem.current.IsPointerOverGameObject();
     }
 
-
-
     public void LoadEpisode(int episodeId)
     {
         currentEpisode = visualNovelData.episodes.Find(e => e.episodeId == episodeId);
@@ -138,7 +134,6 @@ public class DialogueManager : MonoBehaviour
             // Если текущий диалог не задан, начинаем с первого
             currentDialogueId = currentScene.dialogues[0].id;
             textCounter = 0;
-            //characterManager.HideAvatars();
             InitializeDialogue(currentDialogueId, textCounter);
             ShowEpisodeName();
             HandleSceneBackground();
@@ -264,33 +259,49 @@ public class DialogueManager : MonoBehaviour
         return currentScene.dialogues.FirstOrDefault(d => d.id == currentDialogueId);
     }
 
+
     private string GetCharacterPosition(int place)
     {
         return place == 1 ? "left" : "right";
     }
 
+    bool goBackButtonActivated = false;
     private void DisplayDialogueText(Dialogue dialogue)
     {
+        Debug.Log($"DisplayDialogueText: Dialogue: {currentDialogueId} and textCounter: {textCounter}");
         characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
 
         if (dialogue.texts != null && dialogue.texts.Count > 0)
-        {
-            
+        {  
             if (textCounter < dialogue.texts.Count)
             {
-                if(textCounter == 0)
+                //Debug.Log($"ПУТЬ1 - dialogue.texts.Count: {dialogue.texts.Count} and textCounter: {textCounter}");
+
+                if(goBackButtonActivated == true)
                 {
                     dialogueText.text = dialogue.texts[textCounter++];
                 }
+
+                if(textCounter == 0)
+                {
+                    //Debug.Log($"ПУТЬ 1.1 textCounter: {textCounter}");
+                    dialogueText.text = dialogue.texts[textCounter];
+                    textCounter++;
+                    //Debug.Log($"ПУТЬ 1.1 textCounter: {textCounter}");
+                }
                 else {
+                   // Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
                     dialogueHistory.Push((currentDialogueId, textCounter - 1));
                     Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter-1}");
-                    dialogueText.text = dialogue.texts[textCounter++];
+                    dialogueText.text = dialogue.texts[textCounter];
+                    textCounter++;
                     UpdateBackButtonState(true);
+                    //Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
                 }               
             }
             else
             {
+               // Debug.Log($"ПУТЬ2 - dialogue.texts.Count: {dialogue.texts.Count} and textCounter: {textCounter}");
                 // Сохраняем состояние перед переходом к следующему диалогу
                 dialogueHistory.Push((currentDialogueId, textCounter - 1));
                 Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter - 1}");
@@ -304,6 +315,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         canGoBack = true; // Разрешаем возврат после обработки текста
+        goBackButtonActivated = false;
     }
 
     private void HandleDialogueEnd(Dialogue dialogue)
@@ -319,6 +331,7 @@ public class DialogueManager : MonoBehaviour
         {
             AdvanceToNextDialogue();
         }
+        goBackButtonActivated = false;
     }
 
     private void AdvanceToNextDialogue()
@@ -408,8 +421,6 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-
-
     private void UpdateDialogueText()
     {
         var dialogue = GetCurrentDialogue();
@@ -419,6 +430,7 @@ public class DialogueManager : MonoBehaviour
             characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
             HandleDialogueAnimation(dialogue);
         }
+        goBackButtonActivated = true;
     }
 
     public void UpdateBackButtonState(bool state)

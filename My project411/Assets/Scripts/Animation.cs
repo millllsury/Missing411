@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.TextCore.Text;
 
 public class Animations : MonoBehaviour
 {
@@ -96,7 +97,7 @@ public class Animations : MonoBehaviour
         if (characterPosition == "left") isLeftAvatarAnimation = true;
         else if (characterPosition == "right") isRightAvatarAnimation = true;
 
-        StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f));
+        StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f, character));
     }
 
     private void SpriteNull(SpriteRenderer renderer)
@@ -133,9 +134,9 @@ public class Animations : MonoBehaviour
         }
     }
 
-    private IEnumerator ShowEmotionForDuration(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string characterPosition, float duration)
+    private IEnumerator ShowEmotionForDuration(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string characterPosition, float duration, string characterName)
     {
-        blinkingManager.StopBlinking(characterPosition);
+        blinkingManager.StopBlinking(characterName);
 
 
         // Ожидание завершения анимации
@@ -146,7 +147,7 @@ public class Animations : MonoBehaviour
 
         // Ожидание завершения анимации перед морганием
         yield return FadeOut(emotionRenderer);
-        yield return FadeOut(eyesRenderer);
+        //yield return FadeOut(eyesRenderer);
 
         // Завершаем анимацию
         if (characterPosition == "left") isLeftAvatarAnimation = false;
@@ -157,18 +158,15 @@ public class Animations : MonoBehaviour
         // Проверка перед запуском моргания
         if (blinkingManager != null && eyesRenderers.ContainsKey(characterPosition) && eyesRenderers[characterPosition] != null)
         {
-            blinkingManager.StartBlinking(characterPosition, eyesRenderers[characterPosition]);
+            blinkingManager.StopBlinking(characterName);
+            blinkingManager.StartBlinking(characterName, eyesRenderers[characterPosition]);
         }
         else
         {
             Debug.LogWarning($"Не удалось запустить моргание для позиции {characterPosition}. Проверьте настройки.");
         }
 
-        if (blinkingManager != null)
-        {
-            blinkingManager.StopBlinking(characterPosition);
-            blinkingManager.StartBlinking(characterPosition, eyesRenderer); ///////////////
-        }
+        
     }
 
 

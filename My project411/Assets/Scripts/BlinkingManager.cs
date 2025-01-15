@@ -26,16 +26,26 @@ public class BlinkingManager : MonoBehaviour
             return;
         }
 
-        // Остановить старую корутину, если она есть
+     // Остановить старую корутину, если она есть
         if (blinkingCoroutines.ContainsKey(characterName))
         {
             StopBlinking(characterName);
         }
 
+        // Проверяем, если корутина уже запущена
+        if (blinkingCoroutines.ContainsKey(characterName))
+        {
+            Debug.Log($"Blinking for {characterName} is already running.");
+            return; // Не запускаем новую корутину
+        }
+
+        Debug.Log($"Передали в blinkingManager.StartBlinking() characterName: {characterName} ");
+
         // Запуск новой корутины
         Coroutine coroutine = StartCoroutine(BlinkCoroutine(eyesImage, characterName));
         blinkingCoroutines[characterName] = coroutine;
-        Debug.LogWarning("корутина");
+        globalCoroutineCount++;
+        Debug.Log($"Корутину для {characterName} успешно запустили. globalCoroutineCount: {globalCoroutineCount} ");
     }
 
 
@@ -62,6 +72,13 @@ public class BlinkingManager : MonoBehaviour
         }
 
         blinkingCoroutines.Clear();
+    }
+
+    private static int globalCoroutineCount = 0;
+
+    public static int GetGlobalCoroutineCount()
+    {
+        return globalCoroutineCount;
     }
 
     private IEnumerator BlinkCoroutine(SpriteRenderer eyesImage, string characterName)
@@ -92,10 +109,12 @@ public class BlinkingManager : MonoBehaviour
 
                 // Скрытие глаз.
                 eyesImage.gameObject.SetActive(false);
-                yield return new WaitForSeconds(Random.Range(3f, 5f));
+                yield return new WaitForSeconds(Random.Range(5f, 7f));
             }
             else
             {
+                globalCoroutineCount--;
+                Debug.Log($"Корутина завершена. globalCoroutineCount : {globalCoroutineCount}");
                 yield return null;
             }
         }

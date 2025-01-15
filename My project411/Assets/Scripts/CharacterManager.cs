@@ -147,7 +147,9 @@ public class CharacterManager : MonoBehaviour
             UpdateAvatar(avatar, character, isLeft);
 
             // Запуск моргания для нового персонажа.
-            blinkingManager.StartBlinking(character, eyesImage);
+            blinkingManager.StartBlinking(currentCharacter, eyesImage);
+
+            Debug.Log($"Запуск моргания для персонажа: {currentCharacter} ");
         }
     }
 
@@ -367,10 +369,13 @@ public class CharacterManager : MonoBehaviour
                 character.color = color;
             }
         }
+        var (leftCharacterName, rightCharacterName) = GameStateManager.Instance.LoadCharacterNames();
+        
         if (blinkingManager != null)
         {
-            blinkingManager.StartBlinking(currentLeftCharacter, leftEyesImage);
-            blinkingManager.StartBlinking(currentRightCharacter, rightEyesImage);
+            blinkingManager.StartBlinking(leftCharacterName, leftEyesImage);
+            blinkingManager.StartBlinking(rightCharacterName, rightEyesImage);
+            Debug.Log($"Запустили корутину моргания в FadeInCharacters ");
         }
     }
 
