@@ -20,6 +20,7 @@ public class Action
 [System.Serializable]
 public class Dialogue
 {
+    public int sceneId;
     public int id;  
     public string speaker;
     public string character;
@@ -97,4 +98,5 @@ public class Episode
     public string backgroundImage;
     public List<SceneData> scenes;
 }
+
 

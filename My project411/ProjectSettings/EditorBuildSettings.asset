@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Scene1.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
+    path: Assets/Scenes/Scene2.unity
+    guid: 83f716796e8bf3243ae3ddfb36905838
+  - enabled: 1
     path: Assets/Scenes/WardrobeScene.unity
     guid: a0d4e66073642d64b97fb8935bb4f906
   m_configObjects:

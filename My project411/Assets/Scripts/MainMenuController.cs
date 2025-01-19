@@ -1,7 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+
+
+
 
 public class MainMenuController : MonoBehaviour
 {
@@ -9,14 +14,21 @@ public class MainMenuController : MonoBehaviour
     public GameObject loadingScreen;         
     public Image progressFill;               
     public RectTransform thumb;              
-    public float loadTime = 1.5f;              
-
+    public float loadTime = 1.5f;
     private float progress = 0f;             // Прогресс загрузки (0-1)
     private float maxWidth;                  // Ширина прогресс-бара
 
     public CanvasGroup menuCanvasGroup;      // CanvasGroup для плавного появления
     public float fadeInDuration = 1.5f;
 
+
+    [SerializeField] private GameObject saveSlotsCanvas; // Ссылка на Canvas со слотами
+    [SerializeField] private Transform slotsParent;      // Родительский объект для кнопок слотов
+    [SerializeField] private GameObject slotButton; // Префаб кнопки слота
+
+    [SerializeField] private GameObject settingsCanvas; // Ссылка на Canvas со слотами
+
+    private GameStateManager gameStateManager;
     private void Start()
     {
         loadingScreen.SetActive(false);
@@ -30,6 +42,15 @@ public class MainMenuController : MonoBehaviour
 
         // Запускаем эффект плавного появления
         StartCoroutine(FadeInMenu());
+
+        gameStateManager = FindFirstObjectByType<GameStateManager>();
+        if (gameStateManager == null)
+        {
+            Debug.LogError("GameStateManager не найден в сцене. Убедитесь, что объект присутствует.");
+            return;
+        }
+        gameStateManager.LoadSaveSlots();
+        
     }
 
     private IEnumerator FadeInMenu()
@@ -52,9 +73,39 @@ public class MainMenuController : MonoBehaviour
 
     public void NewGame()
     {
+        Debug.Log("Новая игра начата.");
+
+        if (gameStateManager == null)
+        {
+            Debug.LogError("GameStateManager не инициализирован.");
+            return;
+        }
+
+        // Проверяем, есть ли пустой слот
+        var emptySlot = gameStateManager.GetSaveSlots().FirstOrDefault(slot => slot.gameState == null);
+
+        if (emptySlot == null)
+        {
+            Debug.LogWarning("Все слоты заняты. Перезаписываем Слот 1.");
+            emptySlot = gameStateManager.GetSaveSlots()[0]; // Перезаписываем первый слот
+        }
+
+        // Инициализируем новый прогресс игры
+        emptySlot.gameState = new GameState
+        {
+            currentScene = "1",
+            currentDialogue = "0",
+            textCounter = 0,
+            flags = new Dictionary<string, bool>()
+        };
+        emptySlot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        gameStateManager.SaveSlotsToFile();
+
         progress = 0f; // Сброс прогресса
-        loadingScreen.SetActive(true);       // Показать экран загрузки
+        loadingScreen.SetActive(true); // Показать экран загрузки
         StartCoroutine(LoadSceneAsync("Scene1"));
+        menuCanvasGroup.alpha = 0f;
     }
 
     private IEnumerator LoadSceneAsync(string sceneName)
@@ -104,15 +155,28 @@ public class MainMenuController : MonoBehaviour
         float thumbWidth = thumb.rect.width;
         thumb.anchoredPosition = new Vector2(newWidth - (thumbWidth / 2), thumb.anchoredPosition.y);
     }
-
     public void ContinueGame()
     {
-        Debug.Log("Continue Game нажата");
+        saveSlotsCanvas.SetActive(true);
+        menuCanvasGroup.alpha = 0f;
+    }
+
+    public void CloseSaveSlots()
+    {
+        saveSlotsCanvas.SetActive(false);
+        menuCanvasGroup.alpha = 1f;
     }
 
     public void OpenSettings()
     {
-        Debug.Log("Settings нажата");
+        settingsCanvas.SetActive(true);
+        menuCanvasGroup.alpha = 0f;
+    }
+
+    public void CloseSettings()
+    {
+        settingsCanvas.SetActive(false);
+        menuCanvasGroup.alpha = 1f;
     }
 
     public void QuitGame()
@@ -121,5 +185,5 @@ public class MainMenuController : MonoBehaviour
         Application.Quit(); // Работает только в собранной версии игры, не в редакторе Unity
     }
 
-    
+  
 }

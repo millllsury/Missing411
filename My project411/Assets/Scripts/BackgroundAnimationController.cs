@@ -34,13 +34,16 @@ public class BackgroundController : MonoBehaviour
 
     public bool GetKeepLastFrame() => keepLastFrame;
 
+    public string GetCurrentBackgroundName() => currentBackgroundName;
+
     [SerializeField] private CharacterManager characterManager;  
 
 
     [SerializeField] private CanvasGroup uiElements; // CanvasGroup для UI элементов
     [SerializeField] private GameObject charactersParent; // Родительский объект для персонажей
 
-
+   
+    
     #region Background Management
     public void SetBackgroundSmooth(string backgroundName, bool smoothTransition)
     {

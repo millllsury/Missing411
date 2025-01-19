@@ -33,6 +33,8 @@ public class ButtonHoverEffect : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
     }
 
+
+
     private IEnumerator FadeIn(CanvasGroup canvasGroup)
     {
         float elapsedTime = 0f;

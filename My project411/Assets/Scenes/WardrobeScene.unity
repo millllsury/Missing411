@@ -455,6 +455,9 @@ MonoBehaviour:
   animationFrame: {fileID: 196307505}
   frameDelay: 3
   repeatCount: -1
+  characterManager: {fileID: 0}
+  uiElements: {fileID: 0}
+  charactersParent: {fileID: 0}
 --- !u!95 &196307508
 Animator:
   serializedVersion: 7
@@ -2612,6 +2615,7 @@ GameObject:
   - component: {fileID: 1657282980}
   - component: {fileID: 1657282975}
   - component: {fileID: 1657282979}
+  - component: {fileID: 1657282981}
   m_Layer: 0
   m_Name: CharacterAvatarLeft
   m_TagString: Untagged
@@ -2749,9 +2753,25 @@ MonoBehaviour:
   speakerPanelLeft: {fileID: 0}
   speakerPanelCenter: {fileID: 0}
   speakerPanelRight: {fileID: 0}
-  animations: {fileID: 0}
+  animations: {fileID: 1657282981}
   hairRenderer: {fileID: 1568652507}
   clothesRenderer: {fileID: 869029407}
+--- !u!114 &1657282981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1657282974}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36daff5791ad12341a7b522b5b3f16b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  emotionImageLeft: {fileID: 0}
+  emotionImageRight: {fileID: 0}
+  eyesImageLeft: {fileID: 0}
+  eyesImageRight: {fileID: 0}
 --- !u!1 &1965715639
 GameObject:
   m_ObjectHideFlags: 0

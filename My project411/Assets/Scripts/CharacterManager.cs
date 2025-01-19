@@ -140,13 +140,12 @@ public class CharacterManager : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(currentCharacter))
             {
-                blinkingManager.StopBlinking(currentCharacter); // Останавливаем моргание для предыдущего персонажа.
+                blinkingManager.StopBlinking(currentCharacter); 
             }
 
             currentCharacter = character;
             UpdateAvatar(avatar, character, isLeft);
 
-            // Запуск моргания для нового персонажа.
             blinkingManager.StartBlinking(currentCharacter, eyesImage);
 
             Debug.Log($"Запуск моргания для персонажа: {currentCharacter} ");
@@ -373,7 +372,7 @@ public class CharacterManager : MonoBehaviour
         
         if (blinkingManager != null)
         {
-            blinkingManager.StartBlinking(leftCharacterName, leftEyesImage);
+            blinkingManager.StartBlinking(leftCharacterName, leftEyesImage);////////////////////////////
             blinkingManager.StartBlinking(rightCharacterName, rightEyesImage);
             Debug.Log($"Запустили корутину моргания в FadeInCharacters ");
         }

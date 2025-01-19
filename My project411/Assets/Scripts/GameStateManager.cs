@@ -1,6 +1,9 @@
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+
+
 
 [System.Serializable]
 public class GameState
@@ -16,15 +19,123 @@ public class GameState
     public string leftCharacterName;
     public string rightCharacterName;
 
+    public string currentBackgroundName; 
     public string currentBackgroundAnimation;
     public float animationFrameDelay;
     public int animationRepeatCount;
     public bool animationKeepLastFrame;
+    public List<DialogueState> dialogueHistory = new List<DialogueState>();
+}
+
+
+public class DialogueState
+{
+    public int dialogueId;
+    public int textCounter;
+
+    public DialogueState(int dialogueId, int textCounter)
+    {
+        this.dialogueId = dialogueId;
+        this.textCounter = textCounter;
+    }
+}
+
+[System.Serializable]
+public class SaveSlot
+{
+    public string slotName;      // Название слота (например, "Слот 1")
+    public string saveDate;      // Дата сохранения
+    public GameState gameState;  // Состояние игры в этом слоте
+}
+
+[System.Serializable]
+public class SaveSlots
+{
+    public List<SaveSlot> slots = new List<SaveSlot>();
 }
 
 public class GameStateManager : MonoBehaviour
 {
+
     public static GameStateManager Instance { get; private set; }
+
+    private SaveSlots saveSlots = new SaveSlots();
+
+    public List<SaveSlot> GetSaveSlots()
+    {
+        return saveSlots.slots;
+    }
+    private static string slotsFilePath => Path.Combine(Application.persistentDataPath, "save_slots.json");
+
+    public void LoadSaveSlots()
+    {
+        if (File.Exists(slotsFilePath))
+        {
+            string json = File.ReadAllText(slotsFilePath);
+            saveSlots = JsonConvert.DeserializeObject<SaveSlots>(json);
+            Debug.Log("Слоты сохранений загружены.");
+        }
+        else
+        {
+            saveSlots = new SaveSlots { slots = new List<SaveSlot>() };
+            // Создаём пустые слоты
+            for (int i = 1; i <= 6; i++)
+            {
+                saveSlots.slots.Add(new SaveSlot
+                {
+                    slotName = $"Слот {i}",
+                    saveDate = null,
+                    gameState = null
+                });
+            }
+            SaveSlotsToFile();
+            Debug.Log("Созданы пустые слоты сохранений.");
+        }
+    }
+
+    public void SaveSlotsToFile()
+    {
+        string json = JsonConvert.SerializeObject(saveSlots, Formatting.Indented);
+        File.WriteAllText(slotsFilePath, json);
+        Debug.Log($"Слоты сохранений записаны в файл: {slotsFilePath}");
+    }
+
+    public void SaveGameToSlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
+        {
+            Debug.LogError("Неверный индекс слота сохранения.");
+            return;
+        }
+
+        var slot = saveSlots.slots[slotIndex];
+        slot.gameState = currentState; // Сохраняем текущее состояние игры
+        slot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+        SaveSlotsToFile();
+        Debug.Log($"Игра сохранена в слот {slot.slotName}.");
+    }
+
+    public void LoadGameFromSlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
+        {
+            Debug.LogError("Неверный индекс слота сохранения.");
+            return;
+        }
+
+        var slot = saveSlots.slots[slotIndex];
+        if (slot.gameState == null)
+        {
+            Debug.LogWarning($"Слот {slot.slotName} пуст.");
+            return;
+        }
+
+        currentState = slot.gameState; // Восстанавливаем состояние игры
+        Debug.Log($"Игра загружена из слота {slot.slotName}.");
+    }
+
+
     private void Awake()
     {
         if (Instance == null)
@@ -78,78 +189,40 @@ public class GameStateManager : MonoBehaviour
 
     #region Сохранение и загрузка
 
-    public void SaveGame()
-    {
-        string json = JsonUtility.ToJson(currentState, true);
-        File.WriteAllText(saveFilePath, json);
-        Debug.Log($"Игра сохранена в: {saveFilePath}");
-    }
-
     public bool LoadGame()
     {
-        if (File.Exists(saveFilePath))
+        if (!File.Exists(saveFilePath))
         {
-            string json = File.ReadAllText(saveFilePath);
-            currentState = JsonUtility.FromJson<GameState>(json);
-            Debug.Log("Прогресс игры загружен.");
-            return true;
+            Debug.LogWarning("Save file not found! Creating a default state.");
+            currentState = new GameState
+            {
+                currentScene = "1",
+                currentDialogue = "0",
+                textCounter = 0,
+                flags = new Dictionary<string, bool>(),
+                hairIndex = 0,
+                clothesIndex = 0,
+                episodeNameShowed = false
+            };
+            return false;
         }
 
-        Debug.LogWarning("Файл сохранения не найден! Создаем дефолтное состояние.");
-        currentState = new GameState
-        {
-            //currentEpisode = "1",
-            currentScene = "1",
-            currentDialogue = "0",
-            textCounter = 0,
-            flags = new Dictionary<string, bool>(),
-            hairIndex = 0,
-            clothesIndex = 0,
-            episodeNameShowed = false // По умолчанию эпизод не показан
-        };
-
-        return false;
+        string json = File.ReadAllText(saveFilePath); // Чтение JSON из файла
+        currentState = JsonConvert.DeserializeObject<GameState>(json); // Десериализация JSON в объект GameState
+        Debug.Log($"Game progress has been loaded.\nJSON:\n{json}");
+        return true;
     }
 
-    public void UpdateFlags(Dictionary<string, bool> flags)
-    {
-        currentState.flags = new Dictionary<string, bool>(flags);
-    }
-
-    public void SaveAppearance(int hairIndex, int clothesIndex)
-    {
-        currentState.hairIndex = hairIndex;
-        currentState.clothesIndex = clothesIndex;
-        Debug.Log($"Внешний вид сохранен: Волосы={hairIndex}, Одежда={clothesIndex}");
-    }
 
     public (int, int) LoadAppearance()
     {
         return (currentState.hairIndex >= 0 ? currentState.hairIndex : 0,
                 currentState.clothesIndex >= 0 ? currentState.clothesIndex : 0);
     }
-    public void SaveCharacterNames(string leftCharacter, string rightCharacter)
-    {
-        currentState.leftCharacterName = leftCharacter;
-        currentState.rightCharacterName = rightCharacter;
-        Debug.Log($"Сохранены имена персонажей: Левый = {leftCharacter}, Правый = {rightCharacter}");
-    }
-
 
     public (string, string) LoadCharacterNames()
     {
-        return (currentState.leftCharacterName ?? "DefaultLeft", currentState.rightCharacterName ?? "DefaultRight");
-    }
-
-
-    public void SaveBackgroundAnimation(string animationName, float frameDelay, int repeatCount, bool keepLastFrame)
-    {
-        currentState.currentBackgroundAnimation = animationName;
-        currentState.animationFrameDelay = frameDelay;
-        currentState.animationRepeatCount = repeatCount;
-        currentState.animationKeepLastFrame = keepLastFrame;
-
-        Debug.Log($"Фоновая анимация сохранена: {animationName}");
+        return (currentState.leftCharacterName ?? "", currentState.rightCharacterName ?? "");
     }
 
     public (string, float, int, bool) LoadBackgroundAnimation()
@@ -161,6 +234,56 @@ public class GameStateManager : MonoBehaviour
             currentState.animationKeepLastFrame
         );
     }
+
+    public void UpdateFlags(Dictionary<string, bool> flags)
+    {
+        currentState.flags = new Dictionary<string, bool>(flags);
+    }
+
+    public void SaveGame()
+    {
+        string json = JsonConvert.SerializeObject(currentState, Formatting.Indented); // Сериализация с форматированием
+        File.WriteAllText(saveFilePath, json); // Запись JSON в файл
+        Debug.Log($"Game saved: {saveFilePath}\nJSON:\n{json}");
+    }
+
+    public void SaveAppearance(int hairIndex, int clothesIndex)
+    {
+        currentState.hairIndex = hairIndex;
+        currentState.clothesIndex = clothesIndex;
+        Debug.Log($"AppearanceSaved: Волосы={hairIndex}, Одежда={clothesIndex}");
+    }
+
+    public void SaveCharacterNames(string leftCharacter, string rightCharacter)
+    {
+        currentState.leftCharacterName = leftCharacter;
+        currentState.rightCharacterName = rightCharacter;
+        Debug.Log($"Names Saved: Левый = {leftCharacter}, Правый = {rightCharacter}");
+    }
+
+    public void SaveBackground(string backgroundName)
+    {
+        currentState.currentBackgroundName = backgroundName;
+        Debug.Log($"Фон сохранён: {backgroundName}");
+    }
+
+    public string LoadBackground()
+    {
+        return currentState.currentBackgroundName;
+    }
+
+
+    public void SaveBackgroundAnimation(string animationName, float frameDelay, int repeatCount, bool keepLastFrame)
+    {
+        currentState.currentBackgroundAnimation = animationName;
+        currentState.animationFrameDelay = frameDelay;
+        currentState.animationRepeatCount = repeatCount;
+        currentState.animationKeepLastFrame = keepLastFrame;
+
+        Debug.Log($"Background Animation Saved: {animationName}");
+    }
+
+   
 
     #endregion
 }
