@@ -55,6 +55,9 @@ public class SaveSlots
 
 public class GameStateManager : MonoBehaviour
 {
+
+    public GameState originalState; // To store the original state
+
     public static GameStateManager Instance { get; private set; }
 
     private void Awake()
@@ -103,7 +106,7 @@ public class GameStateManager : MonoBehaviour
             Debug.LogWarning($"Слот {slotIndex + 1} пуст.");
             return;
         }
-
+        SaveOriginalState(slotIndex);
         selectedSlotIndex = slotIndex;
         currentState = selectedSlot.gameState; // Устанавливаем текущее состояние
         Debug.Log($"Слот {slotIndex + 1} выбран. Состояние игры загружено.");
@@ -191,8 +194,50 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Game loaded from slot {slot.slotName}.");
     }
 
+    public void SaveOriginalState(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
+        {
+            Debug.LogError("Индекс слота недействителен для сохранения исходного состояния.");
+            return;
+        }
 
-   
+        var slot = saveSlots.slots[slotIndex];
+        if (slot.gameState != null)
+        {
+            // Клонируем текущее состояние для сохранения
+            originalState = JsonConvert.DeserializeObject<GameState>(
+                JsonConvert.SerializeObject(slot.gameState));
+            Debug.Log($"Исходное состояние слота {slotIndex + 1} сохранено.");
+        }
+        else
+        {
+            originalState = null; // Слот был пуст
+            Debug.Log($"Слот {slotIndex + 1} изначально пуст.");
+        }
+    }
+
+
+
+    public void ClearSlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
+        {
+            Debug.LogError("Индекс слота для очистки недействителен.");
+            return;
+        }
+
+        var slot = saveSlots.slots[slotIndex];
+        slot.gameState = null; // Удаляем данные состояния игры
+        slot.saveDate = null;  // Удаляем дату сохранения
+        slot.slotName = $"Слот {slotIndex + 1}"; // Сбрасываем название слота
+
+        SaveSlotsToFile();
+        Debug.Log($"Слот {slotIndex + 1} очищен.");
+    }
+
+
+
 
     private static string saveFilePath => Path.Combine(Application.persistentDataPath, "game_state.json");
 

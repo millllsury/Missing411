@@ -1476,6 +1476,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e82f3b7ccb9d8dd4faff579b68f7ddd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  originalState:
+    currentEpisode: 
+    currentScene: 1
+    currentDialogue: 1
+    textCounter: 0
+    episodeNameShowed: 0
+    hairIndex: 0
+    clothesIndex: 0
+    leftCharacterName: 
+    rightCharacterName: 
+    currentBackgroundName: 
+    currentBackgroundAnimation: 
+    animationFrameDelay: 0
+    animationRepeatCount: 0
+    animationKeepLastFrame: 0
 --- !u!4 &544834166
 Transform:
   m_ObjectHideFlags: 0

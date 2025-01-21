@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using System.Collections;
+using Newtonsoft.Json;
 
 
 public class UIManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button toMainMenuButton;
 
     [SerializeField] private DialogueManager dialogueManager;
+    [SerializeField] private GameStateManager gameStateManager;
     private BackgroundController backgroundController;
     //private GameSaveManager gameSaveManager;
     public GameObject episodeNamePanel;  // Панель с названием эпизода и фоном
@@ -110,14 +112,14 @@ public class UIManager : MonoBehaviour
         dialogueManager.ShowNextDialogueText();
     }
 
-    public void GoToMainMenuConfirmation()
-    {
-        dialogueManager.SaveProgress(); // Сохраняем прогресс перед выходом в меню
+    public void MainMenuButtonClick()
+    { 
+
         QuitConfirmationPanel.SetActive(false);
         SaveConfirmationPanel.SetActive(true);
     }
 
-    public void GoToMainMenuRejection()
+    public void CloseWindow()
     {
         QuitConfirmationPanel.SetActive(false);
         SaveConfirmationPanel.SetActive(false);
@@ -136,15 +138,62 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void SaveRejection()
+    public void ExitWithoutSaving()
     {
-        QuitConfirmationPanel.SetActive(false);
-        SaveConfirmationPanel.SetActive(false);
-        Time.timeScale = 1;
-        dialogueManager.inputUnavailable = false;
-        SceneManager.LoadScene("MainMenu");
+        if (GameStateManager.Instance == null)
+        {
+            Debug.LogError("GameStateManager не инициализирован.");
+            return;
+        }
 
+        int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+
+        if (selectedSlotIndex == -1)
+        {
+            Debug.LogWarning("Слот не выбран. Нечего восстанавливать.");
+        }
+        else
+        {
+            if (GameStateManager.Instance.originalState != null)
+            {
+                // Восстанавливаем исходное состояние, если оно существовало
+                GameStateManager.Instance.GetSaveSlots()[selectedSlotIndex].gameState = JsonConvert.DeserializeObject<GameState>(
+                    JsonConvert.SerializeObject(GameStateManager.Instance.originalState));
+                Debug.Log($"Исходное состояние слота {selectedSlotIndex + 1} восстановлено.");
+            }
+            else
+            {
+                // Если слот изначально был пуст, оставляем его пустым
+                GameStateManager.Instance.ClearSlot(selectedSlotIndex);
+                Debug.Log($"Слот {selectedSlotIndex + 1} был пуст и остаётся пустым.");
+            }
+
+            // Сохраняем изменения в слотах
+            GameStateManager.Instance.SaveSlotsToFile();
+        }
+
+        // Закрываем панели и возвращаемся в главное меню
+        if (QuitConfirmationPanel != null)
+        {
+            QuitConfirmationPanel.SetActive(false);
+        }
+
+        if (SaveConfirmationPanel != null)
+        {
+            SaveConfirmationPanel.SetActive(false);
+        }
+
+        Time.timeScale = 1;
+        if (dialogueManager != null)
+        {
+            dialogueManager.inputUnavailable = false;
+        }
+
+        SceneManager.LoadScene("MainMenu");
     }
+
+
+
 
     public void OpenWardrobe(GameObject clickedObject)
     { 
