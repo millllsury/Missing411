@@ -9,9 +9,9 @@ using Newtonsoft.Json;
 public class GameState
 {
     public string currentEpisode;
-    public string currentScene;             // Текущая сцена
-    public string currentDialogue;          // Текущий диалог
-    public int textCounter;                 // Счетчик текста
+    public string currentScene = "1";             // Текущая сцена
+    public string currentDialogue = "1";          // Текущий диалог
+    public int textCounter = 0;                 // Счетчик текста
     public bool episodeNameShowed;
     public Dictionary<string, bool> flags;  // Флаги игры
     public int hairIndex;                   // Индекс волос персонажа
@@ -24,9 +24,8 @@ public class GameState
     public float animationFrameDelay;
     public int animationRepeatCount;
     public bool animationKeepLastFrame;
-    public List<DialogueState> dialogueHistory = new List<DialogueState>();
+    public List<DialogueState> dialogueHistory = new List<DialogueState>(); //для dialogueHistory стека
 }
-
 
 public class DialogueState
 {
@@ -56,14 +55,69 @@ public class SaveSlots
 
 public class GameStateManager : MonoBehaviour
 {
-
     public static GameStateManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject); // Объект сохраняется между сценами
+            currentState = new GameState();
+            Debug.Log("GameStateManager has been initialized.");
+        }
+        else
+        {
+            Debug.LogWarning("GameStateManager already exists. Delete duplicate.");
+            Destroy(gameObject); // Удаляем дубликат
+        }
+    }
+
 
     private SaveSlots saveSlots = new SaveSlots();
 
     public List<SaveSlot> GetSaveSlots()
     {
+        if (saveSlots == null || saveSlots.slots == null)
+        {
+            Debug.LogWarning("The slot list is not initialized. An empty list is returned.");
+            return new List<SaveSlot>();
+        }
         return saveSlots.slots;
+    }
+
+
+    private int selectedSlotIndex = -1; // Индекс выбранного слота (-1, если слот не выбран)
+
+    public void SelectSlot(int slotIndex)
+    {
+        if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
+        {
+            Debug.LogError($"Индекс слота {slotIndex} вне диапазона.");
+            return;
+        }
+
+        var selectedSlot = saveSlots.slots[slotIndex];
+        if (selectedSlot.gameState == null)
+        {
+            Debug.LogWarning($"Слот {slotIndex + 1} пуст.");
+            return;
+        }
+
+        selectedSlotIndex = slotIndex;
+        currentState = selectedSlot.gameState; // Устанавливаем текущее состояние
+        Debug.Log($"Слот {slotIndex + 1} выбран. Состояние игры загружено.");
+    }
+
+
+    public int GetSelectedSlotIndex()
+    {
+        return selectedSlotIndex;
+    }
+
+    public bool HasSelectedSlot()
+    {
+        return selectedSlotIndex >= 0;
     }
     private static string slotsFilePath => Path.Combine(Application.persistentDataPath, "save_slots.json");
 
@@ -93,18 +147,13 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    public void SaveSlotsToFile()
-    {
-        string json = JsonConvert.SerializeObject(saveSlots, Formatting.Indented);
-        File.WriteAllText(slotsFilePath, json);
-        Debug.Log($"Слоты сохранений записаны в файл: {slotsFilePath}");
-    }
+   
 
     public void SaveGameToSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-            Debug.LogError("Неверный индекс слота сохранения.");
+            Debug.LogError("Invalid save slot index.");
             return;
         }
 
@@ -113,44 +162,37 @@ public class GameStateManager : MonoBehaviour
         slot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         SaveSlotsToFile();
-        Debug.Log($"Игра сохранена в слот {slot.slotName}.");
+        Debug.Log($"The game has been saved to the slot. {slot.slotName}.");
+    }
+
+    public void SaveSlotsToFile()
+    {
+        string json = JsonConvert.SerializeObject(saveSlots, Formatting.Indented);
+        File.WriteAllText(slotsFilePath, json);
+        Debug.Log($"Save slots are written to file: {slotsFilePath}");
     }
 
     public void LoadGameFromSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-            Debug.LogError("Неверный индекс слота сохранения.");
+            Debug.LogError("Invalid save slot index.");
             return;
         }
 
         var slot = saveSlots.slots[slotIndex];
         if (slot.gameState == null)
         {
-            Debug.LogWarning($"Слот {slot.slotName} пуст.");
+            Debug.LogWarning($"Slot {slot.slotName} is empty.");
             return;
         }
 
         currentState = slot.gameState; // Восстанавливаем состояние игры
-        Debug.Log($"Игра загружена из слота {slot.slotName}.");
+        Debug.Log($"Game loaded from slot {slot.slotName}.");
     }
 
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // Объект сохраняется между сценами
-            currentState = new GameState();
-            Debug.Log("GameStateManager инициализирован.");
-        }
-        else
-        {
-            Debug.LogWarning("GameStateManager уже существует. Удаляем дубликат.");
-            Destroy(gameObject);
-        }
-    }
+   
 
     private static string saveFilePath => Path.Combine(Application.persistentDataPath, "game_state.json");
 
@@ -177,9 +219,6 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe=");
     }
 
-
-
-
     public GameState GetGameState()
     {
         return currentState;
@@ -197,7 +236,7 @@ public class GameStateManager : MonoBehaviour
             currentState = new GameState
             {
                 currentScene = "1",
-                currentDialogue = "0",
+                currentDialogue = "1",
                 textCounter = 0,
                 flags = new Dictionary<string, bool>(),
                 hairIndex = 0,
@@ -213,6 +252,10 @@ public class GameStateManager : MonoBehaviour
         return true;
     }
 
+    /*Функция может быть использована через сериализацию:
+
+    Если она связана с объектом, который загружается или сохраняется, Unity или JSON-файлы могут использовать её для восстановления данных.
+    */
 
     public (int, int) LoadAppearance()
     {
@@ -240,12 +283,7 @@ public class GameStateManager : MonoBehaviour
         currentState.flags = new Dictionary<string, bool>(flags);
     }
 
-    public void SaveGame()
-    {
-        string json = JsonConvert.SerializeObject(currentState, Formatting.Indented); // Сериализация с форматированием
-        File.WriteAllText(saveFilePath, json); // Запись JSON в файл
-        Debug.Log($"Game saved: {saveFilePath}\nJSON:\n{json}");
-    }
+   
 
     public void SaveAppearance(int hairIndex, int clothesIndex)
     {

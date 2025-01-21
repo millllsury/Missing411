@@ -24,7 +24,7 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField] private GameObject saveSlotsCanvas; // Ссылка на Canvas со слотами
     [SerializeField] private Transform slotsParent;      // Родительский объект для кнопок слотов
-    [SerializeField] private GameObject slotButton; // Префаб кнопки слота
+    [SerializeField] private GameObject slotButtonPrefab; // Префаб кнопки
 
     [SerializeField] private GameObject settingsCanvas; // Ссылка на Canvas со слотами
 
@@ -50,7 +50,8 @@ public class MainMenuController : MonoBehaviour
             return;
         }
         gameStateManager.LoadSaveSlots();
-        
+        PopulateSaveSlots();
+
     }
 
     private IEnumerator FadeInMenu()
@@ -82,24 +83,31 @@ public class MainMenuController : MonoBehaviour
         }
 
         // Проверяем, есть ли пустой слот
-        var emptySlot = gameStateManager.GetSaveSlots().FirstOrDefault(slot => slot.gameState == null);
+        var emptySlotIndex = gameStateManager.GetSaveSlots()
+            .FindIndex(slot => slot.gameState == null);
 
-        if (emptySlot == null)
+        if (emptySlotIndex == -1)
         {
             Debug.LogWarning("Все слоты заняты. Перезаписываем Слот 1.");
-            emptySlot = gameStateManager.GetSaveSlots()[0]; // Перезаписываем первый слот
+            emptySlotIndex = 0; // Перезаписываем первый слот
         }
 
         // Инициализируем новый прогресс игры
+        var saveSlots = gameStateManager.GetSaveSlots();
+        var emptySlot = saveSlots[emptySlotIndex];
         emptySlot.gameState = new GameState
         {
             currentScene = "1",
-            currentDialogue = "0",
+            currentDialogue = "1",
             textCounter = 0,
             flags = new Dictionary<string, bool>()
         };
         emptySlot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
+        // Устанавливаем выбранный слот
+        gameStateManager.SelectSlot(emptySlotIndex);
+
+        // Сохраняем слоты в файл
         gameStateManager.SaveSlotsToFile();
 
         progress = 0f; // Сброс прогресса
@@ -107,6 +115,7 @@ public class MainMenuController : MonoBehaviour
         StartCoroutine(LoadSceneAsync("Scene1"));
         menuCanvasGroup.alpha = 0f;
     }
+
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
@@ -185,5 +194,91 @@ public class MainMenuController : MonoBehaviour
         Application.Quit(); // Работает только в собранной версии игры, не в редакторе Unity
     }
 
-  
+    
+
+    public void PopulateSaveSlots()
+    {
+        // Очищаем старые кнопки, если они есть
+        foreach (Transform child in slotsParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Получаем список слотов из GameStateManager
+        var slots = GameStateManager.Instance.GetSaveSlots();
+
+        for (int i = 0; i < slots.Count; i++)
+        {
+            var slot = slots[i];
+            var slotButtonInstance = Instantiate(slotButtonPrefab, slotsParent); // Создаём кнопку из префаба
+
+            // Устанавливаем текст кнопки
+            var slotText = slotButtonInstance.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            slotText.text = $"Slot {i + 1}";
+
+            // Добавляем обработчик нажатия
+            int slotIndex = i; // Локальная переменная для замыкания
+            slotButtonInstance.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                HandleSlotSelection(slotIndex); // Вызываем метод обработки выбора слота
+            });
+
+            // Отображаем информацию о сохранении
+            if (slot.gameState != null)
+            {
+                slotText.text += $"\nDate: {slot.saveDate}";
+            }
+            else
+            {
+                slotText.text += "\nEmpty slot";
+            }
+        }
+    }
+
+    private void HandleSlotSelection(int slotIndex)
+    {
+        Debug.Log($"Выбран слот {slotIndex + 1}");
+
+        // Проверяем наличие GameStateManager
+        if (GameStateManager.Instance == null)
+        {
+            Debug.LogError("GameStateManager.Instance не инициализирован.");
+            return;
+        }
+
+        // Получаем список слотов
+        var slots = GameStateManager.Instance.GetSaveSlots();
+
+        // Проверяем корректность индекса
+        if (slotIndex < 0 || slotIndex >= slots.Count)
+        {
+            Debug.LogError($"Индекс слота {slotIndex} вне диапазона. Всего слотов: {slots.Count}");
+            return;
+        }
+
+        var selectedSlot = slots[slotIndex];
+        if (selectedSlot == null)
+        {
+            Debug.LogError($"Слот с индексом {slotIndex} не найден.");
+            return;
+        }
+
+        if (selectedSlot.gameState == null)
+        {
+            Debug.LogWarning($"Слот {slotIndex + 1} пуст.");
+            return;
+        }
+
+        Debug.Log($"slotIndex: {slotIndex}");
+
+
+        // Загружаем прогресс из слота
+        GameStateManager.Instance.SelectSlot(slotIndex);
+
+        SceneManager.LoadScene("Scene" + selectedSlot.gameState.currentScene);
+
+    }
+
+
+
 }

@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json;
+using Unity.VisualScripting;
 
 
 public class DialogueManager : MonoBehaviour
@@ -31,8 +32,8 @@ public class DialogueManager : MonoBehaviour
     private Episode currentEpisode;
     private SceneData currentScene;
 
-    private int currentDialogueId;
-    private int textCounter=0;
+    private int currentDialogueId=1;
+    private int textCounter = 0;
 
     public bool isChoosing = false;
     public bool isEpisodeScreenActive = false;
@@ -44,12 +45,12 @@ public class DialogueManager : MonoBehaviour
     private bool canGoBack = true; // Разрешение на возврат
     private Stack<(int? currentDialogueId, int textCounter)> dialogueHistory = new Stack<(int?, int)>();    // Стек для отслеживания диалогов
 
-
     void Start()
     {
         InitializeComponents();
         LoadInitialData();
-        LoadProgress();
+        LoadProgress(); // Автоматически загружаем состояние, если выбран слот
+        
     }
 
     private void InitializeComponents()
@@ -415,7 +416,8 @@ public class DialogueManager : MonoBehaviour
 
                 GameStateManager.Instance.GetGameState().currentBackgroundAnimation = null;
                 GameStateManager.Instance.SaveBackground(null);
-                GameStateManager.Instance.SaveGame();
+                int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+                GameStateManager.Instance.SaveGameToSlot(selectedSlotIndex);
                 // Лог для отладки
                 Debug.Log($"Сохранено состояние для перехода. Scene={nextScene.sceneId}, Dialogue=0, TextCounter=0");
 
@@ -578,6 +580,16 @@ public class DialogueManager : MonoBehaviour
 
     public void SaveProgress()
     {
+        // Получаем текущий индекс выбранного слота
+        int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+
+        if (selectedSlotIndex == -1)
+        {
+            Debug.LogError("Слот для сохранения не выбран. Сохранение невозможно.");
+            return;
+        }
+
+        // Сохраняем состояние текущей сцены
         int currentTextCounter = textCounter - 1;
         GameStateManager.Instance.UpdateSceneState(
             currentScene.sceneId.ToString(),
@@ -585,24 +597,29 @@ public class DialogueManager : MonoBehaviour
             currentTextCounter 
 
         );
+
+        // Обновляем флаги
         GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
 
+        // Сохраняем внешний вид персонажей
         var (currentHairIndex, currentClothesIndex) = GameStateManager.Instance.LoadAppearance();
         GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
 
+        // Сохраняем имена персонажей
         string leftCharacter = characterManager.GetCurrentLeftCharacter();
         string rightCharacter = characterManager.GetCurrentRightCharacter();
         GameStateManager.Instance.SaveCharacterNames(leftCharacter, rightCharacter);
 
+        // Сохраняем фон и анимацию
         var animationName = backgroundController.GetCurrentAnimationName();
         var frameDelay = backgroundController.GetCurrentFrameDelay();
         var repeatCount = backgroundController.GetCurrentRepeatCount();
         var keepLastFrame = backgroundController.GetKeepLastFrame();
-
         var backgroundName = backgroundController.GetCurrentBackgroundName(); // Добавьте метод в BackgroundController
         GameStateManager.Instance.SaveBackground(backgroundName); // Сохраняем имя фона
         GameStateManager.Instance.SaveBackgroundAnimation(animationName, frameDelay, repeatCount, keepLastFrame);
 
+        // Сохраняем историю диалогов до выбора
         var dialogueHistoryList = dialogueHistory.Reverse()
        .Select(item => new DialogueState(item.currentDialogueId ?? -1, item.textCounter))
        .ToList();
@@ -612,8 +629,8 @@ public class DialogueManager : MonoBehaviour
 
         GameStateManager.Instance.GetGameState().dialogueHistory = dialogueHistoryList;
 
-        GameStateManager.Instance.SaveGame();
-        Debug.Log("Прогресс игры сохранен.");
+        GameStateManager.Instance.SaveGameToSlot(selectedSlotIndex);
+        Debug.Log($"Прогресс игры сохранен в слот {selectedSlotIndex + 1}.");
 
 
     }
@@ -622,16 +639,16 @@ public class DialogueManager : MonoBehaviour
 
     public void LoadProgress()
     {
-    if (GameStateManager.Instance == null)
-    {
-        Debug.LogError("GameStateManager.Instance is not initialized! Make sure the GameStateManager object is present in the scene.");
-        return;
-    }
 
-    
-    if (GameStateManager.Instance.LoadGame())
-    {
+        if (GameStateManager.Instance == null)
+        {
+            Debug.LogError("GameStateManager.Instance не инициализирован.");
+            return;
+        }
+
         var loadedState = GameStateManager.Instance.GetGameState();
+        Debug.Log($"Загружается состояние: Scene={loadedState.currentScene}, Dialogue={loadedState.currentDialogue}, TextCounter={loadedState.textCounter}");
+
 
         if (loadedState == null)
         {
@@ -639,18 +656,10 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // Восстанавливаем флаги
-        if (loadedState.flags == null)
-        {
-            loadedState.flags = new Dictionary<string, bool>();
-        }
-        flagsManager.SetAllFlags(loadedState.flags);
-
-        // Логируем загруженные данные
         Debug.Log("Загруженный путь диалога из GameState: " +
-            (loadedState.dialogueHistory != null
-                ? string.Join(" -> ", loadedState.dialogueHistory.Select(d => $"(ID={d.dialogueId}, TextCounter={d.textCounter})"))
-                : "Пусто"));
+                (loadedState.dialogueHistory != null
+                    ? string.Join(" -> ", loadedState.dialogueHistory.Select(d => $"(ID={d.dialogueId}, TextCounter={d.textCounter})"))
+                    : "Пусто"));
 
         // Очищаем стек перед восстановлением
         dialogueHistory.Clear();
@@ -670,41 +679,45 @@ public class DialogueManager : MonoBehaviour
             string.Join(" -> ", dialogueHistory.Select(d => $"[ID={d.currentDialogueId}, TextCounter={d.textCounter}]")));
 
         // Восстанавливаем сцену и диалог
+        Debug.Log($"Загружается сцена {loadedState.currentScene} и диалог {loadedState.currentDialogue}.");
         LoadScene(int.Parse(loadedState.currentScene));
         InitializeDialogue(int.Parse(loadedState.currentDialogue), loadedState.textCounter);
 
-            var backgroundName = GameStateManager.Instance.LoadBackground();
-            if (!string.IsNullOrEmpty(backgroundName))
-            {
-                backgroundController.SetBackground(backgroundName); // Убедитесь, что метод SetBackground существует
-                Debug.Log($"Фон восстановлен: {backgroundName}");
-            }
+        // Восстановление других данных, таких как фон, персонажи и флаги
+        RestoreGameState(loadedState);
+    }
 
-            // Восстанавливаем фоновую анимацию
-            var (animationName, frameDelay, repeatCount, keepLastFrame) = GameStateManager.Instance.LoadBackgroundAnimation();
+    private void RestoreGameState(GameState loadedState)
+    {
+        // Восстановление флагов
+        flagsManager.SetAllFlags(loadedState.flags);
+
+        // Восстановление фона
+        var backgroundName = GameStateManager.Instance.LoadBackground();
+        if (!string.IsNullOrEmpty(backgroundName))
+        {
+            backgroundController.SetBackground(backgroundName);
+        }
+
+        // Восстановление анимации
+        var (animationName, frameDelay, repeatCount, keepLastFrame) = GameStateManager.Instance.LoadBackgroundAnimation();
         if (!string.IsNullOrEmpty(animationName))
         {
             backgroundController.StartBackgroundAnimation(animationName, frameDelay, repeatCount, keepLastFrame);
         }
 
-        // Восстанавливаем персонажей
+        // Восстановление персонажей
         characterManager.LoadCharacters();
         characterManager.LoadAppearance();
-
-        Debug.Log("Прогресс успешно загружен.");
-    }
-    else
-    {
-        Debug.LogWarning("Не удалось загрузить файл сохранения. Используется состояние по умолчанию.");
-    }
-    }
-
-
     }
 
 
 
-    public static class ButtonExtensions
+}
+
+
+
+public static class ButtonExtensions
 {
     public static void Configure(this Button button, Choice choice, UnityAction<Choice> onClick)
     {

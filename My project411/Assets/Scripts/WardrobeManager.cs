@@ -48,7 +48,8 @@ public class WardrobeManager : MonoBehaviour
         int currentClothesIndex = GetCurrentSpriteIndex(clothesRenderer.sprite, clothesOptions);
 
         GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
-        GameStateManager.Instance.SaveGame();
+        int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+        GameStateManager.Instance.SaveGameToSlot(selectedSlotIndex);
         Debug.Log($"Индексы сохранены: Волосы={currentHairIndex}, Одежда={currentClothesIndex}");
 
         // Переходим на основную сцену
