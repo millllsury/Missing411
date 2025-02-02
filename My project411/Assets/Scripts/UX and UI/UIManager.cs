@@ -13,9 +13,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Button toMainMenuButton;
 
     [SerializeField] private DialogueManager dialogueManager;
-    [SerializeField] private GameStateManager gameStateManager;
     private BackgroundController backgroundController;
-    //private GameSaveManager gameSaveManager;
+
+    private SoundManager soundManager;
+
     public GameObject episodeNamePanel;  // Панель с названием эпизода и фоном
     public TextMeshProUGUI episodeText;  // Текст для названия эпизода
 
@@ -23,6 +24,8 @@ public class UIManager : MonoBehaviour
     private Image episodeImage;  // Поле для компонента Image на панели
 
     public string wardrobeSceneName = "WardrobeScene";
+
+    [SerializeField] private GameObject settingsCanvas;
 
     private void Start()
     {
@@ -39,6 +42,22 @@ public class UIManager : MonoBehaviour
         {
             Debug.LogError("episodeNamePanel не назначена в инспекторе.");
         }
+    }
+
+
+    public void OpenSettings()
+    {
+        QuitConfirmationPanel.SetActive(false);
+        settingsCanvas.SetActive(true);
+        Time.timeScale = 0; // Останавливаем время при открытии настроек
+    }
+
+
+    public void CloseSettings()
+    {
+        settingsCanvas.SetActive(false);
+        Time.timeScale = 1; // Возвращаем нормальное время после закрытия настроек
+        dialogueManager.inputUnavailable = false;
     }
 
 
@@ -192,13 +211,17 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
-
-
+    public void UiClick()
+    {
+        SoundManager.Instance.UIClickSound();
+    }
 
     public void OpenWardrobe(GameObject clickedObject)
     { 
-         int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+        int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
         dialogueManager.SaveProgress();
+        SoundManager.Instance.MuteAllSounds();
         SceneManager.LoadScene(wardrobeSceneName);
+
     }
 }

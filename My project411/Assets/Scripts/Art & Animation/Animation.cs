@@ -20,9 +20,11 @@ public class Animations : MonoBehaviour
     public bool IsLeftAvatarAnimating => isLeftAvatarAnimation;
     public bool IsRightAvatarAnimating => isRightAvatarAnimation;
 
+    private SoundManager soundManager;
 
     private void Start()
     {
+        soundManager = SoundManager.Instance;
         emotionRenderers = new Dictionary<string, SpriteRenderer>
         {
             { "left", emotionImageLeft },
@@ -67,12 +69,13 @@ public class Animations : MonoBehaviour
 
         string emotion = null;
         string eyes = null;
+        string sound = null;
         Debug.Log($"Получено animationName: {animationName}");
         switch (animationName.ToLower())
         {
             case "laugh":
                 emotion = "happy";
-                //eyes = "eyesToTheSideBase";
+                eyes = "eyesToTheSideBase";
                 break;
             case "sad":
                 emotion = "sad";
@@ -80,6 +83,7 @@ public class Animations : MonoBehaviour
             case "happy":
                 emotion = "happy";
                 eyes = "eyesToTheSideBase";
+                sound = emotion;
                 break;
             case "tothesidebase":
                 eyes = "tothesidebase";
@@ -94,11 +98,26 @@ public class Animations : MonoBehaviour
 
         SetEmotionImage(emotionRenderer, eyesRenderer, character, emotion, eyes);
 
+        PlaySoundForEmotion(character, sound);
+
         if (characterPosition == "left") isLeftAvatarAnimation = true;
         else if (characterPosition == "right") isRightAvatarAnimation = true;
 
         StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f, character));
     }
+
+    private void PlaySoundForEmotion(string character, string sound = null)
+    {
+        if (sound == null) return;
+        if (soundManager == null)
+        {
+            Debug.LogError("SoundManager is null! Ensure it is assigned in the inspector.");
+            return;
+        }
+     
+        SoundManager.Instance.HandleSoundTrigger($"play:{character}_{sound}");
+    }
+
 
     private void SpriteNull(SpriteRenderer renderer)
     {

@@ -32,6 +32,7 @@ public class WardrobeManager : MonoBehaviour
 
     private void Awake()
     {
+        SoundManager.Instance.PlaySoundByName("WardrobeMusic");
         blinkingManager.StartBlinking("Alice", eyesImage);
         currentCategory = "Hair"; // По умолчанию выбрана категория "Hair"
         SetButtonState(hairButton, true);
@@ -55,6 +56,7 @@ public class WardrobeManager : MonoBehaviour
         // Переходим на основную сцену
         string mainSceneName = PlayerPrefs.GetString("MainSceneName", "DefaultScene");
         SceneManager.LoadScene(mainSceneName);
+        SoundManager.Instance.StopAllSounds();
     }
 
 

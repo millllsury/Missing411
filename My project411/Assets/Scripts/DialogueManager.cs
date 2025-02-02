@@ -137,6 +137,8 @@ public class DialogueManager : MonoBehaviour
 
     public void LoadScene(int sceneId)
     {
+
+
         currentScene = currentEpisode.scenes.Find(scene => scene.sceneId == sceneId);
         if (currentScene == null)
         {
@@ -448,7 +450,14 @@ public class DialogueManager : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(dialogue.soundTrigger))
         {
-            soundManager.HandleSoundTrigger(dialogue.soundTrigger);
+            if (SoundManager.Instance != null)
+            {
+                SoundManager.Instance.HandleSoundTrigger(dialogue.soundTrigger);
+            }
+            else
+            {
+                Debug.LogError("SoundManager.Instance is null!");
+            }
         }
     }
 

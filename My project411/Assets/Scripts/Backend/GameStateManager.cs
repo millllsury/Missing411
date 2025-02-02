@@ -53,9 +53,28 @@ public class SaveSlots
     public List<SaveSlot> slots = new List<SaveSlot>();
 }
 
+
+
 public class GameStateManager : MonoBehaviour
 {
+    #region Volume Settings
+    private class AudioSettings
+    {
+        public float masterVolume;
+        public float characterVolume;
+        public float backgroundEffectsVolume;
+        public float backgroundVolume; 
+        public float uiVolume;
+    }
 
+    // global settings
+    public float masterVolume = 1f;
+    public float characterVolume = 1f;
+    public float backgroundEffectsVolume = 1f;
+    public float backgroundVolume = 1f;
+    public float uiVolume = 1f;
+
+   
     public GameState originalState; // To store the original state
 
     public static GameStateManager Instance { get; private set; }
@@ -68,6 +87,7 @@ public class GameStateManager : MonoBehaviour
             DontDestroyOnLoad(gameObject); // Объект сохраняется между сценами
             currentState = new GameState();
             Debug.Log("GameStateManager has been initialized.");
+            LoadGlobalSettings();
         }
         else
         {
@@ -75,6 +95,111 @@ public class GameStateManager : MonoBehaviour
             Destroy(gameObject); // Удаляем дубликат
         }
     }
+
+    private static string settingsFilePath => Path.Combine(Application.persistentDataPath, "audio_settings.json");
+
+
+
+    private void LoadGlobalSettings()
+    {
+        if (File.Exists(settingsFilePath))
+        {
+            string json = File.ReadAllText(settingsFilePath);
+            var settings = JsonConvert.DeserializeObject<AudioSettings>(json);
+
+
+            masterVolume = settings.masterVolume;
+
+            Debug.Log($"masterVolume: {masterVolume}, settings.masterVolume: {settings.masterVolume} ");
+            characterVolume = settings.characterVolume;
+            backgroundEffectsVolume = settings.backgroundEffectsVolume;
+            uiVolume = settings.uiVolume;
+            backgroundVolume = settings.backgroundVolume;
+
+            Debug.Log("Настройки громкости успешно загружены.");
+        }
+        else
+        {
+            DefaultSoundSettingsValue();
+            SaveGlobalSettings();
+        }
+    }
+
+    public void DefaultSoundSettingsValue()
+    {
+        // Устанавливаем значения по умолчанию
+        masterVolume = 0.5f;
+        characterVolume = 0.5f;
+        backgroundEffectsVolume = 0.5f;
+        backgroundVolume = 0.5f;
+        uiVolume = 1f;
+        Debug.Log("Настройки громкости созданы с значениями по умолчанию.");
+    }
+
+    public void SaveGlobalSettings()
+    {
+        Debug.Log($"masterVolume1: {masterVolume}");
+
+        var settings = new AudioSettings
+        {
+            masterVolume = masterVolume,
+            characterVolume = characterVolume,
+            backgroundEffectsVolume = backgroundEffectsVolume,
+            uiVolume = uiVolume,
+            backgroundVolume = backgroundVolume
+        };
+
+        Debug.Log($"masterVolume2: {masterVolume}");
+
+        string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
+        File.WriteAllText(settingsFilePath, json);
+
+        Debug.Log("Настройки громкости сохранены.");
+    }
+
+    public void SetMasterVolume(float value)
+    {
+        if (Mathf.Approximately(masterVolume, value))
+        {
+            Debug.Log("SetMasterVolume: Значение не изменилось, не сохраняем.");
+            return;
+        }
+
+        Debug.Log($"SetMasterVolume вызван с значением: {value}");
+        masterVolume = value;
+
+        SaveGlobalSettings();
+    }
+
+
+
+    public void SetCategoryVolume(string category, float value)
+    {
+        switch (category.ToLower())
+        {
+            case "characters":
+                characterVolume = value;
+                break;
+            case "backgroundeffects":
+                backgroundEffectsVolume = value;
+                break;
+            case "ui":
+                uiVolume = value;
+                break;
+            case "background":
+                backgroundVolume = value;
+                break;
+            default:
+                Debug.LogWarning($"Неизвестная категория звука: {category}");
+                return;
+        }
+
+        SaveGlobalSettings();
+        Debug.Log($"Установлена громкость категории '{category}': {value}");
+    }
+
+
+    #endregion
 
 
     private SaveSlots saveSlots = new SaveSlots();
@@ -366,7 +491,6 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Background Animation Saved: {animationName}");
     }
 
-   
 
     #endregion
 }

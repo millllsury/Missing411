@@ -43,7 +43,6 @@
               "character": "Alice",
               "place": 1,
               "animation": "happy",
-              "soundTrigger": "play:woman_laugh",
               "texts": [ "Especially with such a beautiful scenery!" ]
             },
             {
@@ -59,7 +58,7 @@
             {
               "id": 6,
               "isNarration": true,
-              "soundTrigger": "play:male-sigh",
+              "soundTrigger": "play:Chris_sigh",
               "texts": [
                 "Chris sighed and stopped, looking around and caught a mocking look from his sister."
               ]
@@ -69,7 +68,8 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
-              "animation": "happy",
+              "animation": "laugh",
+              "soundTrigger": "play:Alice_short_laugh",
               "texts": [ "..." ]
             },
             {

@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 
 
+
+
 public class MainMenuController : MonoBehaviour
 {
     [Header("UI Elements")]
@@ -19,8 +21,10 @@ public class MainMenuController : MonoBehaviour
     private float maxWidth;                  // Ширина прогресс-бара
 
     public CanvasGroup menuCanvasGroup;      // CanvasGroup для плавного появления
+    public CanvasGroup slotsCanvasGroup;
     public float fadeInDuration = 1.5f;
 
+    private SoundManager soundManager;
 
     [SerializeField] private GameObject saveSlotsCanvas; // Ссылка на Canvas со слотами
     [SerializeField] private Transform slotsParent;      // Родительский объект для кнопок слотов
@@ -31,6 +35,7 @@ public class MainMenuController : MonoBehaviour
     private GameStateManager gameStateManager;
     private void Start()
     {
+       
         loadingScreen.SetActive(false);
         maxWidth = ((RectTransform)progressFill.transform.parent).rect.width;
         loadingScreen.SetActive(false);      // Скрываем экран загрузки в начале
@@ -51,7 +56,15 @@ public class MainMenuController : MonoBehaviour
         }
         gameStateManager.LoadSaveSlots();
         PopulateSaveSlots();
+        soundManager = FindFirstObjectByType<SoundManager>();
+        if (soundManager == null)
+        {
+            Debug.LogError("SoundManager не найден. Убедитесь, что объект присутствует на сцене.");
+            return;
+        }
 
+        soundManager.PlaySoundByName("MainMenuSound");
+        soundManager.PlaySoundByName("owl");
     }
 
     private IEnumerator FadeInMenu()
@@ -122,6 +135,7 @@ public class MainMenuController : MonoBehaviour
        
         Debug.Log($"Попытка загрузить сцену: {sceneName}");
         AsyncOperation operation = SceneManager.LoadSceneAsync(sceneName);
+        SoundManager.Instance.StopAllSounds();
 
         if (operation == null)
         {
@@ -148,7 +162,7 @@ public class MainMenuController : MonoBehaviour
 
             yield return null;
         }
-
+        
         Debug.Log("Сцена успешно загружена!");
     }
 
@@ -275,8 +289,12 @@ public class MainMenuController : MonoBehaviour
         // Загружаем прогресс из слота
         GameStateManager.Instance.SelectSlot(slotIndex);
 
-        SceneManager.LoadScene("Scene" + selectedSlot.gameState.currentScene);
+        loadingScreen.SetActive(true); // Показать экран загрузки
+        StartCoroutine(LoadSceneAsync("Scene" + selectedSlot.gameState.currentScene));
 
+        menuCanvasGroup.alpha = 0f;
+        slotsCanvasGroup.alpha = 0f;    
+       
     }
 
 
