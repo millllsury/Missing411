@@ -3694,6 +3694,8 @@ GameObject:
   - component: {fileID: 931799066}
   - component: {fileID: 931799065}
   - component: {fileID: 931799064}
+  - component: {fileID: 931799067}
+  - component: {fileID: 931799068}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -3772,9 +3774,84 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2064854977}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &931799067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931799063}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1f8ee3db01858a449e23705596dbf74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  postProcessVolume: {fileID: 2064854976}
+  transitionSpeed: 2
+--- !u!114 &931799068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 931799063}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 948f4100a11a5c24981795d21301da5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeTrigger: {fileID: 931799066}
+  volumeLayer:
+    serializedVersion: 2
+    m_Bits: 1
+  stopNaNPropagation: 1
+  finalBlitToCameraTarget: 0
+  antialiasingMode: 0
+  temporalAntialiasing:
+    jitterSpread: 0.75
+    sharpness: 0.25
+    stationaryBlending: 0.95
+    motionBlending: 0.85
+  subpixelMorphologicalAntialiasing:
+    quality: 2
+  fastApproximateAntialiasing:
+    fastMode: 0
+    keepAlpha: 0
+  fog:
+    enabled: 1
+    excludeSkybox: 1
+  debugLayer:
+    lightMeter:
+      width: 512
+      height: 256
+      showCurves: 1
+    histogram:
+      width: 512
+      height: 256
+      channel: 3
+    waveform:
+      exposure: 0.12
+      height: 256
+    vectorscope:
+      size: 256
+      exposure: 0.12
+    overlaySettings:
+      linearDepth: 0
+      motionColorIntensity: 4
+      motionGridSize: 64
+      colorBlindnessType: 0
+      colorBlindnessStrength: 1
+  m_Resources: {fileID: 11400000, guid: d82512f9c8e5d4a4d938b575d47f88d4, type: 2}
+  m_ShowToolkit: 1
+  m_ShowCustomSorter: 1
+  breakBeforeColorGrading: 0
+  m_BeforeTransparentBundles: []
+  m_BeforeStackBundles: []
+  m_AfterStackBundles: []
 --- !u!1 &961015315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3847,7 +3924,7 @@ MonoBehaviour:
       - m_Target: {fileID: 466619814}
         m_TargetAssemblyTypeName: AudioSettingsUI, Assembly-CSharp
         m_MethodName: OnBackgroundVolumeChanged
-        m_Mode: 0
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4227,7 +4304,7 @@ MonoBehaviour:
       - m_Target: {fileID: 466619814}
         m_TargetAssemblyTypeName: AudioSettingsUI, Assembly-CSharp
         m_MethodName: OnBackgroundEffectsVolumeChanged
-        m_Mode: 0
+        m_Mode: 4
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6769,6 +6846,128 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895211322}
   m_CullTransparentMesh: 1
+--- !u!1 &1902112331
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1902112332}
+  - component: {fileID: 1902112336}
+  - component: {fileID: 1902112335}
+  - component: {fileID: 1902112334}
+  - component: {fileID: 1902112333}
+  m_Layer: 0
+  m_Name: AnimationFrame Back Plan
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1902112332
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902112331}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5804102548487052957}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 0}
+--- !u!114 &1902112333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902112331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: -397840676268003080, guid: 2c3689a86a75aee4b928bc81fcbc346d, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!223 &1902112334
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902112331}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 1
+  m_Camera: {fileID: 931799065}
+  m_PlaneDistance: 10
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: -1109645013
+  m_SortingOrder: 1
+  m_TargetDisplay: 0
+--- !u!95 &1902112335
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902112331}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!222 &1902112336
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902112331}
+  m_CullTransparentMesh: 1
 --- !u!1 &1907955452
 GameObject:
   m_ObjectHideFlags: 0
@@ -7288,7 +7487,7 @@ MonoBehaviour:
   originalState:
     currentEpisode: 
     currentScene: 1
-    currentDialogue: 1
+    currentDialogue: 60
     textCounter: 0
     episodeNameShowed: 0
     hairIndex: 0
@@ -7300,6 +7499,7 @@ MonoBehaviour:
     animationFrameDelay: 0
     animationRepeatCount: 0
     animationKeepLastFrame: 0
+    playingTracks: []
 --- !u!1 &2062045378
 GameObject:
   m_ObjectHideFlags: 0
@@ -7436,6 +7636,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062045378}
   m_CullTransparentMesh: 1
+--- !u!1 &2064854975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2064854977}
+  - component: {fileID: 2064854976}
+  m_Layer: 0
+  m_Name: PostProcessingVolume
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &2064854976
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064854975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sharedProfile: {fileID: 11400000, guid: 9e01f3f920b5c57408670b051501ac65, type: 2}
+  isGlobal: 1
+  blendDistance: 0
+  weight: 1
+  priority: 10
+--- !u!4 &2064854977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064854975}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 579.75305, y: 436.2945, z: -20.26713}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 931799066}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &17323733476817767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7784,6 +8033,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 0}
   darkOverlay: {fileID: 0}
   animationFrame: {fileID: 1483044624354887686}
+  backgroundLastFrame: {fileID: 0}
   frameDelay: 3
   repeatCount: -1
   characterManager: {fileID: 0}
@@ -8403,8 +8653,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: -1109645013
-  m_SortingOrder: 1
+  m_SortingLayerID: -507539451
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!1 &1204226221587646139
 GameObject:
@@ -8824,7 +9074,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: bf3b498d854dfea469c1a1eb2a7d1f80, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9556,7 +9806,6 @@ MonoBehaviour:
   emotionImageRight: {fileID: 3227576654169578100}
   eyesImageLeft: {fileID: 3567048394910164570}
   eyesImageRight: {fileID: 4791174413652486490}
-  soundManager: {fileID: 3461680668558417958}
 --- !u!224 &2558976319957472195
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9654,12 +9903,12 @@ GameObject:
   - component: {fileID: 1088616744722879272}
   - component: {fileID: 1483044624354887686}
   m_Layer: 0
-  m_Name: BackgroundAnimationFrame
+  m_Name: AnimationFrame First Plan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &2649633985734825221
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10313,7 +10562,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.03529412, y: 0.03529412}
+  m_Size: {x: 6.75, y: 10.125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -10625,19 +10874,14 @@ MonoBehaviour:
   characterVolume: 1
   sounds:
   - name: rain
-    clip: {fileID: 8300000, guid: 61862782438c5704ea30c0ef502721a9, type: 3}
+    clip: {fileID: 8300000, guid: bac25a66a21350c4b9c75bf79fe4379f, type: 3}
     loop: 1
-    category: 1
-    source: {fileID: 0}
-  - name: owl
-    clip: {fileID: 8300000, guid: cbee4c4e459873944aeb8c85a633a3f8, type: 3}
-    loop: 0
     category: 1
     source: {fileID: 0}
   - name: Winter
-    clip: {fileID: 8300000, guid: 926a7546c38beb245aaaa740bc0d6d29, type: 3}
+    clip: {fileID: 8300000, guid: c8992c9bc1035424cb0d106f1feea0ff, type: 3}
     loop: 1
-    category: 1
+    category: 3
     source: {fileID: 0}
   - name: Alice_happy
     clip: {fileID: 8300000, guid: 78b59b7bf1cd0e348a37ea1aa99a0981, type: 3}
@@ -10645,12 +10889,12 @@ MonoBehaviour:
     category: 2
     source: {fileID: 0}
   - name: Alice_short_laugh
-    clip: {fileID: 8300000, guid: 7d61cb40d9b0f08498ff25fa98593f35, type: 3}
+    clip: {fileID: 8300000, guid: 345f74a35c4c60b40ba7e2cee8bba103, type: 3}
     loop: 0
     category: 2
     source: {fileID: 0}
   - name: Chris_sigh
-    clip: {fileID: 8300000, guid: eab1107602e1c9e4ebc8556f5fda2f04, type: 3}
+    clip: {fileID: 8300000, guid: b90cc4fc028462b41aece599c7060994, type: 3}
     loop: 0
     category: 2
     source: {fileID: 0}
@@ -10658,6 +10902,36 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: ed28758859a445f468c19f2edb2a481d, type: 3}
     loop: 0
     category: 2
+    source: {fileID: 0}
+  - name: thunder
+    clip: {fileID: 8300000, guid: 4b240c6d739c8c9469f7640438fb827c, type: 3}
+    loop: 0
+    category: 1
+    source: {fileID: 0}
+  - name: squirrel
+    clip: {fileID: 8300000, guid: 89c9aa7df5663d142ba3507532c8184a, type: 3}
+    loop: 0
+    category: 1
+    source: {fileID: 0}
+  - name: steps
+    clip: {fileID: 8300000, guid: 819f780c9d4b4a64e89637b2c5344542, type: 3}
+    loop: 0
+    category: 1
+    source: {fileID: 0}
+  - name: interference
+    clip: {fileID: 8300000, guid: 6d557c3e11bf86841b01ae664f795f94, type: 3}
+    loop: 0
+    category: 1
+    source: {fileID: 0}
+  - name: interference
+    clip: {fileID: 8300000, guid: 6d557c3e11bf86841b01ae664f795f94, type: 3}
+    loop: 0
+    category: 1
+    source: {fileID: 0}
+  - name: WardrobeMusic
+    clip: {fileID: 8300000, guid: 8c11fee51955fe34fb056dc9f1ebc779, type: 3}
+    loop: 1
+    category: 3
     source: {fileID: 0}
 --- !u!114 &3461883281816523565
 MonoBehaviour:
@@ -11847,7 +12121,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 6.75, y: 10.125}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -12379,6 +12653,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1902112332}
   - {fileID: 444669075450676939}
   - {fileID: 5459415651223456181}
   m_Father: {fileID: 8930633660983314477}
@@ -12403,6 +12678,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 1465498698785427843}
   darkOverlay: {fileID: 6885323009754840646}
   animationFrame: {fileID: 1483044624354887686}
+  backgroundLastFrame: {fileID: 0}
   frameDelay: 3
   repeatCount: -1
   characterManager: {fileID: 1256994933876070138}
@@ -12911,12 +13187,12 @@ SpriteRenderer:
   m_SortingLayerID: 1202453693
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: -684491276126887066, guid: f3231fd20d552d044b885ae796e352ba, type: 3}
+  m_Sprite: {fileID: -1659956063603049639, guid: 7a36e873e4df0684eb1f33207eb3acfa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 4.788235, y: 8.541176}
+  m_Size: {x: 6.75, y: 10.025}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -14518,7 +14794,6 @@ MonoBehaviour:
   backButton: {fileID: 4038232622025126958}
   UIManager: {fileID: 7830324738891455519}
   animations: {fileID: 2530418757318969264}
-  soundManager: {fileID: 3461680668558417958}
   isChoosing: 0
   isEpisodeScreenActive: 0
   inputUnavailable: 0
@@ -14583,7 +14858,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6350c579c542c564382decb705f9549a, type: 2}
   m_sharedMaterial: {fileID: 2258030281922351856, guid: 6350c579c542c564382decb705f9549a, type: 2}

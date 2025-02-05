@@ -11,34 +11,32 @@ public class AudioSettingsUI : MonoBehaviour
     [SerializeField] private Slider backgroundMusicVolumeSlider;
     [SerializeField] private Slider uisoundSlider;
 
-    private GameStateManager gameStateManager;
-    private SoundManager soundManager;
-    
+
 
     private void Start()
     {
-        gameStateManager = GameStateManager.Instance;
-        soundManager = SoundManager.Instance;
+        //gameStateManager = GameStateManager.Instance;
+        //soundManager = SoundManager.Instance;
 
-        if (soundManager == null)
+        if (SoundManager.Instance == null)
         {
-            Debug.LogError("SoundManager.Instance не найден.");
+           // Debug.LogError("SoundManager.Instance не найден.");
             return;
         }
 
-        Debug.Log($"Загруженные настройки перед установкой слайдеров: " +
-                  $"masterVolume = {gameStateManager.masterVolume}, " +
-                  $"characterVolume = {gameStateManager.characterVolume}, " +
-                  $"backgroundVolume = {gameStateManager.backgroundEffectsVolume}, " +
-                  $"uiVolume = {gameStateManager.uiVolume}");
+        /*Debug.Log($"Загруженные настройки перед установкой слайдеров: " +
+                  $"masterVolume = {GameStateManager.Instance.masterVolume}, " +
+                  $"characterVolume = {GameStateManager.Instance.characterVolume}, " +
+                  $"backgroundVolume = {GameStateManager.Instance.backgroundEffectsVolume}, " +
+                  $"uiVolume = {GameStateManager.Instance.uiVolume}");*/
 
         RemoveListeners();
 
         SetSavedValues();
 
-        uisoundSlider.value = gameStateManager.uiVolume > 0 ? 1 : 0;
+        uisoundSlider.value = GameStateManager.Instance.uiVolume > 0 ? 1 : 0;
 
-        Debug.Log($"После установки: masterVolumeSlider.value = {masterVolumeSlider.value}");
+        //Debug.Log($"После установки: masterVolumeSlider.value = {masterVolumeSlider.value}");
 
         AddListeners();
     }
@@ -57,11 +55,11 @@ public class AudioSettingsUI : MonoBehaviour
     private void SetSavedValues()
     {
         // Устанавливаем сохранённые значения без вызова `OnValueChanged`
-        masterVolumeSlider.SetValueWithoutNotify(gameStateManager.masterVolume);
-        characterVolumeSlider.SetValueWithoutNotify(gameStateManager.characterVolume);
-        backgroundMusicVolumeSlider.SetValueWithoutNotify(gameStateManager.backgroundVolume);
-        backgroundEffectsVolumeSlider.SetValueWithoutNotify(gameStateManager.backgroundEffectsVolume);
-        uisoundSlider.SetValueWithoutNotify(gameStateManager.uiVolume);
+        masterVolumeSlider.SetValueWithoutNotify(GameStateManager.Instance.masterVolume);
+        characterVolumeSlider.SetValueWithoutNotify(GameStateManager.Instance.characterVolume);
+        backgroundMusicVolumeSlider.SetValueWithoutNotify(GameStateManager.Instance.backgroundVolume);
+        backgroundEffectsVolumeSlider.SetValueWithoutNotify(GameStateManager.Instance.backgroundEffectsVolume);
+        uisoundSlider.SetValueWithoutNotify(GameStateManager.Instance.uiVolume);
     }
 
     private void AddListeners()
@@ -73,73 +71,60 @@ public class AudioSettingsUI : MonoBehaviour
         backgroundEffectsVolumeSlider.onValueChanged.AddListener(value => OnCategoryVolumeChanged("backgroundeffects", value));
     }
 
-    private void OnSoundSliderChanged(float value)
-    {
-        bool isOn = value > 0.5f; // Если больше 0.5, считаем включенным
-        float newVolume = isOn ? 1f : 0f;
-
-        gameStateManager.uiVolume = newVolume;
-        gameStateManager.SaveGlobalSettings();
-        soundManager.UpdateAllVolumes();
-
-        // Автоматически ставим слайдер в 0 или 1
-        uisoundSlider.value = newVolume;
-
-        Debug.Log($"Звук: {(isOn ? "On" : "Off")}");
-    }
+    
 
     public void OnMasterVolumeChanged(float value)
     {
-        if (Mathf.Approximately(gameStateManager.masterVolume, value))
+        if (Mathf.Approximately(GameStateManager.Instance.masterVolume, value))
         {
             Debug.Log("OnMasterVolumeChanged: Значение не изменилось, не сохраняем.");
             return;
         }
 
         Debug.Log($"OnMasterVolumeChanged вызван с значением: {value}");
-        gameStateManager.SetMasterVolume(value);
-        soundManager.UpdateAllVolumes();
+        GameStateManager.Instance.SetMasterVolume(value);
+        SoundManager.Instance.UpdateAllVolumes();
     }
 
     public void OnCharacterVolumeChanged(float value)
     {
         Debug.Log($"Изменение громкости персонажей: {value}");
-        gameStateManager.SetCategoryVolume("Characters", value);
-        soundManager.PlaySoundByName("Alice_happy");
+        GameStateManager.Instance.SetCategoryVolume("Characters", value);
+        SoundManager.Instance.PlaySoundByName("Alice_happy");
     }
 
     public void OnBackgroundVolumeChanged(float value)
     {
         Debug.Log($"Изменение громкости фона: {value}");
-        gameStateManager.SetCategoryVolume("Background", value);
+        GameStateManager.Instance.SetCategoryVolume("Background", value);
     }
 
     public void OnBackgroundEffectsVolumeChanged(float value)
     {
         Debug.Log($"Изменение громкости фона: {value}");
-        gameStateManager.SetCategoryVolume("BackgroundEffects", value);
+        GameStateManager.Instance.SetCategoryVolume("BackgroundEffects", value);
     }
 
     public void OnClickVolumeChanged(float value)
     {
         Debug.Log($"Изменение громкости интерфейса: {value}");
-        gameStateManager.SetCategoryVolume("UI", value);
+        GameStateManager.Instance.SetCategoryVolume("UI", value);
     }
 
 
     public void OnCategoryVolumeChanged(string category, float value)
     {
-        gameStateManager.SetCategoryVolume(category, value);
-        soundManager.UpdateAllVolumes();
+        GameStateManager.Instance.SetCategoryVolume(category, value);
+        SoundManager.Instance.UpdateAllVolumes();
     }
 
     public void ResetAudioSettings()
     {
-        gameStateManager.DefaultSoundSettingsValue();
+        GameStateManager.Instance.DefaultSoundSettingsValue();
         SetSavedValues();
-        uisoundSlider.SetValueWithoutNotify(gameStateManager.uiVolume);
-        gameStateManager.SaveGlobalSettings();
-        soundManager.UpdateAllVolumes();
+        uisoundSlider.SetValueWithoutNotify(GameStateManager.Instance.uiVolume);
+        GameStateManager.Instance.SaveGlobalSettings();
+        SoundManager.Instance.UpdateAllVolumes();
 
         Debug.Log("Аудио-настройки сброшены к значениям по умолчанию.");
     }

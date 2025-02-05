@@ -5,7 +5,8 @@
       "preset": {
         "frameDelay": 0.1,
         "keepLastFrame": false,
-        "repeatCount": -1
+        "repeatCount": -1,
+        "soundName": "rain"
       }
     },
     {
@@ -13,7 +14,8 @@
       "preset": {
         "frameDelay": 0.3,
         "keepLastFrame": true,
-        "repeatCount": 1
+        "repeatCount": 1,
+        "soundName": "squirrel"
       }
     },
     {

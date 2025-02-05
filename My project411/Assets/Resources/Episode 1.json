@@ -13,7 +13,6 @@
               "id": 1,
               "isNarration": true,
               "background": "background_forest",
-              "soundTrigger": "play:Winter",
               "texts": [
                 "The surrounding area of Blissville is known for its fabulous forests, which were wrapped in thick fog for most of the year.",
                 "Alice and her brother, Chris, walk along a trail damp from the rain, snaking their way deeper into the woods along the spreading trees."
@@ -24,7 +23,7 @@
               "backgroundAnimation": "RainAnimation",
               "speaker": "Alice",
               "character": "Alice",
-              "soundTrigger": "play:rain",
+              "soundTrigger": "play:Winter",
               "place": 1,
               "texts": [
                 "Come on, don't be so sour! We don't get out together that much."
@@ -49,6 +48,7 @@
               "id": 5,
               "speaker": "Chris",
               "character": "Chris",
+              "soundTrigger": "play:WardrobeMusic",
               "place": 2,
               "texts": [
                 "We don't get out together very often, but we have adventure every time.",
@@ -68,8 +68,8 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
+              "soundTrigger": "stop:WardrobeMusic",
               "animation": "laugh",
-              "soundTrigger": "play:Alice_short_laugh",
               "texts": [ "..." ]
             },
             {
@@ -77,7 +77,8 @@
               "speaker": "Chris",
               "character": "Chris",
               "place": 2,
-              "animation": "tothesidebase",
+              "animation": "eyestothesidebase",
+              "soundTrigger": "play:WardrobeMusic",
               "backgroundAnimation": "RainAvg",
               "texts": [
                 "Oh. Don't make that face. The last time you looked at me like that, we got lost and people were searching for us with dogs for hours!"
@@ -87,6 +88,7 @@
               "id": 9,
               "speaker": "Alice",
               "character": "Alice",
+              "soundTrigger": "play:Winter",
               "place": 1,
               "choices": [
                 {
@@ -118,6 +120,7 @@
                 }
               ],
               "isNarration": true,
+              "soundTrigger": "play:steps",
               "texts": [
                 "Alice, ignoring her brother's complaints, continued her way deeper into the forest, looking at the nature that surrounded her.",
                 "The girl knew that no matter what, her brother would still follow her wherever she went."
@@ -192,6 +195,7 @@
               "id": 16,
               "isNarration": true,
               "backgroundAnimation": "RainStartOfTheEnd",
+              "soundTrigger": "play:thunder",
               "texts": [
                 "Alice always liked to make spontaneous trips. A busy schedule didn’t allow her to do this often, but at least once a month she tried to spend time alone with her brother.",
                 "Chris and Alice were close, and despite the difference in their age, they were always comfortable together.",
@@ -381,6 +385,7 @@
             {
               "id": 30,
               "backgroundAnimation": "RainFinishedAnimation",
+              "soundTrigger": "stop:rain",
               "isNarration": true,
               "texts": [ "Leaving the backpacks in the gazebo, Chris walked over to the firepit." ]
             },
@@ -663,7 +668,7 @@
               "speaker": "Chris",
               "character": "Chris",
               "animation": "laugh",
-              "place": 1,
+              "place": 2,
               "texts": [
                 "Alice! I love you, you know that, don't you?"
               ]
@@ -881,9 +886,750 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
-              "animation": "emotionClosedEyes",
+              "animation": "emotionсlosedeyes",
               "texts": [
                 "..."
+              ]
+            },
+            {
+              "id": 65,
+              "isNarration": true,
+              "texts": [
+                "..."
+              ]
+            },
+            {
+              "id": 66,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "..."
+              ]
+            },
+            {
+              "id": 67,
+              "isNarration": true,
+              "texts": [
+                "Consciousness was rapidly returning, flurriedly restoring all her senses.",
+                "Alice struggled to open her eyes, trying to focus her attention on what was happening."
+              ]
+            },
+            {
+              "id": 68,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "animation": "eyestothesidebase",
+              "texts": [
+                "..."
+              ]
+            },
+            {
+              "id": 69,
+              "isNarration": true,
+              "texts": [
+                "The darkness around her was so thick that she could barely see the silhouette of her own hand raised at face level.",
+                "The throbbing headache was maddening, preventing her from fully realizing what had happened to her and where she was.",
+                "Alice sat down carefully, leaning her back against the tree she could feel next to her with hands, unruly from the cold."
+              ]
+            },
+            {
+              "id": 70,
+              "speaker": "Alice",
+              "character": "Alice",
+              "background": "forest_dark",
+              "smoothBgReplacement": true,
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Remember what happened to her before.",
+                  "actions": [
+                    {
+                      "key": "rememberWhatHappened",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Try to call the brother.",
+                  "actions": [
+                    {
+                      "key": "callBrother",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 71,
+              "conditions": [
+                {
+                  "key": "rememberWhatHappened",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "The memories were flashing back to her.",
+                "With difficulty, Alice gathered the memories swirling in her head into a single strand."
+              ]
+            },
+            {
+              "id": 72,
+              "conditions": [
+                {
+                  "key": "rememberWhatHappened",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Chris. A walk in the woods. Squirrel. I followed a squirrel and then...",
+                "Fall. Wait... Chris! Where is he?"
+              ]
+            },
+            {
+              "id": 73,
+              "conditions": [
+                {
+                  "key": "rememberWhatHappened",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "A wave of panic ran through her body, raising the hair on her arms.",
+                "A lot of questions arose in her mind, confusing her. The girl couldn't seem to fully come back to reality."
+              ]
+            },
+            {
+              "id": 74,
+              "conditions": [
+                {
+                  "key": "rememberWhatHappened",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Why is it so dark? Have I been unconscious for so long?"
+              ]
+            },
+            {
+              "id": 75,
+              "conditions": [
+                {
+                  "key": "rememberWhatHappened",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "As she thought about it, a branch snapped somewhere from the side of her, immediately alerting Alice."
+              ]
+            },
+            {
+              "id": 76,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Freeze.",
+                  "actions": [
+                    {
+                      "key": "freeze",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Could it be a brother? Try to call him.",
+                  "actions": [
+                    {
+                      "key": "trycallBrother",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 77,
+              "conditions": [
+                {
+                  "key": "freeze",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "She held her breath, sticking herself into the tree. The girl’s heart was ready to jump out of her chest.",
+                "Alice listened, her mouth closed with her hand, so that she could not make a sound.",
+                "After a few minutes in that position, Alice took her hand away from her face and sighed slowly, taking in the cool night air and bringing her racing pulse back to normal."
+              ]
+            },
+            {
+              "id": 78,
+              "conditions": [
+                {
+                  "key": "freeze",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "\"Was it just my imagination?\""
+              ]
+            },
+            {
+              "id": 79,
+              "conditions": [
+                {
+                  "key": "freeze",
+                  "value": true
+                }
+              ],
+              "speaker": "...",
+              "character": "Meruem",
+              "animation": "shadow",
+              "place": 2,
+              "texts": [
+                "It wasn’t."
+              ]
+            },
+            {
+              "id": 80,
+              "conditions": [
+                {
+                  "key": "callBrother",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice parted her dry lips and breathed in slowly, taking in more of the cold air in her lungs."
+              ]
+            },
+            {
+              "id": 81,
+              "conditions": [
+                {
+                  "key": "callBrother",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Chris! Chris, where are you?"
+              ]
+            },
+            {
+              "id": 82,
+              "conditions": [
+                {
+                  "key": "callBrother",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "The voice came out very quiet and hoarse. Coughing, Alice was about to shout again when suddenly she heard some movement somewhere very close to her."
+              ]
+            },
+            {
+              "id": 83,
+              "conditions": [
+                {
+                  "key": "callBrother",
+                  "value": true
+                }
+              ],
+              "speaker": "...",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "I wouldn't advise shouting in these woods."
+              ]
+            },
+            {
+              "id": 84,
+              "isNarration": true,
+              "texts": [
+                "An unfamiliar male voice suddenly sounded just above her head.",
+                "Without expecting it, the girl jerked to the side and tried to see who was speaking."
+              ]
+            },
+            {
+              "id": 85,
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Hey, don't worry, I'm Meruem."
+              ]
+            },
+            {
+              "id": 86,
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "And welcome. "
+              ]
+            },
+            {
+              "id": 87,
+              "isNarration": true,
+              "texts": [
+                "Speaking very quietly, the stranger slowly approached the girl.",
+                "Her eyes had already adjusted to the darkness, and Alice could make out some of the man's facial features and his long hair."
+              ]
+            },
+            {
+              "id": 88,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "What do you mean? Welcome? Who are you?"
+              ]
+            },
+            {
+              "id": 89,
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "What is your name? Let me help you up, and we'll walk out of here together."
+              ]
+            },
+            {
+              "id": 90,
+              "isNarration": true,
+              "texts": [
+                "The girl saw that the stranger who had ignored her questions extended his hand to her, but she continued to sit where she was, afraid to even move."
+              ]
+            },
+            {
+              "id": 91,
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "You can take my hand, and I'll help you get out of here and then answer all your questions, or you can sit here and then they'll find you.",
+                "I wouldn't recommend the second option, of course."
+              ]
+            },
+            {
+              "id": 92,
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Take a man's hand.",
+                  "actions": [
+                    {
+                      "key": "takeHand",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Keep asking questions.",
+                  "actions": [
+                    {
+                      "key": "keepAsking",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 93,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Meruem's words made goosebumps run down the girl's body. Alice didn't understand where she was, why the man was saying such strange things, or where her brother had disappeared to. ",
+                "The unknown frightened her, and the potential threat Meruem had mentioned seemed real.",
+                "Alice decided that under the current situation it was safer to follow the stranger than to be alone in an unfamiliar forest.",
+                "Realising by the look on Alice's face that she had made up her mind, Meruem leaned over slightly and put his arm around the girl's waist to help her stand up.",
+                "Maybe this recklessness was a consequence of her head banging, but Alice promised herself that she would find out the answers to her questions from Meruem later and be on the lookout.",
+                "They tried to walk as fast as they could in her current condition, but the girl still struggled to move due to her frozen limbs and the bruises she had received."
+              ]
+            },
+            {
+              "id": 94,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Can we walk a little slower?"
+              ]
+            },
+            {
+              "id": 95,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Now we should not hesitate.",
+                "Get on my back. And hold on to me very tightly."
+              ]
+            },
+            {
+              "id": 96,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Meruem turned away from her and sat up a little and Alice carefully jumped on him from behind and put her arms around his shoulders.",
+                "There were trees and bushes on the sides, the branches of which struck the girl's face and arms, but Meruem seemed to ignore these obstacles and moved forward at a wide stride.",
+                "The forest gradually opened, thinning, revealing the outline of a low-lying settlement. Several small but neat wooden houses were set among the pine trees, as if they were trying to hide the presence of life in this part of the forest."
+              ]
+            },
+            {
+              "id": 97,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "No one will hurt you in this place. You sleep here tonight, and tomorrow we'll talk about everything."
+              ]
+            },
+            {
+              "id": 98,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "The man stopped at the nearest house and carefully lowered Alice off his back."
+              ]
+            },
+            {
+              "id": 99,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "I'm going to leave now. Don't come out of the house until I get back."
+              ]
+            },
+            {
+              "id": 100,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Can I ask just one question before you go?"
+              ]
+            },
+            {
+              "id": 101,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Okay, but only one."
+              ]
+            },
+            {
+              "id": 102,
+              "conditions": [
+                {
+                  "key": "takeHand",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Do you know where my brother is? Is he all right?",
+                  "actions": [
+                    {
+                      "key": "whereisBrother",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Who are you? What are you doing here in the woods?",
+                  "actions": [
+                    {
+                      "key": "whoareYou",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 103,
+              "conditions": [
+                {
+                  "key": "whereisBrother",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "I don't know where your brother is. But since he wasn't with you when I found you, he's in that world. I'm sorry to tell you this, but I don't think you'll see him again."
+              ]
+            },
+            {
+              "id": 104,
+              "conditions": [
+                {
+                  "key": "whereisBrother",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Meruem shook the girl’s shoulder with encouragement."
+              ]
+            },
+            {
+              "id": 105,
+              "conditions": [
+                {
+                  "key": "whereisBrother",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Go to the house. I’ll try to get back as soon as possible."
+              ]
+            },
+            {
+              "id": 106,
+              "conditions": [
+                {
+                  "key": "whoareYou",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "The point is that you have come to the Underworld. I am here as a sort of guide. The rest you will find out after. Now go to the house. I’ll try to get back as soon as possible."
+              ]
+            },
+            {
+              "id": 107,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Who are you and how did you find me?",
+                "What about my brother?",
+                "Did he send you to find me?",
+                "But then why don't you know my name?  What's going on?"
+              ]
+            },
+            {
+              "id": 108,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Your brother isn't here. And I'm sorry to disappoint you, but no one will ever find you again."
+              ]
+            },
+            {
+              "id": 109,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "These words put the girl on a panic. She did not understand how much to believe a man, but even more did not understand what to do.",
+                "Alice took a deep breath, trying to calm herself down and make some decision.",
+                "The girl didn’t realize that while she was sitting there, something changed in the environment. The air, which the girl already lacked, seemed to grow even thicker."
+              ]
+            },
+            {
+              "id": 110,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Birds were howling nearby, soaring into the sky. A terrible toot and heartbreaking howls were heard. It seemed that the whole forest began to come alive and filled with movement."
+              ]
+            },
+            {
+              "id": 111,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "What's going on?"
+              ]
+            },
+            {
+              "id": 112,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "It's starting. We must get out of here as fast as we can."
+              ]
+            },
+            {
+              "id": 113,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice looked around for the source of the sound, trying to figure out what was happening."
+              ]
+            },
+            {
+              "id": 114,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "When she looked up to the sky, she was almost frozen with horror.",
+                "The enormous creatures, impossible to see in the darkness, were circling in the sky, making monstrous sounds that sent shivers down her spine and aroused Alice's animal fear.",
+                "She felt the deadly danger in her gut. A sense of unreality gripped her. It seemed to Alice that her own body-her sight and hearing-was deceiving her. Alice thought again whether the blow to her head could have had such consequences."
+              ]
+            },
+            {
+              "id": 115,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "In an instant, one of the creatures separated from the others and headed towards Alice and Meruem with all speed."
+              ]
+            },
+            {
+              "id": 116,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Run if you don't want to stay in this clearing forever. Because I want to survive this night."
               ]
             }
           ]
