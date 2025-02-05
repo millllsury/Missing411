@@ -160,7 +160,6 @@ public class CharacterManager : MonoBehaviour
     private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)
     {
 
-
         if (avatar == null)
         {
             Debug.LogError("Avatar is null!");
@@ -193,7 +192,7 @@ public class CharacterManager : MonoBehaviour
             else
             {
                 float targetX = isLeft ? -3f : 3f;
-                StartCoroutine(SmoothAppear(avatar, character, targetX));
+                StartCoroutine(SmoothAppear(avatar, targetX, character));
             }
 
             Debug.Log("Sprite for the character was set: " + character);
@@ -209,7 +208,7 @@ public class CharacterManager : MonoBehaviour
 
 
 
-    private IEnumerator SmoothAppear(SpriteRenderer avatar, string character, float endPositionX)
+    private IEnumerator SmoothAppear(SpriteRenderer avatar, float endPositionX, string character = null)
     {
         while (isLeftAvatarAnimating || isRightAvatarAnimating)
         {
@@ -264,7 +263,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         float targetX = isLeft ? -3f : 3f;
-        yield return StartCoroutine(SmoothAppear(avatar, character, targetX));
+        yield return StartCoroutine(SmoothAppear(avatar, targetX, character));
     }
 
     public void HideAvatars()
@@ -330,7 +329,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         // Устанавливаем полную прозрачность
-        foreach (var character in characters)
+        /*foreach (var character in characters)
         {
             if (character != null)
             {
@@ -338,9 +337,8 @@ public class CharacterManager : MonoBehaviour
                 color.a = 0f;
                 character.color = color;
             }
-        }
+        }*/
     }
-
     public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 1.5f)
     {
 
@@ -364,7 +362,7 @@ public class CharacterManager : MonoBehaviour
         }
 
         // Устанавливаем полную непрозрачность
-        foreach (var character in characters)
+       /* foreach (var character in characters)
         {
             if (character != null)
             {
@@ -372,7 +370,7 @@ public class CharacterManager : MonoBehaviour
                 color.a = 1f;
                 character.color = color;
             }
-        }
+        }*/
 
         Debug.Log($"left Character Name: {currentLeftCharacter}, right Character Name: {currentRightCharacter}");
         

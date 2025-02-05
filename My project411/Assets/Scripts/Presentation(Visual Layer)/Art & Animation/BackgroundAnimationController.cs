@@ -14,13 +14,19 @@ public class BackgroundController : MonoBehaviour
     [SerializeField] private Image backgroundLastFrame;
     [SerializeField] private float frameDelay = 3f; // Пауза между кадрами
     [SerializeField] private int repeatCount = -1;
-    private string soundName = string.Empty;
 
     private Coroutine currentTransitionCoroutine;
-    private Coroutine animationCoroutine;
-    private List<Sprite> animationSprites;
+    
+
+    private Coroutine foregroundAnimationCoroutine;
+    private Coroutine backgroundAnimationCoroutine;
+    private List<Sprite> foregroundSprites;
+    private List<Sprite> backgroundSprites;
+
     private bool isAnimatingBackground = false;
+    private bool isAnimatingForeground = false;
     private bool keepLastFrame = false;
+
     private string currentBackgroundName;
     private string currentAnimationName;
     private string currentSoundName;
@@ -79,8 +85,9 @@ public class BackgroundController : MonoBehaviour
         // 2. Плавное затемнение экрана (до 50%)
         float fadeDuration = 3f;
         float elapsedTime = 0f;
-        
 
+        animationFrame.gameObject.SetActive(false);
+        backgroundLastFrame.gameObject.SetActive(false);
         while (elapsedTime < fadeDuration)
         {
             Color overlayColor = darkOverlay.color;
@@ -91,7 +98,7 @@ public class BackgroundController : MonoBehaviour
             yield return null;
         }
         darkOverlay.color = new Color(0, 0, 0, 0.8f);
-        animationFrame.gameObject.SetActive(false); ////
+
         // 3. Меняем фон
         SetBackground(backgroundName);
 
@@ -111,7 +118,7 @@ public class BackgroundController : MonoBehaviour
         // 5. Плавное включение элементов
         yield return StartCoroutine(FadeInElements());
 
-        if (isAnimatingBackground)
+        if (isAnimatingForeground)
         {
             animationFrame.gameObject.SetActive(true);
         }
@@ -181,69 +188,73 @@ public class BackgroundController : MonoBehaviour
     #region Background Animation
     public void StartBackgroundAnimation(string animationFolder, float delay, int repeatCount = -1, bool keepLastFrame = false, string currentSoundName = null)
     {
-        if (isAnimatingBackground)
-        {
-            //Debug.Log($"Попытка запустить новую анимацию {animationFolder}, пока предыдущая ещё выполняется ({currentAnimationName}).");
-            StopBackgroundAnimation();
-        }
-
         Sprite[] sprites = Resources.LoadAll<Sprite>("Backgrounds/" + animationFolder);
-        if (sprites.Length > 0)
-        {
-            animationSprites = new List<Sprite>(sprites);
-            frameDelay = delay;
-            this.repeatCount = repeatCount;
-            this.keepLastFrame = keepLastFrame;
-            currentAnimationName = animationFolder;
-            this.currentSoundName = soundName;
-            isAnimatingBackground = true;
-            animationCoroutine = StartCoroutine(PlayBackgroundAnimation());
-
-            if (currentSoundName != null)
-            {
-                SoundManager.Instance.PlaySoundByName(currentSoundName);
-            }
-
-        }
-        else
+        if (sprites.Length == 0)
         {
             Debug.LogError($"Анимация не найдена в папке Resources/Backgrounds/{animationFolder}");
+            return;
         }
-    }
 
-    public void StopBackgroundAnimation()
-    {
-        if (animationCoroutine != null)
+        if (keepLastFrame)  // Анимация для заднего плана
         {
-            StopCoroutine(animationCoroutine);
-            animationCoroutine = null;
+            backgroundSprites = new List<Sprite>(sprites);
+            PlayBackgroundAnimation(delay, repeatCount, currentSoundName);
         }
-        isAnimatingBackground = false;
-        animationFrame.gameObject.SetActive(false);
+        else  // Анимация для переднего плана
+        {
+            foregroundSprites = new List<Sprite>(sprites);
+            PlayForegroundAnimation(delay, repeatCount, currentSoundName);
+        }
     }
 
-    private IEnumerator PlayBackgroundAnimation()
+    private void PlayForegroundAnimation(float delay, int repeatCount, string soundName)
     {
-        if (animationSprites == null || animationSprites.Count == 0)
+        if (foregroundAnimationCoroutine != null)
+            StopCoroutine(foregroundAnimationCoroutine);
+
+        isAnimatingForeground = true;
+        foregroundAnimationCoroutine = StartCoroutine(PlayAnimation(animationFrame, foregroundSprites, delay, repeatCount, false));
+
+        if (!string.IsNullOrEmpty(soundName))
+        {
+            SoundManager.Instance.PlaySoundByName(soundName);
+        }
+    }
+
+    private void PlayBackgroundAnimation(float delay, int repeatCount, string soundName)
+    {
+        if (backgroundAnimationCoroutine != null)
+            StopCoroutine(backgroundAnimationCoroutine);
+
+        isAnimatingBackground = true;
+        backgroundAnimationCoroutine = StartCoroutine(PlayAnimation(backgroundLastFrame, backgroundSprites, delay, repeatCount, true));
+
+        if (!string.IsNullOrEmpty(soundName))
+        {
+            SoundManager.Instance.PlaySoundByName(soundName);
+        }
+    }
+
+    private IEnumerator PlayAnimation(Image animationImage, List<Sprite> sprites, float frameDelay, int repeatCount, bool keepLastFrame)
+    {
+        if (sprites == null || sprites.Count == 0)
         {
             Debug.LogError("Список спрайтов для анимации пуст.");
             yield break;
         }
 
-
-
         int currentFrame = 0;
         int playedCount = 0;
         int lastFrameIndex = 0;
 
-        animationFrame.gameObject.SetActive(true);
+        animationImage.gameObject.SetActive(true);
 
         while (repeatCount == -1 || playedCount < repeatCount)
         {
-            animationFrame.sprite = animationSprites[currentFrame];
+            animationImage.sprite = sprites[currentFrame];
             lastFrameIndex = currentFrame;
 
-            currentFrame = (currentFrame + 1) % animationSprites.Count;
+            currentFrame = (currentFrame + 1) % sprites.Count;
             if (currentFrame == 0)
             {
                 playedCount++;
@@ -254,20 +265,45 @@ public class BackgroundController : MonoBehaviour
 
         if (keepLastFrame)
         {
-            animationFrame.sprite = animationSprites[lastFrameIndex];
+            animationImage.sprite = sprites[lastFrameIndex];
         }
         else
         {
-            animationFrame.gameObject.SetActive(false);
+            animationImage.gameObject.SetActive(false);
         }
 
-        isAnimatingBackground = false;
-        hasAnimationPlayed = true;
-        animationCoroutine = null;
-        if (!keepLastFrame)
+        if (keepLastFrame)
         {
-            GameStateManager.Instance.ClearBackgroundAnimation();
+            isAnimatingBackground = false;
+            backgroundAnimationCoroutine = null;
         }
+        else
+        {
+            isAnimatingForeground = false;
+            foregroundAnimationCoroutine = null;
+        }
+    }
+
+    public void StopForegroundAnimation()
+    {
+        if (foregroundAnimationCoroutine != null)
+        {
+            StopCoroutine(foregroundAnimationCoroutine);
+            foregroundAnimationCoroutine = null;
+        }
+        isAnimatingForeground = false;
+        animationFrame.gameObject.SetActive(false);
+    }
+
+    public void StopBackgroundAnimation()
+    {
+        if (backgroundAnimationCoroutine != null)
+        {
+            StopCoroutine(backgroundAnimationCoroutine);
+            backgroundAnimationCoroutine = null;
+        }
+        isAnimatingBackground = false;
+        backgroundLastFrame.gameObject.SetActive(false);
     }
 
     public bool HasAnimationPlayed() => hasAnimationPlayed;

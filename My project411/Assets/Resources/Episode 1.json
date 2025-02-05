@@ -13,6 +13,7 @@
               "id": 1,
               "isNarration": true,
               "background": "background_forest",
+              "soundTrigger": "play:Winter",
               "texts": [
                 "The surrounding area of Blissville is known for its fabulous forests, which were wrapped in thick fog for most of the year.",
                 "Alice and her brother, Chris, walk along a trail damp from the rain, snaking their way deeper into the woods along the spreading trees."
@@ -23,7 +24,6 @@
               "backgroundAnimation": "RainAnimation",
               "speaker": "Alice",
               "character": "Alice",
-              "soundTrigger": "play:Winter",
               "place": 1,
               "texts": [
                 "Come on, don't be so sour! We don't get out together that much."
@@ -68,7 +68,6 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
-              "soundTrigger": "stop:WardrobeMusic",
               "animation": "laugh",
               "texts": [ "..." ]
             },
@@ -78,7 +77,6 @@
               "character": "Chris",
               "place": 2,
               "animation": "eyestothesidebase",
-              "soundTrigger": "play:WardrobeMusic",
               "backgroundAnimation": "RainAvg",
               "texts": [
                 "Oh. Don't make that face. The last time you looked at me like that, we got lost and people were searching for us with dogs for hours!"

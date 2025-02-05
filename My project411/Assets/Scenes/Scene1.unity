@@ -6865,7 +6865,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1902112332
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8018,27 +8018,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &353905731331996323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2588750772623070010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fdebb747e923a64698bd06177e40d8d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backgroundImage: {fileID: 0}
-  darkOverlay: {fileID: 0}
-  animationFrame: {fileID: 1483044624354887686}
-  backgroundLastFrame: {fileID: 0}
-  frameDelay: 3
-  repeatCount: -1
-  characterManager: {fileID: 0}
-  uiElements: {fileID: 0}
-  charactersParent: {fileID: 0}
 --- !u!1 &358115718277505317
 GameObject:
   m_ObjectHideFlags: 0
@@ -9899,7 +9878,6 @@ GameObject:
   - component: {fileID: 444669075450676939}
   - component: {fileID: 4674544235461744698}
   - component: {fileID: 9127057282382876434}
-  - component: {fileID: 353905731331996323}
   - component: {fileID: 1088616744722879272}
   - component: {fileID: 1483044624354887686}
   m_Layer: 0
@@ -9908,7 +9886,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!82 &2649633985734825221
 AudioSource:
   m_ObjectHideFlags: 0
@@ -10111,7 +10089,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &2780635661438915230
 GameObject:
   m_ObjectHideFlags: 0
@@ -12071,7 +12049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &4791174413652486490
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12678,7 +12656,7 @@ MonoBehaviour:
   backgroundImage: {fileID: 1465498698785427843}
   darkOverlay: {fileID: 6885323009754840646}
   animationFrame: {fileID: 1483044624354887686}
-  backgroundLastFrame: {fileID: 0}
+  backgroundLastFrame: {fileID: 1902112333}
   frameDelay: 3
   repeatCount: -1
   characterManager: {fileID: 1256994933876070138}

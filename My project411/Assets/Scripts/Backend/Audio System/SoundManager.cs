@@ -131,6 +131,12 @@ public class SoundManager : MonoBehaviour
             return;
         }
 
+        if (newSound.source.isPlaying)
+        {
+            Debug.Log($"Sound '{soundName}' is already playing.");
+            return;
+        }
+
         if (newSound.category == SoundCategory.Background)
         {
             Sound currentlyPlayingBg = sounds.Find(s => s.category == SoundCategory.Background && s.source.isPlaying);
@@ -142,24 +148,19 @@ public class SoundManager : MonoBehaviour
             }
         }
 
-        if (!newSound.source.isPlaying)
+
+
+        if (newSound.category == SoundCategory.Background || newSound.category == SoundCategory.BackgroundEffects)
         {
-            if (newSound.category == SoundCategory.Background || newSound.category == SoundCategory.BackgroundEffects)
-            {
-                StartCoroutine(FadeIn(newSound, 4f)); // Плавное начало в течение 3 секунд
-            }
-            else
-            {
-                newSound.source.volume = GetVolumeForSound(newSound);
-                newSound.source.Play();
-            }
+            StartCoroutine(FadeIn(newSound, 4f)); // Плавное начало
         }
         else
         {
-            Debug.Log($"Sound '{soundName}' is already playing.");
+            newSound.source.volume = GetVolumeForSound(newSound);
+            newSound.source.Play();
         }
-        
-        if(newSound.category == SoundCategory.Background || newSound.category == SoundCategory.BackgroundEffects)
+
+        if (newSound.category == SoundCategory.Background || newSound.category == SoundCategory.BackgroundEffects)
         {
             
          GameStateManager.Instance.AddPlayingTrack(newSound.name);

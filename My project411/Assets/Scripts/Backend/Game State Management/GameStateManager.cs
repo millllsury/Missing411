@@ -270,7 +270,7 @@ public class GameStateManager : MonoBehaviour
             {
                 saveSlots.slots.Add(new SaveSlot
                 {
-                    slotName = $"Слот {i}",
+                    slotName = $"Slot {i}",
                     saveDate = null,
                     gameState = null
                 });
@@ -316,7 +316,6 @@ public class GameStateManager : MonoBehaviour
         }
 
         currentState = slot.gameState; // Восстанавливаем состояние игры
-        LoadPlayingTracks();
         //Debug.Log($"Game loaded from slot {slot.slotName}.");
     }
 
@@ -362,34 +361,27 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Слот {slotIndex + 1} очищен.");
     }
 
-
-
-
-    private static string saveFilePath => Path.Combine(Application.persistentDataPath, "game_state.json");
-
    
-    private GameState currentState;
-
-
 
     #region Управление состоянием
 
-    public void UpdateSceneState(/*string episode,*/ string scene, string dialogue, int textIndex/*, bool episodeNameShowed*/)
+    public void UpdateSceneState(string episode, string scene, string dialogue, int textIndex, bool episodeNameShowed)
     {
         if (string.IsNullOrEmpty(scene) || string.IsNullOrEmpty(dialogue))
         {
             Debug.LogWarning("Попытка обновить состояние с пустыми значениями.");
             return;
         }
-        //currentState.currentEpisode = episode;
+        currentState.currentEpisode = episode;
         currentState.currentScene = scene;
         currentState.currentDialogue = dialogue;
         currentState.textCounter = textIndex;
-        /// currentState.episodeNameShowed = episodeNameShowed;
+        currentState.episodeNameShowed = episodeNameShowed;
 
         Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe=");
     }
 
+    private GameState currentState;
     public GameState GetGameState()
     {
         return currentState;
@@ -399,34 +391,6 @@ public class GameStateManager : MonoBehaviour
 
     #region Сохранение и загрузка
 
-    public bool LoadGame()
-    {
-        if (!File.Exists(saveFilePath))
-        {
-            Debug.LogWarning("Save file not found! Creating a default state.");
-            currentState = new GameState
-            {
-                currentScene = "1",
-                currentDialogue = "1",
-                textCounter = 0,
-                flags = new Dictionary<string, bool>(),
-                hairIndex = 0,
-                clothesIndex = 0,
-                episodeNameShowed = false
-            };
-            return false;
-        }
-
-        string json = File.ReadAllText(saveFilePath); // Чтение JSON из файла
-        currentState = JsonConvert.DeserializeObject<GameState>(json); // Десериализация JSON в объект GameState
-        Debug.Log($"Game progress has been loaded.\nJSON:\n{json}");
-        return true;
-    }
-
-    /*Функция может быть использована через сериализацию:
-
-    Если она связана с объектом, который загружается или сохраняется, Unity или JSON-файлы могут использовать её для восстановления данных.
-    */
 
     public (int, int) LoadAppearance()
     {
@@ -528,13 +492,14 @@ public class GameStateManager : MonoBehaviour
     {
         foreach (var track in currentState.playingTracks)
         {
-           
-         AddPlayingTrack(track);
-         SoundManager.Instance.PlaySoundByName(track);
-            
+            if (!SoundManager.Instance.sounds.Any(s => s.name == track && s.source.isPlaying))
+            {
+                SoundManager.Instance.PlaySoundByName(track);
+            }
         }
         Debug.Log("Загружены треки: " + string.Join(", ", currentState.playingTracks));
     }
+
 
 
     public void AddPlayingTrack(string trackName)

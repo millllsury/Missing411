@@ -34,6 +34,8 @@ public class DialogueManager : MonoBehaviour
     private int currentDialogueId=1;
     private int textCounter = 0;
 
+    private bool firstTimeSceneSound = false;
+
     public bool isChoosing = false;
     public bool isEpisodeScreenActive = false;
     public bool inputUnavailable = false;
@@ -47,9 +49,7 @@ public class DialogueManager : MonoBehaviour
     void Start()
     {
         InitializeComponents();
-        LoadInitialData();
-        LoadProgress(); // Автоматически загружаем состояние, если выбран слот
-        
+        LoadInitialData();        
     }
 
     private void InitializeComponents()
@@ -83,8 +83,7 @@ public class DialogueManager : MonoBehaviour
                 Debug.Log($"Scene {scene.sceneId}, Dialogues: {scene.dialogues?.Count ?? 0}");
             }
         }
-        characterManager.HideAvatars();
-        LoadEpisode(1);
+        LoadProgress();
     }
 
     private T FindComponent<T>(string componentName) where T : Component
@@ -130,12 +129,13 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError($"Эпизод с ID {episodeId} не найден!");
             return;
         }
-
-        LoadScene(currentEpisode.scenes[0].sceneId);
+        ShowEpisodeName();
     }
 
     public void LoadScene(int sceneId)
     {
+        Resources.UnloadUnusedAssets();
+        System.GC.Collect(); //// очистка мусора
 
         currentScene = currentEpisode.scenes.Find(scene => scene.sceneId == sceneId);
         if (currentScene == null)
@@ -143,22 +143,7 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError($"Сцена с ID {sceneId} не найдена!");
             return;
         }
-
-        // Если текущий диалог уже установлен, используем его
-        if (currentDialogueId > 0)
-        {
-            InitializeDialogue(currentDialogueId, textCounter);
-        }
-        else
-        {
-            // Если текущий диалог не задан, начинаем с первого
-            currentDialogueId = currentScene.dialogues[0].id;
-            textCounter = 0;
-            InitializeDialogue(currentDialogueId, textCounter);
-            //ShowEpisodeName();
-            HandleSceneBackground();
-        }
-        HideChoices();
+        HandleSceneBackground();
     }
 
 
@@ -207,9 +192,11 @@ public class DialogueManager : MonoBehaviour
                 Debug.LogWarning($"TextCounter ({textCounter}) выходит за пределы текста диалога. Сбрасываем на 0.");
                 textCounter = 0;
             }
-
+            HideChoices();
             // Обрабатываем звуки и анимации, если они указаны
-            //HandleDialogueSound(dialogue);
+            firstTimeSceneSound = true;
+            HandleDialogueSound(dialogue);
+
             HandleDialogueAnimation(dialogue);
             DisplayDialogueText(dialogue); // Отображаем текущий текст
         }
@@ -382,7 +369,11 @@ public class DialogueManager : MonoBehaviour
             // Обрабатываем анимацию перед показом текста
             HandleDialogueAnimation(nextDialogue);
 
-            HandleDialogueSound(nextDialogue);
+            if (!firstTimeSceneSound == true)
+            {
+                HandleDialogueSound(nextDialogue);
+            }
+
             UpdateBackButtonState(true);
 
             // Показываем текст следующего диалога
@@ -400,16 +391,21 @@ public class DialogueManager : MonoBehaviour
                 // Сохраняем прогресс для перехода
                 GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
                 var (currentHairIndex, currentClothesIndex) = GameStateManager.Instance.LoadAppearance();
+
                 GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
                 GameStateManager.Instance.SaveCharacterNames(
                     null,
                     null
                     );
+
                 GameStateManager.Instance.UpdateSceneState(
-                    nextScene.sceneId.ToString(),  // Следующая сцена
-                    "1",                          // Диалог начинается с 1
-                    0                             // Сброс текстового счётчика
-                );
+                    currentEpisode.episodeId.ToString(),  // Текущий эпизод
+                    nextScene.sceneId.ToString(),         // Следующая сцена
+                    "1",                                 // Диалог начинается с 1
+                    0,                                    // Сброс текстового счётчика
+                    true                                 // EpisodeNameShowed = true для новой сцены
+                    );
+
 
                 dialogueHistory.Clear(); // Очищаем стек
                 var dialogueHistoryList = new List<DialogueState>(); // Создаём новый пустой список
@@ -447,6 +443,11 @@ public class DialogueManager : MonoBehaviour
 
     private void HandleDialogueSound(Dialogue dialogue)
     {
+        if (firstTimeSceneSound == true)
+        {
+            firstTimeSceneSound = false;
+        }
+      
         if (!string.IsNullOrEmpty(dialogue.soundTrigger))
         {
             if (SoundManager.Instance != null)
@@ -589,7 +590,7 @@ public class DialogueManager : MonoBehaviour
 
     public void SaveProgress()
     {
-        // Получаем текущий индекс выбранного слота
+        // Get the current index of the selected slot
         int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
 
         if (selectedSlotIndex == -1)
@@ -601,31 +602,33 @@ public class DialogueManager : MonoBehaviour
         // Сохраняем состояние текущей сцены
         int currentTextCounter = textCounter - 1;
         GameStateManager.Instance.UpdateSceneState(
-            currentScene.sceneId.ToString(),
-            currentDialogueId.ToString(),
-            currentTextCounter 
-
+            currentEpisode.episodeId.ToString(),  // Current episode
+            currentScene.sceneId.ToString(),      // Current scene
+            currentDialogueId.ToString(),         // Current Dialogue
+            currentTextCounter,                   // Current text index
+            true                                  // EpisodeNameShowed = true if the episode screen is already shown
         );
 
-        // Обновляем флаги
+        // Updating flags
         GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
 
-        // Сохраняем внешний вид персонажей
+        // Preserving the appearance of the characters
         var (currentHairIndex, currentClothesIndex) = GameStateManager.Instance.LoadAppearance();
         GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
 
-        // Сохраняем имена персонажей
+        // Save character names
         string leftCharacter = characterManager.GetCurrentLeftCharacter();
         string rightCharacter = characterManager.GetCurrentRightCharacter();
         GameStateManager.Instance.SaveCharacterNames(leftCharacter, rightCharacter);
 
-        // Сохраняем фон и анимацию
+        // Save background and animation
         var animationName = backgroundController.GetCurrentAnimationName();
         var frameDelay = backgroundController.GetCurrentFrameDelay();
         var repeatCount = backgroundController.GetCurrentRepeatCount();
         var keepLastFrame = backgroundController.GetKeepLastFrame();
-        var backgroundName = backgroundController.GetCurrentBackgroundName(); // Добавьте метод в BackgroundController
-        GameStateManager.Instance.SaveBackground(backgroundName); // Сохраняем имя фона
+        var backgroundName = backgroundController.GetCurrentBackgroundName(); // Add a method to BackgroundController
+
+        GameStateManager.Instance.SaveBackground(backgroundName); // Save the background name
         GameStateManager.Instance.SaveBackgroundAnimation(animationName, frameDelay, repeatCount, keepLastFrame);
 
 
@@ -676,10 +679,10 @@ public class DialogueManager : MonoBehaviour
                     ? string.Join(" -> ", loadedState.dialogueHistory.Select(d => $"(ID={d.dialogueId}, TextCounter={d.textCounter})"))
                     : "Пусто"));
 
-        // Очищаем стек перед восстановлением
+        // Clearing the stack before restoring
         dialogueHistory.Clear();
 
-        // Восстанавливаем стек из истории (без Reverse)
+        // Recovering stack from history (without Reverse)
         if (loadedState.dialogueHistory != null)
         {
             foreach (var item in loadedState.dialogueHistory)
@@ -689,16 +692,17 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        // Логируем итоговое содержимое стека
+        // Logging the final stack contents
         Debug.Log("Итоговое содержимое стека после восстановления: " +
             string.Join(" -> ", dialogueHistory.Select(d => $"[ID={d.currentDialogueId}, TextCounter={d.textCounter}]")));
 
-        // Восстанавливаем сцену и диалог
+        // Reconstructing the scene and dialogue
         Debug.Log($"Scene {loadedState.currentScene} and dialogue {loadedState.currentDialogue} are loading.");
+        LoadEpisode(int.Parse(loadedState.currentEpisode));
         LoadScene(int.Parse(loadedState.currentScene));
         InitializeDialogue(int.Parse(loadedState.currentDialogue), loadedState.textCounter);
 
-        // Восстановление других данных, таких как фон, персонажи и флаги
+        // Recover other data such as background, characters and flags
         RestoreGameState(loadedState);
 
         
@@ -707,10 +711,10 @@ public class DialogueManager : MonoBehaviour
 
     private void RestoreGameState(GameState loadedState)
     {
-        // Восстановление флагов
+        // Restoring flags
         flagsManager.SetAllFlags(loadedState.flags);
 
-        // Восстановление фона
+        // BG
         var backgroundName = GameStateManager.Instance.LoadBackground();
         if (!string.IsNullOrEmpty(backgroundName))
         {

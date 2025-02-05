@@ -111,10 +111,14 @@ public class MainMenuController : MonoBehaviour
         var emptySlot = saveSlots[emptySlotIndex];
         emptySlot.gameState = new GameState
         {
+            currentEpisode = "1",
             currentScene = "1",
             currentDialogue = "1",
             textCounter = 0,
-            flags = new Dictionary<string, bool>()
+            flags = new Dictionary<string, bool>(),
+            hairIndex = 0,
+            clothesIndex = 0,
+            episodeNameShowed = false
         };
         emptySlot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
