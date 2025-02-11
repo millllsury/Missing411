@@ -6,7 +6,8 @@ public class Choice
 {
     public string text;
     public List<Action> actions;
-
+    public int cost; 
+    public int reward; 
 }
 
 [System.Serializable]
@@ -48,6 +49,13 @@ public class Dialogue
     public string soundTrigger;
 
     public float? targetPosition;
+
+    public bool screenRipple;
+
+    public string feedback;
+
+    public bool unlockNewItem;
+    public int reward;
 }
 
 [System.Serializable]

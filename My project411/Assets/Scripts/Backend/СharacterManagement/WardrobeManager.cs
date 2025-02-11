@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
+using System.Collections.Generic;
 
 public class WardrobeManager : MonoBehaviour
 {
@@ -30,16 +31,32 @@ public class WardrobeManager : MonoBehaviour
     public SpriteRenderer eyesImage;
 
 
+    private GameStateManager gameStateManager;
+
     private void Awake()
     {
+        gameStateManager = FindFirstObjectByType<GameStateManager>();
         SoundManager.Instance.PlaySoundByName("WardrobeMusic");
         blinkingManager.StartBlinking("Alice", eyesImage);
         currentCategory = "Hair"; // По умолчанию выбрана категория "Hair"
         SetButtonState(hairButton, true);
         SetButtonState(clothesButton, false);
         var (savedHairIndex, savedClothesIndex) = GameStateManager.Instance.LoadAppearance();
+
+        List<int> unlockedHairstyles = GameStateManager.Instance.GetUnlockedHairstyles();
+        List<int> unlockedClothes = GameStateManager.Instance.GetUnlockedClothes();
+
         hairRenderer.sprite = hairOptions[savedHairIndex];
         clothesRenderer.sprite = clothesOptions[savedClothesIndex];
+
+        if (unlockedHairstyles.Contains(savedHairIndex))
+        {
+            hairRenderer.sprite = hairOptions[savedHairIndex];
+        }
+        if (unlockedClothes.Contains(savedClothesIndex))
+        {
+            clothesRenderer.sprite = clothesOptions[savedClothesIndex];
+        }
     }
 
     public void CloseWardrobe()
@@ -84,30 +101,38 @@ public class WardrobeManager : MonoBehaviour
     {
         if (currentCategory == "Hair")
         {
-            currentIndex = (currentIndex + 1) % hairOptions.Length;
+            List<int> unlockedHairstyles = GameStateManager.Instance.GetUnlockedHairstyles();
+            int currentIndexInList = unlockedHairstyles.IndexOf(currentIndex);
+            currentIndex = unlockedHairstyles[(currentIndexInList + 1) % unlockedHairstyles.Count];
             UpdateHair();
         }
         else if (currentCategory == "Clothes")
         {
-            currentIndex = (currentIndex + 1) % clothesOptions.Length;
+            List<int> unlockedClothes = GameStateManager.Instance.GetUnlockedClothes();
+            int currentIndexInList = unlockedClothes.IndexOf(currentIndex);
+            currentIndex = unlockedClothes[(currentIndexInList + 1) % unlockedClothes.Count];
             UpdateClothes();
         }
     }
 
-    // Предыдущий элемент
     public void PreviousItem()
     {
         if (currentCategory == "Hair")
         {
-            currentIndex = (currentIndex - 1 + hairOptions.Length) % hairOptions.Length;
-           UpdateHair();
+            List<int> unlockedHairstyles = GameStateManager.Instance.GetUnlockedHairstyles();
+            int currentIndexInList = unlockedHairstyles.IndexOf(currentIndex);
+            currentIndex = unlockedHairstyles[(currentIndexInList - 1 + unlockedHairstyles.Count) % unlockedHairstyles.Count];
+            UpdateHair();
         }
         else if (currentCategory == "Clothes")
         {
-            currentIndex = (currentIndex - 1 + clothesOptions.Length) % clothesOptions.Length;
-           UpdateClothes();
+            List<int> unlockedClothes = GameStateManager.Instance.GetUnlockedClothes();
+            int currentIndexInList = unlockedClothes.IndexOf(currentIndex);
+            currentIndex = unlockedClothes[(currentIndexInList - 1 + unlockedClothes.Count) % unlockedClothes.Count];
+            UpdateClothes();
         }
     }
+
 
     // Обновить волосы
     private void UpdateHair()

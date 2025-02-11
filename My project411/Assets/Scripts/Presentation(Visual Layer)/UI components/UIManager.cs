@@ -169,26 +169,35 @@ public class UIManager : MonoBehaviour
         if (selectedSlotIndex == -1)
         {
             Debug.LogWarning("Слот не выбран. Нечего восстанавливать.");
+            return;
+        }
+
+        var saveSlots = GameStateManager.Instance.GetSaveSlots();
+        if (saveSlots == null || selectedSlotIndex >= saveSlots.Count || saveSlots[selectedSlotIndex] == null)
+        {
+            Debug.LogError($"Ошибка: Слот {selectedSlotIndex} не существует или пуст.");
+            return;
+        }
+
+        if (GameStateManager.Instance.isNewGame)
+        {
+            GameStateManager.Instance.ClearSlot(selectedSlotIndex);
+            Debug.Log($"Новая игра была начата, но не сохранена. Слот {selectedSlotIndex + 1} удален.");
+        }
+        else if (GameStateManager.Instance.originalState != null)
+        {
+            GameStateManager.Instance.GetSaveSlots()[selectedSlotIndex].gameState = JsonConvert.DeserializeObject<GameState>(
+                JsonConvert.SerializeObject(GameStateManager.Instance.originalState));
+            Debug.Log($"Исходное состояние слота {selectedSlotIndex + 1} восстановлено.");
         }
         else
         {
-            if (GameStateManager.Instance.originalState != null)
-            {
-                // Восстанавливаем исходное состояние, если оно существовало
-                GameStateManager.Instance.GetSaveSlots()[selectedSlotIndex].gameState = JsonConvert.DeserializeObject<GameState>(
-                    JsonConvert.SerializeObject(GameStateManager.Instance.originalState));
-                Debug.Log($"Исходное состояние слота {selectedSlotIndex + 1} восстановлено.");
-            }
-            else
-            {
-                // Если слот изначально был пуст, оставляем его пустым
-                GameStateManager.Instance.ClearSlot(selectedSlotIndex);
-                Debug.Log($"Слот {selectedSlotIndex + 1} был пуст и остаётся пустым.");
-            }
-
-            // Сохраняем изменения в слотах
-            GameStateManager.Instance.SaveSlotsToFile();
+            GameStateManager.Instance.ClearSlot(selectedSlotIndex);
+            Debug.Log($"Слот {selectedSlotIndex + 1} был пуст и удален.");
         }
+
+        // Сохраняем изменения в слотах
+        GameStateManager.Instance.SaveSlotsToFile();
 
         // Закрываем панели и возвращаемся в главное меню
         if (QuitConfirmationPanel != null)
@@ -206,9 +215,15 @@ public class UIManager : MonoBehaviour
         {
             dialogueManager.inputUnavailable = false;
         }
-        SoundManager.Instance.StopAllSounds();
+
+        if (SoundManager.Instance != null)
+        {
+            SoundManager.Instance.StopAllSounds();
+        }
+
         SceneManager.LoadScene("MainMenu");
     }
+
 
     public void UiClick()
     {

@@ -223,7 +223,7 @@ public class CharacterManager : MonoBehaviour
         avatar.gameObject.SetActive(true);
 
         // јнимаци€ по€влени€
-        float duration = 0.5f;
+        float duration = 0.2f;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -244,16 +244,34 @@ public class CharacterManager : MonoBehaviour
 
     private IEnumerator SmoothDisappear(SpriteRenderer avatar)
     {
+        if (avatar == null) yield break;
+
         while (isLeftAvatarAnimating || isRightAvatarAnimating)
         {
             yield return null;
         }
 
+        float duration = 0.2f; // ¬рем€ анимации ухода
+        float elapsedTime = 0f;
+        Vector3 startPosition = avatar.transform.position;
+        float targetX = startPosition.x > 0 ? 7f : -7f; // ≈сли персонаж справа, уходит вправо, если слева - влево
+        Vector3 endPosition = new Vector3(targetX, startPosition.y, startPosition.z);
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            avatar.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
+            avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, Mathf.Lerp(1f, 0f, elapsedTime / duration));
+            yield return null;
+        }
+
         avatar.gameObject.SetActive(false);
-        avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 0f); // ќбнул€ем прозрачность на случай повторного использовани€
+        avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 0f);
+        avatar.transform.position = startPosition; // ¬озвращаем на изначальное место дл€ будущего по€влени€
     }
 
- 
+
+
 
     private IEnumerator WaitAndShowNewAvatar(SpriteRenderer avatar, string character, bool isLeft)
     {
@@ -301,7 +319,7 @@ public class CharacterManager : MonoBehaviour
         return string.IsNullOrEmpty(currentRightCharacter) ? null : currentRightCharacter;
     }
 
-    public IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 1.5f)
+    public IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 0.5f)
     {
        if (blinkingManager != null)
         {
@@ -339,7 +357,7 @@ public class CharacterManager : MonoBehaviour
             }
         }*/
     }
-    public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 1.5f)
+    public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 0.5f)
     {
 
         SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();

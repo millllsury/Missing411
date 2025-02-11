@@ -95,6 +95,7 @@ public class SoundManager : MonoBehaviour
         string[] parts = soundTrigger.Split(':');
         string command = parts[0].ToLower();
         string soundName = parts.Length > 1 ? parts[1] : null;
+        string effectName = parts.Length > 1 ? parts[1] : null;
 
         switch (command)
         {
@@ -106,8 +107,26 @@ public class SoundManager : MonoBehaviour
                 MuteSoundByName(soundName);
                 break;
 
+            case "effect":
+                if (effectName == "echo")
+                {
+                    StartUnderwaterEchoEffect();
+                }
+                else
+                {
+                    Debug.LogWarning($"Unknown effect: {effectName}");
+                }
+                break;
+
             case "stop":
-                StopSoundByName(soundName);
+                if (effectName == "echo")
+                {
+                    StopUnderwaterEchoEffect();
+                }
+                else
+                {
+                    StopSoundByName(effectName);
+                }
                 break;
 
             default:
@@ -321,6 +340,50 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    private void StartUnderwaterEchoEffect()
+    {
+        Debug.Log("Applying underwater echo effect...");
+
+        foreach (var sound in sounds)
+        {
+            if (sound.source != null && sound.source.isPlaying)
+            {
+                AudioEchoFilter echoFilter = sound.source.GetComponent<AudioEchoFilter>();
+                if (echoFilter == null)
+                {
+                    echoFilter = sound.source.gameObject.AddComponent<AudioEchoFilter>();
+                }
+
+                // Увеличенные параметры для заметного эффекта
+                echoFilter.delay = 700f;  // Длинная задержка эха
+                echoFilter.decayRatio = 0.6f;  // Дольше сохраняет звук
+                echoFilter.wetMix = 1f;  // 100% эха, сильное изменение звука
+                echoFilter.dryMix = 0.2f;  // Оригинальный звук почти приглушен
+
+                Debug.Log($"Echo effect applied to: {sound.name}");
+            }
+        }
+    }
+
+
+
+    private void StopUnderwaterEchoEffect()
+    {
+        Debug.Log("Removing underwater echo effect...");
+
+        foreach (var sound in sounds)
+        {
+            if (sound.source != null)
+            {
+                AudioEchoFilter echoFilter = sound.source.GetComponent<AudioEchoFilter>();
+                if (echoFilter != null)
+                {
+                    Destroy(echoFilter); // Удаляем компонент эха
+                    Debug.Log($"Echo effect removed from: {sound.name}");
+                }
+            }
+        }
+    }
 
     public void UpdateAllVolumes()
     {

@@ -10,7 +10,7 @@ using System.Linq;
 [System.Serializable]
 public class GameState
 {
-    public string currentEpisode;
+    public string currentEpisode= "1";
     public string currentScene = "1";             // Текущая сцена
     public string currentDialogue = "1";          // Текущий диалог
     public int textCounter = 0;                 // Счетчик текста
@@ -22,13 +22,26 @@ public class GameState
     public string rightCharacterName;
 
     public string currentBackgroundName; 
-    public string currentBackgroundAnimation;
-    public float animationFrameDelay;
-    public int animationRepeatCount;
-    public bool animationKeepLastFrame;
-    public List<DialogueState> dialogueHistory = new List<DialogueState>(); //для dialogueHistory стека
 
-    public List<string> playingTracks = new List<string>(); 
+    public string currentBackgroundAnimation;
+    public string currentForegroundAnimation;
+
+    public float animationFrameDelay;
+    public float foregroundFrameDelay;
+    
+    public int animationRepeatCount;
+    public int foregroundRepeatCount;
+
+    public bool animationKeepLastFrame;
+    public bool foregroundKeepLastFrame;
+
+    public List<DialogueState> dialogueHistory = new(); //для dialogueHistory стека
+
+    public List<string> playingTracks = new();
+    public int keys;
+    public List<int> unlockedHairstyles = new List<int>();
+    public List<int> unlockedClothes = new List<int>();
+
 }
 
 public class DialogueState
@@ -78,8 +91,8 @@ public class GameStateManager : MonoBehaviour
     public float backgroundVolume = 1f;
     public float uiVolume = 1f;
 
-   
     public GameState originalState; // To store the original state
+    public bool isNewGame = false;
 
     public static GameStateManager Instance { get; private set; }
 
@@ -90,36 +103,34 @@ public class GameStateManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject); // Объект сохраняется между сценами
             currentState = new GameState();
-            //Debug.Log("GameStateManager has been initialized.");
             LoadGlobalSettings();
         }
         else
         {
-            //Debug.LogWarning("GameStateManager already exists. Delete duplicate.");
+
             Destroy(gameObject); // Удаляем дубликат
         }
     }
 
-    private static string settingsFilePath => Path.Combine(Application.persistentDataPath, "audio_settings.json");
 
+
+    #region Global Settings
+
+    private static string SettingsFilePath => Path.Combine(Application.persistentDataPath, "audio_settings.json");
 
 
     private void LoadGlobalSettings()
     {
-        if (File.Exists(settingsFilePath))
+        if (File.Exists(SettingsFilePath))
         {
-            string json = File.ReadAllText(settingsFilePath);
+            string json = File.ReadAllText(SettingsFilePath);
             var settings = JsonConvert.DeserializeObject<AudioSettings>(json);
-
-
             masterVolume = settings.masterVolume;
-
             //Debug.Log($"masterVolume: {masterVolume}, settings.masterVolume: {settings.masterVolume} ");
             characterVolume = settings.characterVolume;
             backgroundEffectsVolume = settings.backgroundEffectsVolume;
             uiVolume = settings.uiVolume;
             backgroundVolume = settings.backgroundVolume;
-
             //Debug.Log("Настройки громкости успешно загружены.");
         }
         else
@@ -156,7 +167,7 @@ public class GameStateManager : MonoBehaviour
         //Debug.Log($"masterVolume2: {masterVolume}");
 
         string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-        File.WriteAllText(settingsFilePath, json);
+        File.WriteAllText(SettingsFilePath, json);
 
         //Debug.Log("Настройки громкости сохранены.");
     }
@@ -199,15 +210,18 @@ public class GameStateManager : MonoBehaviour
         }
 
         SaveGlobalSettings();
-       //Debug.Log($"Установлена громкость категории '{category}': {value}");
+        //Debug.Log($"Установлена громкость категории '{category}': {value}");
     }
+
+    #endregion
+
 
 
     #endregion
 
-    private HashSet<string> playingTracks = new HashSet<string>(); 
+    private HashSet<string> playingTracks = new(); 
 
-    private SaveSlots saveSlots = new SaveSlots();
+    private SaveSlots saveSlots = new();
 
     public List<SaveSlot> GetSaveSlots()
     {
@@ -290,7 +304,8 @@ public class GameStateManager : MonoBehaviour
         slot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         SaveSlotsToFile();
-        //Debug.Log($"The game has been saved to the slot. {slot.slotName}.");
+
+        isNewGame = false;
     }
 
     public void SaveSlotsToFile()
@@ -314,8 +329,8 @@ public class GameStateManager : MonoBehaviour
             Debug.LogWarning($"Slot {slot.slotName} is empty.");
             return;
         }
-
         currentState = slot.gameState; // Восстанавливаем состояние игры
+        CurrencyManager.Instance.SetKeys(currentState.keys);
         //Debug.Log($"Game loaded from slot {slot.slotName}.");
     }
 
@@ -355,10 +370,10 @@ public class GameStateManager : MonoBehaviour
         var slot = saveSlots.slots[slotIndex];
         slot.gameState = null; // Удаляем данные состояния игры
         slot.saveDate = null;  // Удаляем дату сохранения
-        slot.slotName = $"Слот {slotIndex + 1}"; // Сбрасываем название слота
+        slot.slotName = $"Slot {slotIndex + 1}"; // Сбрасываем название слота
 
         SaveSlotsToFile();
-        Debug.Log($"Слот {slotIndex + 1} очищен.");
+        Debug.Log($"Slot {slotIndex + 1} was cleared.");
     }
 
    
@@ -403,15 +418,7 @@ public class GameStateManager : MonoBehaviour
         return (currentState.leftCharacterName ?? "", currentState.rightCharacterName ?? "");
     }
 
-    public (string, float, int, bool) LoadBackgroundAnimation()
-    {
-        return (
-            currentState.currentBackgroundAnimation,
-            currentState.animationFrameDelay,
-            currentState.animationRepeatCount,
-            currentState.animationKeepLastFrame
-        );
-    }
+    
 
     public void UpdateFlags(Dictionary<string, bool> flags)
     {
@@ -445,6 +452,9 @@ public class GameStateManager : MonoBehaviour
         return currentState.currentBackgroundName;
     }
 
+    ///animation
+
+
 
     public void SaveBackgroundAnimation(string animationName, float frameDelay, int repeatCount, bool keepLastFrame)
     {   
@@ -456,6 +466,17 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Background Animation Saved: {animationName}");
     }
 
+    public void SaveForegroundAnimation(string animationName, float frameDelay, int repeatCount, bool keepLastFrame)
+    {
+        currentState.currentForegroundAnimation = animationName;
+        currentState.foregroundFrameDelay = frameDelay;
+        currentState.foregroundRepeatCount = repeatCount;
+        currentState.foregroundKeepLastFrame = keepLastFrame;
+
+        Debug.Log($"Foreground Animation Saved: {animationName}");
+    }
+
+
     public void ClearBackgroundAnimation()
     {
         currentState.currentBackgroundAnimation = null;
@@ -464,6 +485,36 @@ public class GameStateManager : MonoBehaviour
         currentState.animationKeepLastFrame = false;
 
         Debug.Log("Background animation data cleared from save.");
+    }
+
+    public void ClearForegroundAnimation()
+    {
+        currentState.currentForegroundAnimation = null;
+        currentState.foregroundFrameDelay = 0f;
+        currentState.foregroundRepeatCount = 0;
+        currentState.foregroundKeepLastFrame = false;
+
+        Debug.Log("Foreground animation data cleared from save.");
+    }
+
+    public (string, float, int, bool) LoadBackgroundAnimation()
+    {
+        return (
+            currentState.currentBackgroundAnimation ?? "",
+            currentState.animationFrameDelay,
+            currentState.animationRepeatCount,
+            currentState.animationKeepLastFrame
+        );
+    }
+
+    public (string, float, int, bool) LoadForegroundAnimation()
+    {
+        return (
+            currentState.currentForegroundAnimation ?? "",
+            currentState.foregroundFrameDelay,
+            currentState.foregroundRepeatCount,
+            currentState.foregroundKeepLastFrame
+        );
     }
 
 
@@ -548,6 +599,61 @@ public class GameStateManager : MonoBehaviour
 
         Debug.Log("All tracks have been stopped and removed from the playing list.");
     }
+
+
+    public void SetKeys(int amount)
+    {
+        currentState.keys = amount;
+    }
+
+    public int GetKeys()
+    {
+        return currentState.keys;
+    }
+
+    public void AddKeys(int amount)
+    {
+        currentState.keys += amount;
+    }
+
+    public bool SpendKeys(int amount)
+    {
+        if (currentState.keys >= amount)
+        {
+            currentState.keys -= amount;
+            return true;
+        }
+        return false;
+    }
+
+
+    public void UnlockNextItem()
+    {
+        int nextHairIndex = currentState.unlockedHairstyles.Max() + 1;
+        int nextClothesIndex = currentState.unlockedClothes.Max() + 1;
+
+        if (!currentState.unlockedHairstyles.Contains(nextHairIndex))
+        {
+            currentState.unlockedHairstyles.Add(nextHairIndex);
+            Debug.Log($"Открыта новая прическа: {nextHairIndex}");
+        }
+
+        if (!currentState.unlockedClothes.Contains(nextClothesIndex))
+        {
+            currentState.unlockedClothes.Add(nextClothesIndex);
+            Debug.Log($"Открыта новая одежда: {nextClothesIndex}");
+        }
+
+        //SaveGameToSlot(GetSelectedSlotIndex()); // Сохраняем прогресс только в выбранный слот
+
+    }
+
+
+
+
+
+    public List<int> GetUnlockedHairstyles() => currentState.unlockedHairstyles;
+    public List<int> GetUnlockedClothes() => currentState.unlockedClothes;
 
 
     #endregion

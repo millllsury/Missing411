@@ -11,32 +11,23 @@ public class AudioSettingsUI : MonoBehaviour
     [SerializeField] private Slider backgroundMusicVolumeSlider;
     [SerializeField] private Slider uisoundSlider;
 
-
+    [SerializeField]  private FeedbackManager feedbackManager;
 
     private void Start()
     {
-        //gameStateManager = GameStateManager.Instance;
-        //soundManager = SoundManager.Instance;
-
+        feedbackManager = FindFirstObjectByType<FeedbackManager>();
         if (SoundManager.Instance == null)
         {
-           // Debug.LogError("SoundManager.Instance не найден.");
+           
             return;
         }
 
-        /*Debug.Log($"Загруженные настройки перед установкой слайдеров: " +
-                  $"masterVolume = {GameStateManager.Instance.masterVolume}, " +
-                  $"characterVolume = {GameStateManager.Instance.characterVolume}, " +
-                  $"backgroundVolume = {GameStateManager.Instance.backgroundEffectsVolume}, " +
-                  $"uiVolume = {GameStateManager.Instance.uiVolume}");*/
 
         RemoveListeners();
 
         SetSavedValues();
 
         uisoundSlider.value = GameStateManager.Instance.uiVolume > 0 ? 1 : 0;
-
-        //Debug.Log($"После установки: masterVolumeSlider.value = {masterVolumeSlider.value}");
 
         AddListeners();
     }
@@ -125,7 +116,7 @@ public class AudioSettingsUI : MonoBehaviour
         uisoundSlider.SetValueWithoutNotify(GameStateManager.Instance.uiVolume);
         GameStateManager.Instance.SaveGlobalSettings();
         SoundManager.Instance.UpdateAllVolumes();
-
-        Debug.Log("Аудио-настройки сброшены к значениям по умолчанию.");
+        feedbackManager.ShowMessage("Audio settings are reset to default values.");
+        Debug.Log("Audio settings are reset to default values.");
     }
 }

@@ -38,26 +38,6 @@ public class ScreenRipple : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (isEffectActive)
-                StopEffect();
-            else
-                StartEffect();
-        }
-
-
-        if (isEffectActive && !effectApplied)
-        {
-            ApplyEffect();
-        }
-        else if (!isEffectActive && effectApplied)
-        {
-            RemoveEffect();
-        }
-    }
 
     // Плавное включение эффекта
     private void ApplyEffect()
@@ -101,6 +81,7 @@ public class ScreenRipple : MonoBehaviour
     // Включение эффекта
     public void StartEffect()
     {
+        ApplyEffect();
         isEffectActive = true;
         SoundManager.Instance.PlaySoundByName("interference");
         StartCoroutine(RepeatLensDistortion(2));
@@ -173,8 +154,16 @@ public class ScreenRipple : MonoBehaviour
     // Отключение эффекта
     public void StopEffect()
     {
+        RemoveEffect();
         isEffectActive = false;
     }
+
+    private IEnumerator StopRippleAfterDelay(ScreenRipple screenRipple, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        screenRipple.StopEffect();
+    }
+
 
     // Полный сброс эффекта
     public void ResetEffect()

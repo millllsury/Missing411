@@ -6,10 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-
-
-
-
 public class MainMenuController : MonoBehaviour
 {
     [Header("UI Elements")]
@@ -30,10 +26,14 @@ public class MainMenuController : MonoBehaviour
 
     [SerializeField] private GameObject settingsCanvas; // Ссылка на Canvas со слотами
 
+    private FeedbackManager feedbackManager;
+
+    public bool isNewGame = false; // Флаг, указывающий, была ли начата новая игра
+
 
     private void Start()
     {
-       
+        feedbackManager = FindFirstObjectByType<FeedbackManager>();
         loadingScreen.SetActive(false);
         maxWidth = ((RectTransform)progressFill.transform.parent).rect.width;
         loadingScreen.SetActive(false);      // Скрываем экран загрузки в начале
@@ -85,9 +85,10 @@ public class MainMenuController : MonoBehaviour
         menuCanvasGroup.blocksRaycasts = true;
     }
 
+
     public void NewGame()
     {
-
+ 
         Debug.Log("New Game is started.");
 
         if (GameStateManager.Instance == null)
@@ -105,6 +106,10 @@ public class MainMenuController : MonoBehaviour
             Debug.LogWarning("Все слоты заняты. Перезаписываем Слот 1.");
             emptySlotIndex = 0; // Перезаписываем первый слот
         }
+        else
+        {
+            GameStateManager.Instance.isNewGame = true;
+        }
 
         // Инициализируем новый прогресс игры
         var saveSlots = GameStateManager.Instance.GetSaveSlots();
@@ -118,7 +123,12 @@ public class MainMenuController : MonoBehaviour
             flags = new Dictionary<string, bool>(),
             hairIndex = 0,
             clothesIndex = 0,
-            episodeNameShowed = false
+            episodeNameShowed = false,
+
+             // **Очищаем unlockedHairstyles и unlockedClothes**
+            unlockedHairstyles = new List<int> { 0, 1 },
+            unlockedClothes = new List<int> { 0, 1 }
+
         };
         emptySlot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
@@ -288,7 +298,8 @@ public class MainMenuController : MonoBehaviour
 
         if (selectedSlot.gameState == null)
         {
-            Debug.LogWarning($"Слот {slotIndex + 1} пуст.");
+            Debug.Log($"Slot {slotIndex + 1} is empty.");
+            feedbackManager.ShowMessage($"Slot {slotIndex + 1} is empty.");
             return;
         }
 

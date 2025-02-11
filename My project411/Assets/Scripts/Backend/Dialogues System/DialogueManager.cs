@@ -8,13 +8,14 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Newtonsoft.Json;
 using Unity.VisualScripting;
+using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 
 public class DialogueManager : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private GameObject dialogueTextPanel;
-    [SerializeField] private Button[] optionButtons;
+
    
     [SerializeField] private Button backButton;
 
@@ -25,7 +26,7 @@ public class DialogueManager : MonoBehaviour
     private BackgroundController backgroundController;
     private CharacterManager characterManager;
     private GameFlagsManager flagsManager;
-
+    private FeedbackManager feedbackManager;
 
     private VisualNovelData visualNovelData;
     private Episode currentEpisode;
@@ -46,6 +47,11 @@ public class DialogueManager : MonoBehaviour
     private bool canGoBack = true; // Разрешение на возврат
     private Stack<(int? currentDialogueId, int textCounter)> dialogueHistory = new Stack<(int?, int)>();    // Стек для отслеживания диалогов
 
+
+    [SerializeField] private GameObject choiceButtonNormalPrefab; // Префаб обычной кнопки
+    [SerializeField] private GameObject choiceButtonCostPrefab;   // Префаб кнопки с ценой
+    [SerializeField] private Transform choicesPanel; // Панель, куда добавляются кнопки
+
     void Start()
     {
         InitializeComponents();
@@ -58,7 +64,7 @@ public class DialogueManager : MonoBehaviour
         backgroundController = FindComponent<BackgroundController>("BackgroundController");
         characterManager = FindComponent<CharacterManager>("CharacterManager");
         flagsManager = FindComponent<GameFlagsManager>("FlagsManager");
-
+        feedbackManager = FindComponent<FeedbackManager>("FeedbackManager");
         if (UIManager == null)
         {
             Debug.LogError("Не удалось найти UIManager.");
@@ -134,8 +140,7 @@ public class DialogueManager : MonoBehaviour
 
     public void LoadScene(int sceneId)
     {
-        Resources.UnloadUnusedAssets();
-        System.GC.Collect(); //// очистка мусора
+        
 
         currentScene = currentEpisode.scenes.Find(scene => scene.sceneId == sceneId);
         if (currentScene == null)
@@ -149,6 +154,8 @@ public class DialogueManager : MonoBehaviour
 
     private void ShowEpisodeName()
     {
+        EpisodeNameShowed = GameStateManager.Instance.GetGameState().episodeNameShowed;
+
         if (EpisodeNameShowed) return; // Если уже показывали, не показываем снова
 
         if (isEpisodeScreenActive) return; // Проверяем, активен ли уже экран
@@ -196,7 +203,6 @@ public class DialogueManager : MonoBehaviour
             // Обрабатываем звуки и анимации, если они указаны
             firstTimeSceneSound = true;
             HandleDialogueSound(dialogue);
-
             HandleDialogueAnimation(dialogue);
             DisplayDialogueText(dialogue); // Отображаем текущий текст
         }
@@ -204,6 +210,8 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.LogWarning($"Диалог с ID {startingDialogueId} не найден.");
         }
+
+        HandleScreenRippleEffect(dialogue);
     }
 
     public void ShowNextDialogueText()
@@ -225,7 +233,8 @@ public class DialogueManager : MonoBehaviour
         {
             StartBackgroundAnimation(dialogue);
         }
-        else if (!string.IsNullOrEmpty(dialogue.background))
+        
+        if (!string.IsNullOrEmpty(dialogue.background))
         {
             backgroundController.SetBackgroundSmooth(dialogue.background, dialogue.smoothBgReplacement);
         }
@@ -321,6 +330,25 @@ public class DialogueManager : MonoBehaviour
                 // Сохраняем состояние перед переходом к следующему диалогу
                 dialogueHistory.Push((currentDialogueId, textCounter - 1));
                 //Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter - 1}");
+                // Показываем Feedback перед завершением диалога
+                if (!string.IsNullOrEmpty(dialogue.feedback))
+                {
+                    feedbackManager.ShowMessage(dialogue.feedback);
+                }
+
+                if (dialogue.unlockNewItem)
+                {
+                        GameStateManager.Instance.UnlockNextItem();
+                      
+                        feedbackManager.ShowMessage("Ты открыл новый наряд и прическу!");
+                    
+                }
+
+                if (dialogue.reward > 0)
+                {
+                    CurrencyManager.Instance.AddKeys(dialogue.reward);
+                    feedbackManager.ShowMessage($"You've received {dialogue.reward} keys!");
+                }
 
                 HandleDialogueEnd(dialogue);
             }
@@ -334,6 +362,22 @@ public class DialogueManager : MonoBehaviour
         goBackButtonActivated = false;
     }
 
+    private void HandleScreenRippleEffect(Dialogue dialogue)
+    {
+        if (dialogue.screenRipple)
+        {
+            ScreenRipple screenRipple = FindFirstObjectByType<ScreenRipple>();
+            if (screenRipple != null)
+            {
+                screenRipple.StartEffect();
+                Debug.Log("Эффект ряби активирован через JSON.");
+            }
+            else
+            {
+                Debug.LogError("ScreenRipple не найден в сцене!");
+            }
+        }
+    }
 
     private void HandleDialogueEnd(Dialogue dialogue)
     {
@@ -356,79 +400,79 @@ public class DialogueManager : MonoBehaviour
         var nextDialogue = FindNextDialogue();
         if (nextDialogue != null)
         {
-
-            // Сбрасываем текстовый счётчик для нового диалога
-            textCounter = 0;
-
-            // Устанавливаем новый текущий диалог
-            currentDialogueId = nextDialogue.id;
-
-            // Сбрасываем флаг анимации для следующего диалога
-            nextDialogue.isAnimationPlayed = false;
-
-            // Обрабатываем анимацию перед показом текста
-            HandleDialogueAnimation(nextDialogue);
-
-            if (!firstTimeSceneSound == true)
-            {
-                HandleDialogueSound(nextDialogue);
-            }
-
-            UpdateBackButtonState(true);
-
-            // Показываем текст следующего диалога
-            ShowNextDialogueText();
+            StartNextDialogue(nextDialogue);
+            return;
         }
-        else
+
+        Debug.LogWarning("Не найден следующий диалог. Переход к следующей сцене.");
+        if (TryLoadNextScene()) return;
+
+        Debug.LogWarning("Это последняя сцена эпизода. Завершение эпизода.");
+        EndEpisode();
+    }
+
+    // Старт нового диалога
+    private void StartNextDialogue(Dialogue nextDialogue)
+    {
+        textCounter = 0;
+        currentDialogueId = nextDialogue.id;
+        nextDialogue.isAnimationPlayed = false;
+
+        HandleDialogueAnimation(nextDialogue);
+
+        if (!firstTimeSceneSound)
         {
-            Debug.LogWarning("Не найден следующий диалог. Переход к следующей сцене.");
-            var currentSceneIndex = currentEpisode.scenes.IndexOf(currentScene);
-
-            if (currentSceneIndex >= 0 && currentSceneIndex < currentEpisode.scenes.Count - 1)
-            {
-                // Берем следующую сцену
-                var nextScene = currentEpisode.scenes[currentSceneIndex + 1];
-                // Сохраняем прогресс для перехода
-                GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
-                var (currentHairIndex, currentClothesIndex) = GameStateManager.Instance.LoadAppearance();
-
-                GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
-                GameStateManager.Instance.SaveCharacterNames(
-                    null,
-                    null
-                    );
-
-                GameStateManager.Instance.UpdateSceneState(
-                    currentEpisode.episodeId.ToString(),  // Текущий эпизод
-                    nextScene.sceneId.ToString(),         // Следующая сцена
-                    "1",                                 // Диалог начинается с 1
-                    0,                                    // Сброс текстового счётчика
-                    true                                 // EpisodeNameShowed = true для новой сцены
-                    );
-
-
-                dialogueHistory.Clear(); // Очищаем стек
-                var dialogueHistoryList = new List<DialogueState>(); // Создаём новый пустой список
-                GameStateManager.Instance.GetGameState().dialogueHistory = dialogueHistoryList; // Присваиваем новый пустой список
-
-                GameStateManager.Instance.GetGameState().currentBackgroundAnimation = null;
-                GameStateManager.Instance.SaveBackground(null);
-                int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
-                GameStateManager.Instance.SaveGameToSlot(selectedSlotIndex);
-                // Лог для отладки
-                Debug.Log($"Сохранено состояние для перехода. Scene={nextScene.sceneId}, Dialogue=0, TextCounter=0");
-
-                characterManager.HideAvatars();
-                // Переход к следующей сцене
-                SceneManager.LoadScene("Scene" + nextScene.sceneId);
-                LoadScene(nextScene.sceneId);
-            }
-            else
-            {
-                Debug.LogWarning("Это последняя сцена эпизода. Завершение эпизода.");
-                EndEpisode();
-            }
+            HandleDialogueSound(nextDialogue);
         }
+
+        UpdateBackButtonState(true);
+        ShowNextDialogueText();
+    }
+
+    // Переход к следующей сцене, если есть
+    private bool TryLoadNextScene()
+    {
+        int currentSceneIndex = currentEpisode.scenes.IndexOf(currentScene);
+        if (currentSceneIndex < 0 || currentSceneIndex >= currentEpisode.scenes.Count - 1)
+            return false;
+
+        var nextScene = currentEpisode.scenes[currentSceneIndex + 1];
+
+        SaveGameStateForSceneChange(nextScene);
+
+        characterManager.HideAvatars();
+        SceneManager.LoadScene("Scene" + nextScene.sceneId);
+        LoadScene(nextScene.sceneId);
+
+        return true;
+    }
+
+    // Сохранение прогресса перед переходом к следующей сцене
+    private void SaveGameStateForSceneChange(SceneData nextScene)
+    {
+        GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
+        var (currentHairIndex, currentClothesIndex) = GameStateManager.Instance.LoadAppearance();
+
+        GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
+        GameStateManager.Instance.SaveCharacterNames(null, null);
+        GameStateManager.Instance.UpdateSceneState(
+            currentEpisode.episodeId.ToString(),
+            nextScene.sceneId.ToString(),
+            "1", 0, true
+        );
+
+        dialogueHistory.Clear();
+        GameStateManager.Instance.GetGameState().dialogueHistory = new List<DialogueState>();
+        GameStateManager.Instance.GetGameState().currentBackgroundAnimation = null;
+
+        GameStateManager.Instance.SaveBackground(null);
+        GameStateManager.Instance.ClearBackgroundAnimation();
+        GameStateManager.Instance.ClearForegroundAnimation();
+
+        int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+        GameStateManager.Instance.SaveGameToSlot(selectedSlotIndex);
+
+        Debug.Log($"Сохранено состояние для перехода. Scene={nextScene.sceneId}, Dialogue=0, TextCounter=0");
     }
 
     private void EndEpisode()
@@ -538,37 +582,63 @@ public class DialogueManager : MonoBehaviour
             .FirstOrDefault();
     }
 
-    private void ShowChoices(List<Choice> choices)
+    public void ShowChoices(List<Choice> choices)
     {
         dialogueTextPanel.SetActive(false);
         isChoosing = true;
 
-        for (int i = 0; i < optionButtons.Length; i++)
+        // Очищаем старые кнопки
+        foreach (Transform child in choicesPanel)
         {
-            if (i < choices.Count)
-            {
-                optionButtons[i].Configure(choices[i], OnChoiceSelected);
-            }
-            else
-            {
-                optionButtons[i].gameObject.SetActive(false);
-            }
+            Destroy(child.gameObject);
+        }
+
+        foreach (Choice choice in choices)
+        {
+            // Выбираем, какой префаб использовать
+            GameObject buttonPrefab = choice.cost > 0 ? choiceButtonCostPrefab : choiceButtonNormalPrefab;
+            GameObject choiceButton = Instantiate(buttonPrefab, choicesPanel);
+
+            Button button = choiceButton.GetComponent<Button>();
+            button.Configure(choice, OnChoiceSelected);
         }
     }
 
+
     private void HideChoices()
     {
-        foreach (var button in optionButtons)
+        foreach (Transform child in choicesPanel)
         {
-            button.gameObject.SetActive(false);
+            Destroy(child.gameObject); // Удаляем все кнопки из панели выбора
         }
 
         dialogueTextPanel.SetActive(true);
         isChoosing = false;
     }
 
+
+
     public void OnChoiceSelected(Choice choice)
     {
+        if (choice.cost > 0)
+        {
+            if (!CurrencyManager.Instance.SpendKeys(choice.cost))
+            {
+                //Debug.Log("Недостаточно ключей для выбора!");
+                feedbackManager.ShowMessage("There are not enough keys to select!");
+                return;
+
+            }
+            Debug.Log($"Игрок потратил {choice.cost} ключей на выбор: {choice.text}");
+        }
+
+        if (choice.reward > 0)
+        {
+            CurrencyManager.Instance.AddKeys(choice.reward);
+            Debug.Log($"Игрок получил {choice.reward} ключей за выбор: {choice.text}");
+            feedbackManager.ShowMessage($"You've received {choice.reward} keys!");
+        }
+
         if (choice.actions != null)
         {
             foreach (var action in choice.actions)
@@ -606,7 +676,7 @@ public class DialogueManager : MonoBehaviour
             currentScene.sceneId.ToString(),      // Current scene
             currentDialogueId.ToString(),         // Current Dialogue
             currentTextCounter,                   // Current text index
-            true                                  // EpisodeNameShowed = true if the episode screen is already shown
+            EpisodeNameShowed                     // current status         
         );
 
         // Updating flags
@@ -621,16 +691,34 @@ public class DialogueManager : MonoBehaviour
         string rightCharacter = characterManager.GetCurrentRightCharacter();
         GameStateManager.Instance.SaveCharacterNames(leftCharacter, rightCharacter);
 
-        // Save background and animation
-        var animationName = backgroundController.GetCurrentAnimationName();
-        var frameDelay = backgroundController.GetCurrentFrameDelay();
-        var repeatCount = backgroundController.GetCurrentRepeatCount();
-        var keepLastFrame = backgroundController.GetKeepLastFrame();
         var backgroundName = backgroundController.GetCurrentBackgroundName(); // Add a method to BackgroundController
-
         GameStateManager.Instance.SaveBackground(backgroundName); // Save the background name
-        GameStateManager.Instance.SaveBackgroundAnimation(animationName, frameDelay, repeatCount, keepLastFrame);
+        if (backgroundController.IsAnimatingBackground)
+        {
+            var backgroundAnimationName = backgroundController.GetCurrentBackgroundAnimationName(); // Add a method to BackgroundController
+            var animationFrameDelay = backgroundController.GetCurrentBackgroundFrameDelay();
+            var animationRepeatCount = backgroundController.GetCurrentBackgroundRepeatCount(); ;
+            var animationKeepLastFrame = backgroundController.GetBackgroundKeepLastFrame();
+            GameStateManager.Instance.SaveBackgroundAnimation(backgroundAnimationName, animationFrameDelay, animationRepeatCount, animationKeepLastFrame);
+        }
+        else
+        {
+            GameStateManager.Instance.ClearBackgroundAnimation();
+        }
 
+        if (backgroundController.IsAnimatingForeground)
+        {
+            var currentForegroundAnimation = backgroundController.GetCurrentForegroundAnimationName(); // Add a method to BackgroundController
+            var foregroundFrameDelay = backgroundController.GetCurrentForegroundFrameDelay();
+            var foregroundRepeatCount = backgroundController.GetCurrentForegroundRepeatCount(); ;
+            var foregroundKeepLastFrame = backgroundController.GetForegroundKeepLastFrame();
+            GameStateManager.Instance.SaveForegroundAnimation(currentForegroundAnimation, foregroundFrameDelay, foregroundRepeatCount, foregroundKeepLastFrame);
+        }
+        else
+        {
+            GameStateManager.Instance.ClearForegroundAnimation();
+        }
+        
 
         if (SceneManager.GetActiveScene().name != "WardrobeScene" && SceneManager.GetActiveScene().name != "MainMenu")
         {
@@ -697,6 +785,7 @@ public class DialogueManager : MonoBehaviour
             string.Join(" -> ", dialogueHistory.Select(d => $"[ID={d.currentDialogueId}, TextCounter={d.textCounter}]")));
 
         // Reconstructing the scene and dialogue
+        EpisodeNameShowed = loadedState.episodeNameShowed;
         Debug.Log($"Scene {loadedState.currentScene} and dialogue {loadedState.currentDialogue} are loading.");
         LoadEpisode(int.Parse(loadedState.currentEpisode));
         LoadScene(int.Parse(loadedState.currentScene));
@@ -704,8 +793,6 @@ public class DialogueManager : MonoBehaviour
 
         // Recover other data such as background, characters and flags
         RestoreGameState(loadedState);
-
-        
 
     }
 
@@ -721,12 +808,18 @@ public class DialogueManager : MonoBehaviour
             backgroundController.SetBackground(backgroundName);
         }
 
-        // Восстановление анимации
-        var (animationName, frameDelay, repeatCount, keepLastFrame) = GameStateManager.Instance.LoadBackgroundAnimation();
-        if (!string.IsNullOrEmpty(animationName))
+        var (foregroundAnimation, foregroundframeDelay, foregroundrepeatCount, foregroundkeepLastFrame) = GameStateManager.Instance.LoadForegroundAnimation();
+        if (!string.IsNullOrEmpty(foregroundAnimation))
         {
-            backgroundController.StartBackgroundAnimation(animationName, frameDelay, repeatCount, keepLastFrame, null);
+            backgroundController.StartBackgroundAnimation(foregroundAnimation, foregroundframeDelay, foregroundrepeatCount, foregroundkeepLastFrame);
         }
+
+        var (backgroundAnimation, frameDelay, repeatCount, keepLastFrame) = GameStateManager.Instance.LoadBackgroundAnimation();
+        if (!string.IsNullOrEmpty(backgroundAnimation))
+        {
+            backgroundController.StartBackgroundAnimation(backgroundAnimation, frameDelay, repeatCount, keepLastFrame);
+        }
+
 
         // Восстановление персонажей
         characterManager.LoadCharacters();
@@ -747,7 +840,33 @@ public static class ButtonExtensions
     public static void Configure(this Button button, Choice choice, UnityAction<Choice> onClick)
     {
         button.gameObject.SetActive(true);
-        button.GetComponentInChildren<TextMeshProUGUI>().text = choice.text;
+
+        // Ищем компоненты UI внутри кнопки
+        TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
+        TextMeshProUGUI costText = button.transform.Find("CostText")?.GetComponent<TextMeshProUGUI>();
+        Image keyIcon = button.transform.Find("KeyIcon")?.GetComponent<Image>();
+
+        // Устанавливаем текст кнопки
+        if (buttonText != null)
+            buttonText.text = choice.text;
+
+        // Если выбор стоит ключей, показываем стоимость
+        if (choice.cost > 0)
+        {
+            if (costText != null)
+                costText.text = choice.cost.ToString();
+            if (keyIcon != null)
+                keyIcon.gameObject.SetActive(true);
+        }
+        else
+        {
+            if (costText != null)
+                costText.gameObject.SetActive(false);
+            if (keyIcon != null)
+                keyIcon.gameObject.SetActive(false);
+        }
+
+        // Убираем старые события и добавляем новый обработчик клика
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => onClick(choice));
     }

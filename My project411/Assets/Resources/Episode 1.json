@@ -13,6 +13,7 @@
               "id": 1,
               "isNarration": true,
               "background": "background_forest",
+              "backgroundAnimation": "RainAnimation",
               "soundTrigger": "play:Winter",
               "texts": [
                 "The surrounding area of Blissville is known for its fabulous forests, which were wrapped in thick fog for most of the year.",
@@ -21,7 +22,6 @@
             },
             {
               "id": 2,
-              "backgroundAnimation": "RainAnimation",
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -41,6 +41,7 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
+              "unlockNewItem": true,
               "animation": "happy",
               "texts": [ "Especially with such a beautiful scenery!" ]
             },
@@ -48,11 +49,10 @@
               "id": 5,
               "speaker": "Chris",
               "character": "Chris",
-              "soundTrigger": "play:WardrobeMusic",
               "place": 2,
               "texts": [
                 "We don't get out together very often, but we have adventure every time.",
-                " Listen, are you serious? Going into the woods in this weather?"
+                "Listen, are you serious? Going into the woods in this weather?"
               ]
             },
             {
@@ -77,7 +77,6 @@
               "character": "Chris",
               "place": 2,
               "animation": "eyestothesidebase",
-              "backgroundAnimation": "RainAvg",
               "texts": [
                 "Oh. Don't make that face. The last time you looked at me like that, we got lost and people were searching for us with dogs for hours!"
               ]
@@ -85,12 +84,15 @@
             {
               "id": 9,
               "speaker": "Alice",
+              "backgroundAnimation": "RainAvg",
               "character": "Alice",
-              "soundTrigger": "play:Winter",
               "place": 1,
               "choices": [
                 {
                   "text": "Keep going.",
+                  "cost": 0,
+                  "reward": 5,
+                  "feedback": "Ты получил 5 ключей!",
                   "actions": [
                     {
                       "key": "keepGoing",
@@ -100,10 +102,14 @@
                 },
                 {
                   "text": "Cheer up brother.",
+                  "cost": 5,
+                  "reward": 0,
                   "actions": [
                     {
                       "key": "cheerUp",
-                      "value": true
+                      "value": true,
+                      "cost": 5,
+                      "reward": 0
                     }
                   ]
                 }
@@ -118,7 +124,6 @@
                 }
               ],
               "isNarration": true,
-              "soundTrigger": "play:steps",
               "texts": [
                 "Alice, ignoring her brother's complaints, continued her way deeper into the forest, looking at the nature that surrounded her.",
                 "The girl knew that no matter what, her brother would still follow her wherever she went."
@@ -135,6 +140,7 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
+              "reward": 5,
               "texts": [
                 "Keep up!"
               ]
@@ -173,6 +179,7 @@
                   "value": true
                 }
               ],
+              "animation": "happy",
               "isNarration": true,
               "texts": [ "Alice smiled and nodded at the path." ]
             },
@@ -216,6 +223,7 @@
               "choices": [
                 {
                   "text": "Invite Chris to sit down and rest.",
+                  "cost": 3,
                   "actions": [
                     {
                       "key": "inviteChrisSit",
@@ -333,13 +341,10 @@
                 }
               ],
               "isNarration": true,
-
-              "texts": [ "Looking around, brother and sister found a small, dilapidated gazebo and a nearby firepit, fenced in with large stones." ]
+              "texts": [ "After a couple minutes, brother and sister stumbled upon a small, half-ruined gazebo with a small firepit fenced in with large stones." ]
             },
             {
               "id": 27,
-              "background": "background_meadow",
-              "smoothBgReplacement": true,
               "conditions": [
                 {
                   "key": "exploreNeighborhood",
@@ -347,31 +352,24 @@
                 }
               ],
               "isNarration": true,
-              "texts": [ "..." ]
+              "texts": [ "Looking around, brother and sister found a small, dilapidated gazebo and a nearby firepit, fenced in with large stones." ]
             },
             {
               "id": 28,
               "background": "background_meadow",
               "smoothBgReplacement": true,
-              "conditions": [
-                {
-                  "key": "exploreNeighborhood",
-                  "value": true
-                }
-              ],
+              "isNarration": true,
+              "texts": [ "..." ]
+            },
+            {
+              "id": 29,
               "speaker": "Chris",
               "character": "Chris",
               "place": 2,
               "texts": [ "You’ve never brought me here before." ]
             },
             {
-              "id": 29,
-              "conditions": [
-                {
-                  "key": "exploreNeighborhood",
-                  "value": true
-                }
-              ],
+              "id": 30,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -381,35 +379,35 @@
               ]
             },
             {
-              "id": 30,
+              "id": 31,
               "backgroundAnimation": "RainFinishedAnimation",
               "soundTrigger": "stop:rain",
               "isNarration": true,
               "texts": [ "Leaving the backpacks in the gazebo, Chris walked over to the firepit." ]
             },
             {
-              "id": 31,
+              "id": 32,
               "speaker": "Chris",
               "character": "Chris",
               "place": 2,
               "texts": [ "It seems like I'm starving to death." ]
             },
             {
-              "id": 32,
+              "id": 33,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
               "texts": [ "I suggest to look for dry branches. I brought a lighter, I think if we gather some firewood, we can start the fire." ]
             },
             {
-              "id": 33,
+              "id": 34,
               "speaker": "Chris",
               "character": "Chris",
               "place": 2,
               "texts": [ "Hope it doesn’t rain again, otherwise we’ll have to eat raw sausages." ]
             },
             {
-              "id": 34,
+              "id": 35,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -435,7 +433,7 @@
               ]
             },
             {
-              "id": 35,
+              "id": 36,
               "conditions": [
                 {
                   "key": "separately",
@@ -450,7 +448,7 @@
               ]
             },
             {
-              "id": 36,
+              "id": 37,
               "conditions": [
                 {
                   "key": "separately",
@@ -465,7 +463,7 @@
               ]
             },
             {
-              "id": 37,
+              "id": 38,
               "conditions": [
                 {
                   "key": "separately",
@@ -480,7 +478,7 @@
               ]
             },
             {
-              "id": 38,
+              "id": 39,
               "conditions": [
                 {
                   "key": "separately",
@@ -494,35 +492,7 @@
               ]
             },
             {
-              "id": 39,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
-              "speaker": "Сhris",
-              "character": "Chris",
-              "place": 2,
-              "texts": [
-                "Alice! I love you, you know that, don't you?"
-              ]
-            },
-            {
               "id": 40,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
-              "isNarration": true,
-              "texts": [
-                "Chris looked very serious for some reason, and it made Alice anxious."
-              ]
-            },
-            {
-              "id": 41,
               "conditions": [
                 {
                   "key": "firepit",
@@ -537,7 +507,7 @@
               ]
             },
             {
-              "id": 42,
+              "id": 41,
               "conditions": [
                 {
                   "key": "firepit",
@@ -552,7 +522,7 @@
               ]
             },
             {
-              "id": 43,
+              "id": 42,
               "conditions": [
                 {
                   "key": "firepit",
@@ -567,7 +537,7 @@
               ]
             },
             {
-              "id": 44,
+              "id": 43,
               "conditions": [
                 {
                   "key": "firepit",
@@ -582,7 +552,7 @@
               ]
             },
             {
-              "id": 45,
+              "id": 44,
               "conditions": [
                 {
                   "key": "firepit",
@@ -597,7 +567,7 @@
               ]
             },
             {
-              "id": 46,
+              "id": 45,
               "conditions": [
                 {
                   "key": "firepit",
@@ -610,7 +580,7 @@
               ]
             },
             {
-              "id": 47,
+              "id": 46,
               "conditions": [
                 {
                   "key": "firepit",
@@ -626,7 +596,7 @@
               ]
             },
             {
-              "id": 48,
+              "id": 47,
               "conditions": [
                 {
                   "key": "firepit",
@@ -642,7 +612,7 @@
               ]
             },
             {
-              "id": 49,
+              "id": 48,
               "conditions": [
                 {
                   "key": "firepit",
@@ -656,13 +626,7 @@
               ]
             },
             {
-              "id": 50,
-              "conditions": [
-                {
-                  "key": "firepit",
-                  "value": true
-                }
-              ],
+              "id": 49,
               "speaker": "Chris",
               "character": "Chris",
               "animation": "laugh",
@@ -672,20 +636,14 @@
               ]
             },
             {
-              "id": 51,
-              "conditions": [
-                {
-                  "key": "firepit",
-                  "value": true
-                }
-              ],
+              "id": 50,
               "isNarration": true,
               "texts": [
                 "Chris looked very serious for some reason, and it made Alice anxious."
               ]
             },
             {
-              "id": 52,
+              "id": 51,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -711,7 +669,7 @@
               ]
             },
             {
-              "id": 53,
+              "id": 52,
               "conditions": [
                 {
                   "key": "funnyback",
@@ -726,7 +684,7 @@
               ]
             },
             {
-              "id": 54,
+              "id": 53,
               "conditions": [
                 {
                   "key": "expressfeel",
@@ -741,7 +699,48 @@
               ]
             },
             {
+              "id": 54,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Chris smiled and turned away, walking into the woods."
+              ]
+            },
+            {
               "id": 55,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "speaker": "Chris",
+              "character": "",
+              "place": 2,
+              "texts": [
+                "..."
+              ]
+            },
+            {
+              "id": 56,
+              "conditions": [
+                {
+                  "key": "firepit",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice calmed her anxiety caused by her brother's unexpected words and went back to preparing the fire pit and gazebo for their future picnic."
+              ]
+            },
+            {
+              "id": 57,
               "conditions": [
                 {
                   "key": "separately",
@@ -754,7 +753,7 @@
               ]
             },
             {
-              "id": 56,
+              "id": 58,
               "conditions": [
                 {
                   "key": "separately",
@@ -769,7 +768,7 @@
               ]
             },
             {
-              "id": 57,
+              "id": 59,
               "conditions": [
                 {
                   "key": "separately",
@@ -777,23 +776,24 @@
                 }
               ],
               "isNarration": true,
+              "texts": [
+                "Alice followed his example and began searching for dry twigs as well."
+              ]
+            },
+            {
+              "id": 60,
+              "isNarration": true,
+              "soundTrigger": "play:birds",
               "background": "background_forest",
               "smoothBgReplacement": true,
               "texts": [
-                "Alice followed his example and began searching for dry twigs as well.",
                 "The cool wind blew pleasantly against her skin. The leaves rustled and the birds chirped softly. ",
                 "Alice hadn't felt so peaceful in a long time. All the thoughts that had been on repeat in her head had disappeared, and worries had faded into the background.",
                 "The girl's gaze locked on a squirrel that appeared out of nowhere, gracefully jumping from branch to branch, from tree to tree."
               ]
             },
             {
-              "id": 58,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
+              "id": 61,
               "speaker": "Alice",
               "character": "Alice",
 
@@ -803,13 +803,7 @@
               ]
             },
             {
-              "id": 59,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
+              "id": 62,
               "isNarration": true,
               "backgroundAnimation": "SquirrelAnimation",
               "texts": [
@@ -818,13 +812,7 @@
               ]
             },
             {
-              "id": 60,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
+              "id": 63,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -833,80 +821,58 @@
               ]
             },
             {
-              "id": 61,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
+              "id": 64,
               "isNarration": true,
+              "soundTrigger":"effect:echo",
               "texts": [
                 "Suddenly time slowed and her ears hissed as if Alice had been placed deep underwater. ",
                 "Losing her concentration, she stumbled over a large rock and flew downward, anticipating her face meeting the ground painfully."
               ]
             },
             {
-              "id": 62,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
+              "id": 65,
               "isNarration": true,
-              "backgroundAnimation": "FallAnimation",
+              "background": "fall9",
               "texts": [
                 "Her eyes began to darken and her stomach twisted with excitement, as if she were falling into a kilometer-long chasm."
               ]
             },
             {
-              "id": 63,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
+              "id": 66,
+              "speaker": "Alice",
+              "animation": "fall",
+              "screenRipple": true,
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Ahh..."
+              ]
+            },
+            {
+              "id": 67,
               "isNarration": true,
               "texts": [
                 "She lost consciousness."
               ]
             },
+
             {
-              "id": 64,
-              "conditions": [
-                {
-                  "key": "separately",
-                  "value": true
-                }
-              ],
+              "id": 68,
               "speaker": "Alice",
-              "character": "Alice",
-              "place": 1,
-              "animation": "emotionсlosedeyes",
-              "texts": [
-                "..."
-              ]
-            },
-            {
-              "id": 65,
-              "isNarration": true,
-              "texts": [
-                "..."
-              ]
-            },
-            {
-              "id": 66,
-              "speaker": "Alice",
-              "character": "Alice",
+              "character": "",
               "place": 1,
               "texts": [
                 "..."
               ]
-            },
+            }
+          ]
+        },
+        {
+          "sceneId": 2,
+          "background": "fall9",
+          "dialogues": [
             {
-              "id": 67,
+              "id": 1,
               "isNarration": true,
               "texts": [
                 "Consciousness was rapidly returning, flurriedly restoring all her senses.",
@@ -914,17 +880,19 @@
               ]
             },
             {
-              "id": 68,
+              "id": 2,
               "speaker": "Alice",
+              "soundTrigger": "stop:echo",
               "character": "Alice",
               "place": 1,
-              "animation": "eyestothesidebase",
               "texts": [
                 "..."
               ]
             },
             {
-              "id": 69,
+              "id": 3,
+              "background": "forest_dark",
+              "smoothBgReplacement": true,
               "isNarration": true,
               "texts": [
                 "The darkness around her was so thick that she could barely see the silhouette of her own hand raised at face level.",
@@ -933,11 +901,9 @@
               ]
             },
             {
-              "id": 70,
+              "id": 4,
               "speaker": "Alice",
               "character": "Alice",
-              "background": "forest_dark",
-              "smoothBgReplacement": true,
               "place": 1,
               "choices": [
                 {
@@ -961,7 +927,7 @@
               ]
             },
             {
-              "id": 71,
+              "id": 5,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -975,7 +941,7 @@
               ]
             },
             {
-              "id": 72,
+              "id": 6,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -991,7 +957,7 @@
               ]
             },
             {
-              "id": 73,
+              "id": 7,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -1005,7 +971,7 @@
               ]
             },
             {
-              "id": 74,
+              "id": 8,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -1020,7 +986,7 @@
               ]
             },
             {
-              "id": 75,
+              "id": 9,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -1033,7 +999,7 @@
               ]
             },
             {
-              "id": 76,
+              "id": 10,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -1059,7 +1025,7 @@
               ]
             },
             {
-              "id": 77,
+              "id": 11,
               "conditions": [
                 {
                   "key": "freeze",
@@ -1074,7 +1040,7 @@
               ]
             },
             {
-              "id": 78,
+              "id": 12,
               "conditions": [
                 {
                   "key": "freeze",
@@ -1089,7 +1055,7 @@
               ]
             },
             {
-              "id": 79,
+              "id": 13,
               "conditions": [
                 {
                   "key": "freeze",
@@ -1098,14 +1064,13 @@
               ],
               "speaker": "...",
               "character": "Meruem",
-              "animation": "shadow",
               "place": 2,
               "texts": [
                 "It wasn’t."
               ]
             },
             {
-              "id": 80,
+              "id": 14,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1118,7 +1083,7 @@
               ]
             },
             {
-              "id": 81,
+              "id": 15,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1133,7 +1098,7 @@
               ]
             },
             {
-              "id": 82,
+              "id": 16,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1146,7 +1111,7 @@
               ]
             },
             {
-              "id": 83,
+              "id": 17,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1161,7 +1126,7 @@
               ]
             },
             {
-              "id": 84,
+              "id": 18,
               "isNarration": true,
               "texts": [
                 "An unfamiliar male voice suddenly sounded just above her head.",
@@ -1169,7 +1134,7 @@
               ]
             },
             {
-              "id": 85,
+              "id": 19,
               "speaker": "Meruem",
               "character": "Meruem",
               "place": 2,
@@ -1178,7 +1143,7 @@
               ]
             },
             {
-              "id": 86,
+              "id": 20,
               "speaker": "Meruem",
               "character": "Meruem",
               "place": 2,
@@ -1187,7 +1152,7 @@
               ]
             },
             {
-              "id": 87,
+              "id": 21,
               "isNarration": true,
               "texts": [
                 "Speaking very quietly, the stranger slowly approached the girl.",
@@ -1195,7 +1160,7 @@
               ]
             },
             {
-              "id": 88,
+              "id": 22,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -1204,7 +1169,7 @@
               ]
             },
             {
-              "id": 89,
+              "id": 23,
               "speaker": "Meruem",
               "character": "Meruem",
               "place": 2,
@@ -1213,14 +1178,14 @@
               ]
             },
             {
-              "id": 90,
+              "id": 24,
               "isNarration": true,
               "texts": [
                 "The girl saw that the stranger who had ignored her questions extended his hand to her, but she continued to sit where she was, afraid to even move."
               ]
             },
             {
-              "id": 91,
+              "id": 25,
               "speaker": "Meruem",
               "character": "Meruem",
               "place": 2,
@@ -1230,7 +1195,7 @@
               ]
             },
             {
-              "id": 92,
+              "id": 26,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -1256,7 +1221,7 @@
               ]
             },
             {
-              "id": 93,
+              "id": 27,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1268,13 +1233,13 @@
                 "Meruem's words made goosebumps run down the girl's body. Alice didn't understand where she was, why the man was saying such strange things, or where her brother had disappeared to. ",
                 "The unknown frightened her, and the potential threat Meruem had mentioned seemed real.",
                 "Alice decided that under the current situation it was safer to follow the stranger than to be alone in an unfamiliar forest.",
-                "Realising by the look on Alice's face that she had made up her mind, Meruem leaned over slightly and put his arm around the girl's waist to help her stand up.",
+                "Realizing by the look on Alice's face that she had made up her mind, Meruem leaned over slightly and put his arm around the girl's waist to help her stand up.",
                 "Maybe this recklessness was a consequence of her head banging, but Alice promised herself that she would find out the answers to her questions from Meruem later and be on the lookout.",
                 "They tried to walk as fast as they could in her current condition, but the girl still struggled to move due to her frozen limbs and the bruises she had received."
               ]
             },
             {
-              "id": 94,
+              "id": 28,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1289,7 +1254,7 @@
               ]
             },
             {
-              "id": 95,
+              "id": 29,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1305,7 +1270,7 @@
               ]
             },
             {
-              "id": 96,
+              "id": 30,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1320,7 +1285,7 @@
               ]
             },
             {
-              "id": 97,
+              "id": 31,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1328,6 +1293,8 @@
                 }
               ],
               "speaker": "Meruem",
+              "background": "house1",
+              "smoothBgReplacement": true,
               "character": "Meruem",
               "place": 2,
               "texts": [
@@ -1335,7 +1302,7 @@
               ]
             },
             {
-              "id": 98,
+              "id": 32,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1348,7 +1315,7 @@
               ]
             },
             {
-              "id": 99,
+              "id": 33,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1363,7 +1330,7 @@
               ]
             },
             {
-              "id": 100,
+              "id": 34,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1378,7 +1345,7 @@
               ]
             },
             {
-              "id": 101,
+              "id": 35,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1393,7 +1360,7 @@
               ]
             },
             {
-              "id": 102,
+              "id": 36,
               "conditions": [
                 {
                   "key": "takeHand",
@@ -1425,7 +1392,7 @@
               ]
             },
             {
-              "id": 103,
+              "id": 37,
               "conditions": [
                 {
                   "key": "whereisBrother",
@@ -1440,7 +1407,7 @@
               ]
             },
             {
-              "id": 104,
+              "id": 38,
               "conditions": [
                 {
                   "key": "whereisBrother",
@@ -1453,7 +1420,7 @@
               ]
             },
             {
-              "id": 105,
+              "id": 39,
               "conditions": [
                 {
                   "key": "whereisBrother",
@@ -1466,216 +1433,56 @@
               "texts": [
                 "Go to the house. I’ll try to get back as soon as possible."
               ]
-            },
+            }
+          ]
+        },
+        {
+          "sceneId": 3,
+          "background": "background_meadow",
+          "dialogues": [
             {
-              "id": 106,
-              "conditions": [
-                {
-                  "key": "whoareYou",
-                  "value": true
-                }
-              ],
-              "speaker": "Meruem",
-              "character": "Meruem",
-              "place": 2,
-              "texts": [
-                "The point is that you have come to the Underworld. I am here as a sort of guide. The rest you will find out after. Now go to the house. I’ll try to get back as soon as possible."
-              ]
-            },
-            {
-              "id": 107,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
+              "id": 1,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
               "texts": [
-                "Who are you and how did you find me?",
-                "What about my brother?",
-                "Did he send you to find me?",
-                "But then why don't you know my name?  What's going on?"
-              ]
-            },
-            {
-              "id": 108,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "speaker": "Meruem",
-              "character": "Meruem",
-              "place": 2,
-              "texts": [
-                "Your brother isn't here. And I'm sorry to disappoint you, but no one will ever find you again."
-              ]
-            },
-            {
-              "id": 109,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "isNarration": true,
-              "texts": [
-                "These words put the girl on a panic. She did not understand how much to believe a man, but even more did not understand what to do.",
-                "Alice took a deep breath, trying to calm herself down and make some decision.",
-                "The girl didn’t realize that while she was sitting there, something changed in the environment. The air, which the girl already lacked, seemed to grow even thicker."
-              ]
-            },
-            {
-              "id": 110,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "isNarration": true,
-              "texts": [
-                "Birds were howling nearby, soaring into the sky. A terrible toot and heartbreaking howls were heard. It seemed that the whole forest began to come alive and filled with movement."
-              ]
-            },
-            {
-              "id": 111,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-
-              "speaker": "Alice",
-              "character": "Alice",
-              "place": 1,
-              "texts": [
-                "What's going on?"
-              ]
-            },
-            {
-              "id": 112,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "speaker": "Meruem",
-              "character": "Meruem",
-              "place": 2,
-              "texts": [
-                "It's starting. We must get out of here as fast as we can."
-              ]
-            },
-            {
-              "id": 113,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "isNarration": true,
-              "texts": [
-                "Alice looked around for the source of the sound, trying to figure out what was happening."
-              ]
-            },
-            {
-              "id": 114,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "isNarration": true,
-              "texts": [
-                "When she looked up to the sky, she was almost frozen with horror.",
-                "The enormous creatures, impossible to see in the darkness, were circling in the sky, making monstrous sounds that sent shivers down her spine and aroused Alice's animal fear.",
-                "She felt the deadly danger in her gut. A sense of unreality gripped her. It seemed to Alice that her own body-her sight and hearing-was deceiving her. Alice thought again whether the blow to her head could have had such consequences."
-              ]
-            },
-            {
-              "id": 115,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "isNarration": true,
-              "texts": [
-                "In an instant, one of the creatures separated from the others and headed towards Alice and Meruem with all speed."
-              ]
-            },
-            {
-              "id": 116,
-              "conditions": [
-                {
-                  "key": "keepAsking",
-                  "value": true
-                }
-              ],
-              "speaker": "Meruem",
-              "character": "Meruem",
-              "place": 2,
-              "texts": [
-                "Run if you don't want to stay in this clearing forever. Because I want to survive this night."
+                "Let's take a walk around the neighborhood first, shall we? I saw something interesting here last time."
               ]
             }
           ]
         },
         {
-          "sceneId": 2,
+          "sceneId": 4,
+          "background": "background_forest_deep",
           "dialogues": [
             {
               "id": 1,
               "isNarration": true,
-              "background": "ChoosingDoorsAll",
               "texts": [
-                "The surrounding area of Blissville is known for its fabulous forests, which were wrapped in thick fog for most of the year.",
-                "Alice and her brother, Chris, walk along a trail damp from the rain, snaking their way deeper into the woods along the spreading trees."
+                "Alice smiled at her brother and, with her hair gathered in a thick tail, headed into the forest."
               ]
-            },
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "episodeId": 2,
+      "episodeName": "Episode 2: \"Lost in the Unknown\"",
+      "backgroundImage": "Backgrounds/background_mystery",
+      "scenes": [
+        {
+          "sceneId": 1,
+          "background": "background_dark_forest",
+          "dialogues": [
             {
-              "id": 2,
+              "id": 1,
               "speaker": "Alice",
+              "character": "Alice",
               "place": 1,
+              "animation": "emotionсlosedeyes",
               "texts": [
-                "Hmm...Where I would like to come in firstly?"
-              ]
-            },
-            {
-              "id": 3,
-              "speaker": "Alice",
-              "background": "OpenDoorsView",
-              "place": 1,
-              "choices": [
-                {
-                  "text": "Choose the left door",
-                  "actions": [
-                    {
-                      "key": "theleftdoor",
-                      "value": true
-                    }
-                  ]
-                },
-                {
-                  "text": "Choose the right door",
-                  "actions": [
-                    {
-                      "key": "therightdoor",
-                      "value": true
-                    }
-                  ]
-                }
+                "..."
               ]
             }
           ]

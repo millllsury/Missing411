@@ -61,6 +61,9 @@ public class Animations : MonoBehaviour
             return;
         }
 
+        Transform characterTransform = emotionRenderer.transform.parent; // Предполагаем, что эмоции внутри родителя (главного объекта)
+
+
         SpriteNull(emotionRenderer);
         SpriteNull(eyesRenderer);
 
@@ -99,6 +102,12 @@ public class Animations : MonoBehaviour
                 emotion = "shadow";
                 leaveLastFrame= true;
                 break;
+            case "fall":
+                emotion = "ClosedEyes";
+                leaveLastFrame = true;
+                StartCoroutine(ShakeCharacter(characterTransform, 0.1f, 1f)); // Теперь трясется весь объект
+                sound = "body-fall";
+                break;
             default:
                 Debug.LogWarning($"Анимация {animationName} не найдена.");
                 return;
@@ -113,6 +122,27 @@ public class Animations : MonoBehaviour
 
         StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f, character, leaveLastFrame, stopBlinkingPermanently));
     }
+
+    private IEnumerator ShakeCharacter(Transform characterTransform, float shakeAmount, float duration)
+    {
+        if (characterTransform == null) yield break;
+
+        Vector3 originalPosition = characterTransform.localPosition;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            float xOffset = Random.Range(-shakeAmount, shakeAmount);
+            characterTransform.localPosition = new Vector3(originalPosition.x + xOffset, originalPosition.y, originalPosition.z);
+            yield return null;
+        }
+
+        // Возвращаем персонажа в исходное положение
+        characterTransform.localPosition = originalPosition;
+    }
+
+
 
     private void PlaySoundForEmotion(string character, string sound = null)
     {
@@ -220,6 +250,7 @@ public class Animations : MonoBehaviour
             yield return null;
         }
         SetAlpha(renderer, 0f); // Убедимся, что значение точно 0
+        SpriteNull(renderer);
     }
 
     private void SetAlpha(SpriteRenderer renderer, float alpha)
