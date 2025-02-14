@@ -40,7 +40,7 @@ public class ScreenRipple : MonoBehaviour
 
 
     // Плавное включение эффекта
-    private void ApplyEffect()
+    public void ApplyEffect()
     {
 
         grain.intensity.value = Mathf.MoveTowards(grain.intensity.value, 1f, Time.deltaTime * transitionSpeed);

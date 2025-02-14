@@ -9,6 +9,7 @@ public class AnimationPreset
     public bool keepLastFrame;
     public int repeatCount;
     public string soundName;
+    public string type;
 }
 [System.Serializable]
 public class AnimationPresetDictionary

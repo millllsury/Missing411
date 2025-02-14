@@ -52,4 +52,6 @@ public class CurrencyManager : MonoBehaviour
             return false;
         }
     }
+
+
 }

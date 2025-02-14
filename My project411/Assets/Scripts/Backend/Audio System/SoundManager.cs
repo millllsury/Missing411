@@ -128,7 +128,9 @@ public class SoundManager : MonoBehaviour
                     StopSoundByName(effectName);
                 }
                 break;
-
+            case "stopall":
+                StopAllSounds();
+                break;
             default:
                 Debug.LogWarning($"Unknown sound command: {command}");
                 break;

@@ -147,6 +147,7 @@ public class UIManager : MonoBehaviour
 
     public void SaveConfirmation()
     {
+        GameStateManager.Instance.isNewGame = false;
         dialogueManager.SaveProgress();
         QuitConfirmationPanel.SetActive(false);
         SaveConfirmationPanel.SetActive(false);

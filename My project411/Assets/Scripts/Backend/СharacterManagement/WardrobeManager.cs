@@ -27,7 +27,7 @@ public class WardrobeManager : MonoBehaviour
     public Button hairButton;
     public Button clothesButton;
 
-    //private CharacterManager characterManager;
+    [SerializeField] private CharacterManager characterManager;
     public SpriteRenderer eyesImage;
 
 
@@ -57,6 +57,8 @@ public class WardrobeManager : MonoBehaviour
         {
             clothesRenderer.sprite = clothesOptions[savedClothesIndex];
         }
+
+        characterManager.AdjustCharacterAppearance("WardrobeScene");
     }
 
     public void CloseWardrobe()
@@ -71,9 +73,10 @@ public class WardrobeManager : MonoBehaviour
         Debug.Log($"Индексы сохранены: Волосы={currentHairIndex}, Одежда={currentClothesIndex}");
 
         // Переходим на основную сцену
-        string mainSceneName = PlayerPrefs.GetString("MainSceneName", "DefaultScene");
+        string mainSceneName = GameStateManager.Instance.LoadSceneID();
         SoundManager.Instance.StopAllSounds();
-        SceneManager.LoadScene(mainSceneName);
+        SceneManager.LoadScene("Scene"+ mainSceneName);
+        
         
     }
 

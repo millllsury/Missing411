@@ -35,6 +35,7 @@ public class BackgroundController : MonoBehaviour
     private bool isAnimatingForeground = false;
     private bool foregroundKeepLastFrame = false;
 
+    private string lastStoredFrame = null; // Храним название последнего кадра
 
 
     private bool hasAnimationPlayed = false;
@@ -45,16 +46,7 @@ public class BackgroundController : MonoBehaviour
 
     public string GetCurrentBackgroundName() => currentBackgroundName;
     // Для заднего плана
-    public string GetCurrentBackgroundAnimationName() => currentBackgroundAnimation;
-    public float GetCurrentBackgroundFrameDelay() => animationFrameDelay;
-    public int GetCurrentBackgroundRepeatCount() => animationRepeatCount;
-    public bool GetBackgroundKeepLastFrame() => animationKeepLastFrame;
-
-    // Для переднего плана
-    public string GetCurrentForegroundAnimationName() => currentForegroundAnimation;
-    public float GetCurrentForegroundFrameDelay() => foregroundFrameDelay;
-    public int GetCurrentForegroundRepeatCount() => foregroundRepeatCount;
-    public bool GetForegroundKeepLastFrame() => foregroundKeepLastFrame;
+   
 
 
     [SerializeField] private CharacterManager characterManager;  
@@ -125,14 +117,15 @@ public class BackgroundController : MonoBehaviour
             yield return null;
         }
         darkOverlay.color = new Color(0, 0, 0, 0f);
-        
-        // 5. Плавное включение элементов
-        yield return StartCoroutine(FadeInElements());
 
         if (isAnimatingForeground)
         {
             animationFrame.gameObject.SetActive(true);
         }
+        // 5. Плавное включение элементов
+        yield return StartCoroutine(FadeInElements());
+
+       
         IsTransitioning = false;
         currentTransitionCoroutine = null;
     }
@@ -186,6 +179,7 @@ public class BackgroundController : MonoBehaviour
         if (bgSprite != null)
         {
             backgroundImage.sprite = bgSprite; // Устанавливаем спрайт
+            GameStateManager.Instance.SaveBackground(backgroundName);
         }
         else
         {
@@ -197,8 +191,10 @@ public class BackgroundController : MonoBehaviour
     #endregion
 
     #region Background Animation
-    public void StartBackgroundAnimation(string animationFolder, float delay, int repeatCount = -1, bool keepLastFrame = false, string currentSoundName = null)
+    public void StartBackgroundAnimation(string animationFolder, float delay, int repeatCount = -1, bool keepLastFrame = false, string currentSoundName = null, string animationType = "background")
     {
+        Debug.Log($" Получено animationType: {animationType} для {animationFolder}");
+
         Sprite[] sprites = Resources.LoadAll<Sprite>("Backgrounds/" + animationFolder);
         if (sprites.Length == 0)
         {
@@ -206,27 +202,35 @@ public class BackgroundController : MonoBehaviour
             return;
         }
 
-        if (keepLastFrame)  // Анимация для заднего плана
+        if (animationType.ToLower() == "background")
         {
             backgroundSprites = new List<Sprite>(sprites);
-            PlayBackgroundAnimation(animationFolder, delay, repeatCount, currentSoundName);
+            PlayBackgroundAnimation(animationFolder, delay, repeatCount, currentSoundName, keepLastFrame);
+            Debug.Log(" Начинаем анимацию заднего фона.");
         }
-        else  // Анимация для переднего плана
+        else if (animationType.ToLower() == "foreground")
         {
             foregroundSprites = new List<Sprite>(sprites);
-            PlayForegroundAnimation(animationFolder, delay, repeatCount, currentSoundName);
+            PlayForegroundAnimation(animationFolder, delay, repeatCount, currentSoundName, keepLastFrame);
+            Debug.Log("Начинаем анимацию переднего фона.");
+        }
+        else
+        {
+            Debug.LogError($" Неизвестный тип анимации: {animationType}. Допустимые значения: 'foreground', 'background'.");
         }
     }
 
-    public void PlayForegroundAnimation(string animationName, float delay, int repeatCount, string soundName)
+
+    public void PlayForegroundAnimation(string animationName, float delay, int repeatCount, string soundName, bool keepLastFrame)
     {
-        foregroundFrameDelay = delay;
+        
         if (foregroundAnimationCoroutine != null)
             StopCoroutine(foregroundAnimationCoroutine);
+        foregroundFrameDelay = delay;
 
         isAnimatingForeground = true;
         currentForegroundAnimation = animationName; // Сохраняем имя анимации
-        foregroundAnimationCoroutine = StartCoroutine(PlayAnimation(animationName, animationFrame, foregroundSprites, delay, repeatCount, false));
+        foregroundAnimationCoroutine = StartCoroutine(PlayAnimation(animationName, animationFrame, foregroundSprites, delay, repeatCount, keepLastFrame));
 
         if (!string.IsNullOrEmpty(soundName))
         {
@@ -235,15 +239,16 @@ public class BackgroundController : MonoBehaviour
     }
 
 
-    public void PlayBackgroundAnimation(string animationName, float delay, int repeatCount, string soundName)
+    public void PlayBackgroundAnimation(string animationName, float delay, int repeatCount, string soundName, bool keepLastFrame)
     {
         
         if (backgroundAnimationCoroutine != null)
             StopCoroutine(backgroundAnimationCoroutine);
         animationFrameDelay = delay;
+
         isAnimatingBackground = true;
         currentBackgroundAnimation = animationName; // Сохраняем имя анимации
-        backgroundAnimationCoroutine = StartCoroutine(PlayAnimation(animationName, backgroundLastFrame, backgroundSprites, delay, repeatCount, true));
+        backgroundAnimationCoroutine = StartCoroutine(PlayAnimation(animationName, backgroundLastFrame, backgroundSprites, delay, repeatCount, keepLastFrame));
 
         if (!string.IsNullOrEmpty(soundName))
         {
@@ -296,12 +301,14 @@ public class BackgroundController : MonoBehaviour
         {
             animationImage.sprite = sprites[lastFrameIndex];
             isAnimatingBackground = false;
+            GameStateManager.Instance.ClearForegroundAnimation();///////////
             backgroundAnimationCoroutine = null;
         }
         else
         {
             animationImage.gameObject.SetActive(false);
             isAnimatingForeground = false;
+            GameStateManager.Instance.ClearForegroundAnimation();
             foregroundAnimationCoroutine = null;
         }
     }
@@ -314,6 +321,7 @@ public class BackgroundController : MonoBehaviour
             foregroundAnimationCoroutine = null;
         }
         isAnimatingForeground = false;
+        GameStateManager.Instance.ClearForegroundAnimation();
         animationFrame.gameObject.SetActive(false);
     }
 
@@ -325,8 +333,21 @@ public class BackgroundController : MonoBehaviour
             backgroundAnimationCoroutine = null;
         }
         isAnimatingBackground = false;
+        GameStateManager.Instance.ClearBackgroundAnimation();
         backgroundLastFrame.gameObject.SetActive(false);
     }
+
+    public (string, float, int, bool) GetCurrentBackgroundAnimationData()
+    {
+        return (currentBackgroundAnimation, animationFrameDelay, animationRepeatCount, animationKeepLastFrame);
+    }
+
+
+    public (string, float, int, bool) GetCurrentForegroundAnimationData()
+    {
+        return (currentForegroundAnimation, foregroundFrameDelay, foregroundRepeatCount, foregroundKeepLastFrame);
+    }
+
 
     public bool HasAnimationPlayed() => hasAnimationPlayed;
     #endregion

@@ -1,23 +1,22 @@
-using System.IO;
+п»їusing System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using UnityEngine.SceneManagement;
 using System.Linq;
-
-
+using System.Runtime.CompilerServices;
 
 [System.Serializable]
 public class GameState
 {
     public string currentEpisode= "1";
-    public string currentScene = "1";             // Текущая сцена
-    public string currentDialogue = "1";          // Текущий диалог
-    public int textCounter = 0;                 // Счетчик текста
+    public string currentScene = "1";             // РўРµРєСѓС‰Р°СЏ СЃС†РµРЅР°
+    public string currentDialogue = "1";          // РўРµРєСѓС‰РёР№ РґРёР°Р»РѕРі
+    public int textCounter = 0;                 // РЎС‡РµС‚С‡РёРє С‚РµРєСЃС‚Р°
     public bool episodeNameShowed;
-    public Dictionary<string, bool> flags;  // Флаги игры
-    public int hairIndex;                   // Индекс волос персонажа
-    public int clothesIndex;                // Индекс одежды персонажа
+    public Dictionary<string, bool> flags;  // Р¤Р»Р°РіРё РёРіСЂС‹
+    public int hairIndex;                   // РРЅРґРµРєСЃ РІРѕР»РѕСЃ РїРµСЂСЃРѕРЅР°Р¶Р°
+    public int clothesIndex;                // РРЅРґРµРєСЃ РѕРґРµР¶РґС‹ РїРµСЂСЃРѕРЅР°Р¶Р°
     public string leftCharacterName;
     public string rightCharacterName;
 
@@ -32,10 +31,11 @@ public class GameState
     public int animationRepeatCount;
     public int foregroundRepeatCount;
 
+
     public bool animationKeepLastFrame;
     public bool foregroundKeepLastFrame;
 
-    public List<DialogueState> dialogueHistory = new(); //для dialogueHistory стека
+    public List<DialogueState> dialogueHistory = new(); //РґР»СЏ dialogueHistory СЃС‚РµРєР°
 
     public List<string> playingTracks = new();
     public int keys;
@@ -59,9 +59,9 @@ public class DialogueState
 [System.Serializable]
 public class SaveSlot
 {
-    public string slotName;      // Название слота (например, "Слот 1")
-    public string saveDate;      // Дата сохранения
-    public GameState gameState;  // Состояние игры в этом слоте
+    public string slotName;      // РќР°Р·РІР°РЅРёРµ СЃР»РѕС‚Р° (РЅР°РїСЂРёРјРµСЂ, "РЎР»РѕС‚ 1")
+    public string saveDate;      // Р”Р°С‚Р° СЃРѕС…СЂР°РЅРµРЅРёСЏ
+    public GameState gameState;  // РЎРѕСЃС‚РѕСЏРЅРёРµ РёРіСЂС‹ РІ СЌС‚РѕРј СЃР»РѕС‚Рµ
 }
 
 [System.Serializable]
@@ -93,7 +93,7 @@ public class GameStateManager : MonoBehaviour
 
     public GameState originalState; // To store the original state
     public bool isNewGame = false;
-
+    public bool rewritingGame = false;
     public static GameStateManager Instance { get; private set; }
 
     private void Awake()
@@ -101,18 +101,21 @@ public class GameStateManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // Объект сохраняется между сценами
+            DontDestroyOnLoad(gameObject); // РћР±СЉРµРєС‚ СЃРѕС…СЂР°РЅСЏРµС‚СЃСЏ РјРµР¶РґСѓ СЃС†РµРЅР°РјРё
             currentState = new GameState();
             LoadGlobalSettings();
         }
         else
         {
 
-            Destroy(gameObject); // Удаляем дубликат
+            Destroy(gameObject); // РЈРґР°Р»СЏРµРј РґСѓР±Р»РёРєР°С‚
         }
+
+        backgroundController = FindFirstObjectByType<BackgroundController>();
     }
 
 
+    private BackgroundController backgroundController;
 
     #region Global Settings
 
@@ -131,7 +134,7 @@ public class GameStateManager : MonoBehaviour
             backgroundEffectsVolume = settings.backgroundEffectsVolume;
             uiVolume = settings.uiVolume;
             backgroundVolume = settings.backgroundVolume;
-            //Debug.Log("Настройки громкости успешно загружены.");
+            //Debug.Log("РќР°СЃС‚СЂРѕР№РєРё РіСЂРѕРјРєРѕСЃС‚Рё СѓСЃРїРµС€РЅРѕ Р·Р°РіСЂСѓР¶РµРЅС‹.");
         }
         else
         {
@@ -142,13 +145,13 @@ public class GameStateManager : MonoBehaviour
 
     public void DefaultSoundSettingsValue()
     {
-        // Устанавливаем значения по умолчанию
+        // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј Р·РЅР°С‡РµРЅРёСЏ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ
         masterVolume = 0.5f;
         characterVolume = 0.5f;
         backgroundEffectsVolume = 0.5f;
         backgroundVolume = 0.5f;
         uiVolume = 1f;
-        //Debug.Log("Настройки громкости созданы с значениями по умолчанию.");
+        //Debug.Log("РќР°СЃС‚СЂРѕР№РєРё РіСЂРѕРјРєРѕСЃС‚Рё СЃРѕР·РґР°РЅС‹ СЃ Р·РЅР°С‡РµРЅРёСЏРјРё РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ.");
     }
 
     public void SaveGlobalSettings()
@@ -169,18 +172,18 @@ public class GameStateManager : MonoBehaviour
         string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
         File.WriteAllText(SettingsFilePath, json);
 
-        //Debug.Log("Настройки громкости сохранены.");
+        //Debug.Log("РќР°СЃС‚СЂРѕР№РєРё РіСЂРѕРјРєРѕСЃС‚Рё СЃРѕС…СЂР°РЅРµРЅС‹.");
     }
 
     public void SetMasterVolume(float value)
     {
         if (Mathf.Approximately(masterVolume, value))
         {
-            Debug.Log("SetMasterVolume: Значение не изменилось, не сохраняем.");
+            Debug.Log("SetMasterVolume: Р—РЅР°С‡РµРЅРёРµ РЅРµ РёР·РјРµРЅРёР»РѕСЃСЊ, РЅРµ СЃРѕС…СЂР°РЅСЏРµРј.");
             return;
         }
 
-        //Debug.Log($"SetMasterVolume вызван с значением: {value}");
+        //Debug.Log($"SetMasterVolume РІС‹Р·РІР°РЅ СЃ Р·РЅР°С‡РµРЅРёРµРј: {value}");
         masterVolume = value;
 
         SaveGlobalSettings();
@@ -205,12 +208,12 @@ public class GameStateManager : MonoBehaviour
                 backgroundVolume = value;
                 break;
             default:
-                Debug.LogWarning($"Неизвестная категория звука: {category}");
+                Debug.LogWarning($"РќРµРёР·РІРµСЃС‚РЅР°СЏ РєР°С‚РµРіРѕСЂРёСЏ Р·РІСѓРєР°: {category}");
                 return;
         }
 
         SaveGlobalSettings();
-        //Debug.Log($"Установлена громкость категории '{category}': {value}");
+        //Debug.Log($"РЈСЃС‚Р°РЅРѕРІР»РµРЅР° РіСЂРѕРјРєРѕСЃС‚СЊ РєР°С‚РµРіРѕСЂРёРё '{category}': {value}");
     }
 
     #endregion
@@ -234,26 +237,26 @@ public class GameStateManager : MonoBehaviour
     }
 
 
-    private int selectedSlotIndex = -1; // Индекс выбранного слота (-1, если слот не выбран)
+    private int selectedSlotIndex = -1; // РРЅРґРµРєСЃ РІС‹Р±СЂР°РЅРЅРѕРіРѕ СЃР»РѕС‚Р° (-1, РµСЃР»Рё СЃР»РѕС‚ РЅРµ РІС‹Р±СЂР°РЅ)
 
     public void SelectSlot(int slotIndex)
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-            //Debug.LogError($"Индекс слота {slotIndex} вне диапазона.");
+            //Debug.LogError($"РРЅРґРµРєСЃ СЃР»РѕС‚Р° {slotIndex} РІРЅРµ РґРёР°РїР°Р·РѕРЅР°.");
             return;
         }
 
         var selectedSlot = saveSlots.slots[slotIndex];
         if (selectedSlot.gameState == null)
         {
-            Debug.LogWarning($"Слот {slotIndex + 1} пуст.");
+            Debug.LogWarning($"РЎР»РѕС‚ {slotIndex + 1} РїСѓСЃС‚.");
             return;
         }
         SaveOriginalState(slotIndex);
         selectedSlotIndex = slotIndex;
-        currentState = selectedSlot.gameState; // Устанавливаем текущее состояние
-       // Debug.Log($"Слот {slotIndex + 1} выбран. Состояние игры загружено.");
+        currentState = selectedSlot.gameState; // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј С‚РµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ
+       // Debug.Log($"РЎР»РѕС‚ {slotIndex + 1} РІС‹Р±СЂР°РЅ. РЎРѕСЃС‚РѕСЏРЅРёРµ РёРіСЂС‹ Р·Р°РіСЂСѓР¶РµРЅРѕ.");
     }
 
 
@@ -274,12 +277,12 @@ public class GameStateManager : MonoBehaviour
         {
             string json = File.ReadAllText(slotsFilePath);
             saveSlots = JsonConvert.DeserializeObject<SaveSlots>(json);
-            //Debug.Log("Слоты сохранений загружены.");
+            //Debug.Log("РЎР»РѕС‚С‹ СЃРѕС…СЂР°РЅРµРЅРёР№ Р·Р°РіСЂСѓР¶РµРЅС‹.");
         }
         else
         {
             saveSlots = new SaveSlots { slots = new List<SaveSlot>() };
-            // Создаём пустые слоты
+            // РЎРѕР·РґР°С‘Рј РїСѓСЃС‚С‹Рµ СЃР»РѕС‚С‹
             for (int i = 1; i <= 6; i++)
             {
                 saveSlots.slots.Add(new SaveSlot
@@ -290,7 +293,7 @@ public class GameStateManager : MonoBehaviour
                 });
             }
             SaveSlotsToFile();
-            //Debug.Log("Созданы пустые слоты сохранений.");
+            //Debug.Log("РЎРѕР·РґР°РЅС‹ РїСѓСЃС‚С‹Рµ СЃР»РѕС‚С‹ СЃРѕС…СЂР°РЅРµРЅРёР№.");
         }
     }
 
@@ -300,12 +303,10 @@ public class GameStateManager : MonoBehaviour
     {
 
         var slot = saveSlots.slots[slotIndex];
-        slot.gameState = currentState; // Сохраняем текущее состояние игры
+        slot.gameState = currentState; // РЎРѕС…СЂР°РЅСЏРµРј С‚РµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РёРіСЂС‹
         slot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         SaveSlotsToFile();
-
-        isNewGame = false;
     }
 
     public void SaveSlotsToFile()
@@ -329,7 +330,7 @@ public class GameStateManager : MonoBehaviour
             Debug.LogWarning($"Slot {slot.slotName} is empty.");
             return;
         }
-        currentState = slot.gameState; // Восстанавливаем состояние игры
+        currentState = slot.gameState; // Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЃРѕСЃС‚РѕСЏРЅРёРµ РёРіСЂС‹
         CurrencyManager.Instance.SetKeys(currentState.keys);
         //Debug.Log($"Game loaded from slot {slot.slotName}.");
     }
@@ -338,22 +339,22 @@ public class GameStateManager : MonoBehaviour
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-            //Debug.LogError("Индекс слота недействителен для сохранения исходного состояния.");
+            //Debug.LogError("РРЅРґРµРєСЃ СЃР»РѕС‚Р° РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ РёСЃС…РѕРґРЅРѕРіРѕ СЃРѕСЃС‚РѕСЏРЅРёСЏ.");
             return;
         }
 
         var slot = saveSlots.slots[slotIndex];
         if (slot.gameState != null)
         {
-            // Клонируем текущее состояние для сохранения
+            // РљР»РѕРЅРёСЂСѓРµРј С‚РµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ РґР»СЏ СЃРѕС…СЂР°РЅРµРЅРёСЏ
             originalState = JsonConvert.DeserializeObject<GameState>(
                 JsonConvert.SerializeObject(slot.gameState));
-            //Debug.Log($"Исходное состояние слота {slotIndex + 1} сохранено.");
+            //Debug.Log($"РСЃС…РѕРґРЅРѕРµ СЃРѕСЃС‚РѕСЏРЅРёРµ СЃР»РѕС‚Р° {slotIndex + 1} СЃРѕС…СЂР°РЅРµРЅРѕ.");
         }
         else
         {
-            originalState = null; // Слот был пуст
-            //Debug.Log($"Слот {slotIndex + 1} изначально пуст.");
+            originalState = null; // РЎР»РѕС‚ Р±С‹Р» РїСѓСЃС‚
+            //Debug.Log($"РЎР»РѕС‚ {slotIndex + 1} РёР·РЅР°С‡Р°Р»СЊРЅРѕ РїСѓСЃС‚.");
         }
     }
 
@@ -363,28 +364,41 @@ public class GameStateManager : MonoBehaviour
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-            //Debug.LogError("Индекс слота для очистки недействителен.");
+            //Debug.LogError("РРЅРґРµРєСЃ СЃР»РѕС‚Р° РґР»СЏ РѕС‡РёСЃС‚РєРё РЅРµРґРµР№СЃС‚РІРёС‚РµР»РµРЅ.");
             return;
         }
 
         var slot = saveSlots.slots[slotIndex];
-        slot.gameState = null; // Удаляем данные состояния игры
-        slot.saveDate = null;  // Удаляем дату сохранения
-        slot.slotName = $"Slot {slotIndex + 1}"; // Сбрасываем название слота
+        slot.gameState = null; // РЈРґР°Р»СЏРµРј РґР°РЅРЅС‹Рµ СЃРѕСЃС‚РѕСЏРЅРёСЏ РёРіСЂС‹
+        slot.saveDate = null;  // РЈРґР°Р»СЏРµРј РґР°С‚Сѓ СЃРѕС…СЂР°РЅРµРЅРёСЏ
+        slot.slotName = $"Slot {slotIndex + 1}"; // РЎР±СЂР°СЃС‹РІР°РµРј РЅР°Р·РІР°РЅРёРµ СЃР»РѕС‚Р°
 
         SaveSlotsToFile();
         Debug.Log($"Slot {slotIndex + 1} was cleared.");
     }
 
+
+
+    ///
+    public void SaveCurrentState(
+     int episodeId, int sceneId, int dialogueId, int textCounter, bool episodeNameShowed,
+     Dictionary<string, bool> flags, string leftCharacter, string rightCharacter)
+    {
+        UpdateSceneState(episodeId.ToString(), sceneId.ToString(), dialogueId.ToString(), textCounter, episodeNameShowed);
+        UpdateFlags(flags);
+        SaveCharacterNames(leftCharacter, rightCharacter);
+        
+    }
    
 
-    #region Управление состоянием
+
+    #region РЈРїСЂР°РІР»РµРЅРёРµ СЃРѕСЃС‚РѕСЏРЅРёРµРј
 
     public void UpdateSceneState(string episode, string scene, string dialogue, int textIndex, bool episodeNameShowed)
     {
         if (string.IsNullOrEmpty(scene) || string.IsNullOrEmpty(dialogue))
         {
-            Debug.LogWarning("Попытка обновить состояние с пустыми значениями.");
+            Debug.LogWarning("РџРѕРїС‹С‚РєР° РѕР±РЅРѕРІРёС‚СЊ СЃРѕСЃС‚РѕСЏРЅРёРµ СЃ РїСѓСЃС‚С‹РјРё Р·РЅР°С‡РµРЅРёСЏРјРё.");
             return;
         }
         currentState.currentEpisode = episode;
@@ -393,7 +407,7 @@ public class GameStateManager : MonoBehaviour
         currentState.textCounter = textIndex;
         currentState.episodeNameShowed = episodeNameShowed;
 
-        Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe=");
+        Debug.Log($"РЎРѕС…СЂР°РЅРµРЅРѕ СЃРѕСЃС‚РѕСЏРЅРёРµ: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe=");
     }
 
     private GameState currentState;
@@ -404,7 +418,7 @@ public class GameStateManager : MonoBehaviour
 
     #endregion
 
-    #region Сохранение и загрузка
+    #region РЎРѕС…СЂР°РЅРµРЅРёРµ Рё Р·Р°РіСЂСѓР·РєР°
 
 
     public (int, int) LoadAppearance()
@@ -431,20 +445,27 @@ public class GameStateManager : MonoBehaviour
     {
         currentState.hairIndex = hairIndex;
         currentState.clothesIndex = clothesIndex;
-        Debug.Log($"AppearanceSaved: Волосы={hairIndex}, Одежда={clothesIndex}");
+        Debug.Log($"AppearanceSaved: Р’РѕР»РѕСЃС‹={hairIndex}, РћРґРµР¶РґР°={clothesIndex}");
     }
 
     public void SaveCharacterNames(string leftCharacter, string rightCharacter)
     {
         currentState.leftCharacterName = leftCharacter;
         currentState.rightCharacterName = rightCharacter;
-        Debug.Log($"Names Saved: Левый = {leftCharacter}, Правый = {rightCharacter}");
+        Debug.Log($"Names Saved: Р›РµРІС‹Р№ = {leftCharacter}, РџСЂР°РІС‹Р№ = {rightCharacter}");
     }
 
     public void SaveBackground(string backgroundName)
     {
         currentState.currentBackgroundName = backgroundName;
-        Debug.Log($"Фон сохранён: {backgroundName}");
+        Debug.Log($"Р¤РѕРЅ СЃРѕС…СЂР°РЅС‘РЅ: {backgroundName}");
+
+        int selectedSlotIndex = GetSelectedSlotIndex();
+        if (selectedSlotIndex != -1)
+        {
+            SaveGameToSlot(selectedSlotIndex);
+           
+        }
     }
 
     public string LoadBackground()
@@ -452,16 +473,19 @@ public class GameStateManager : MonoBehaviour
         return currentState.currentBackgroundName;
     }
 
-    ///animation
-
+    public string LoadSceneID()
+    {
+        return currentState.currentScene;
+    }
 
 
     public void SaveBackgroundAnimation(string animationName, float frameDelay, int repeatCount, bool keepLastFrame)
-    {   
+    {
         currentState.currentBackgroundAnimation = animationName;
         currentState.animationFrameDelay = frameDelay;
         currentState.animationRepeatCount = repeatCount;
         currentState.animationKeepLastFrame = keepLastFrame;
+        
 
         Debug.Log($"Background Animation Saved: {animationName}");
     }
@@ -472,20 +496,33 @@ public class GameStateManager : MonoBehaviour
         currentState.foregroundFrameDelay = frameDelay;
         currentState.foregroundRepeatCount = repeatCount;
         currentState.foregroundKeepLastFrame = keepLastFrame;
+        
 
         Debug.Log($"Foreground Animation Saved: {animationName}");
     }
 
 
+
     public void ClearBackgroundAnimation()
     {
+        //Debug.LogError($" ClearBackgroundAnimation() РІС‹Р·РІР°РЅ! РўРµРєСѓС‰РёР№ С„РѕРЅ РїРµСЂРµРґ РѕС‡РёСЃС‚РєРѕР№: {currentState.currentBackgroundName}");
+
         currentState.currentBackgroundAnimation = null;
         currentState.animationFrameDelay = 0f;
         currentState.animationRepeatCount = 0;
         currentState.animationKeepLastFrame = false;
+        
 
         Debug.Log("Background animation data cleared from save.");
+
+        int selectedSlotIndex = GetSelectedSlotIndex();
+        if (selectedSlotIndex != -1)
+        {
+            SaveGameToSlot(selectedSlotIndex);
+            Debug.Log($"Background animation data removed from slot {selectedSlotIndex + 1}.");
+        }
     }
+
 
     public void ClearForegroundAnimation()
     {
@@ -495,7 +532,16 @@ public class GameStateManager : MonoBehaviour
         currentState.foregroundKeepLastFrame = false;
 
         Debug.Log("Foreground animation data cleared from save.");
+
+        // РџСЂРёРЅСѓРґРёС‚РµР»СЊРЅРѕ СЃРѕС…СЂР°РЅСЏРµРј СЃРѕСЃС‚РѕСЏРЅРёРµ РїРѕСЃР»Рµ РѕС‡РёСЃС‚РєРё
+        int selectedSlotIndex = GetSelectedSlotIndex();
+        if (selectedSlotIndex != -1)
+        {
+            SaveGameToSlot(selectedSlotIndex);
+            Debug.Log($"Foreground animation data removed from slot {selectedSlotIndex + 1}.");
+        }
     }
+
 
     public (string, float, int, bool) LoadBackgroundAnimation()
     {
@@ -504,6 +550,8 @@ public class GameStateManager : MonoBehaviour
             currentState.animationFrameDelay,
             currentState.animationRepeatCount,
             currentState.animationKeepLastFrame
+
+
         );
     }
 
@@ -514,6 +562,7 @@ public class GameStateManager : MonoBehaviour
             currentState.foregroundFrameDelay,
             currentState.foregroundRepeatCount,
             currentState.foregroundKeepLastFrame
+            
         );
     }
 
@@ -521,7 +570,7 @@ public class GameStateManager : MonoBehaviour
 
     public void SavePlayingTracks()
     {
-        // Проверяем текущую сцену и исключаем WardrobeScene и MainMenu
+        // РџСЂРѕРІРµСЂСЏРµРј С‚РµРєСѓС‰СѓСЋ СЃС†РµРЅСѓ Рё РёСЃРєР»СЋС‡Р°РµРј WardrobeScene Рё MainMenu
         string currentSceneName = SceneManager.GetActiveScene().name;
         if (currentSceneName == "WardrobeScene" || currentSceneName == "MainMenu")
         {
@@ -530,7 +579,7 @@ public class GameStateManager : MonoBehaviour
         }
 
         currentState.playingTracks = GetPlayingTracks();
-        Debug.Log("Сохранены текущие треки: " + string.Join(", ", currentState.playingTracks));
+        Debug.Log("РЎРѕС…СЂР°РЅРµРЅС‹ С‚РµРєСѓС‰РёРµ С‚СЂРµРєРё: " + string.Join(", ", currentState.playingTracks));
     }
 
     public List<string> GetPlayingTracks()
@@ -548,7 +597,7 @@ public class GameStateManager : MonoBehaviour
                 SoundManager.Instance.PlaySoundByName(track);
             }
         }
-        Debug.Log("Загружены треки: " + string.Join(", ", currentState.playingTracks));
+        Debug.Log("Р—Р°РіСЂСѓР¶РµРЅС‹ С‚СЂРµРєРё: " + string.Join(", ", currentState.playingTracks));
     }
 
 
@@ -588,12 +637,12 @@ public class GameStateManager : MonoBehaviour
 
     public void RemoveAllPlayingTracks()
     {
-        var tracksToRemove = playingTracks.ToList(); // Теперь будет работать корректно
+        var tracksToRemove = playingTracks.ToList(); // РўРµРїРµСЂСЊ Р±СѓРґРµС‚ СЂР°Р±РѕС‚Р°С‚СЊ РєРѕСЂСЂРµРєС‚РЅРѕ
 
         foreach (var trackName in tracksToRemove)
         {
-            SoundManager.Instance.StopSoundByName(trackName); // Остановка звука
-            playingTracks.Remove(trackName);                  // Удаление из списка
+            SoundManager.Instance.StopSoundByName(trackName); // РћСЃС‚Р°РЅРѕРІРєР° Р·РІСѓРєР°
+            playingTracks.Remove(trackName);                  // РЈРґР°Р»РµРЅРёРµ РёР· СЃРїРёСЃРєР°
             Debug.Log($"Track '{trackName}' stopped and removed from playing list.");
         }
 
@@ -635,16 +684,16 @@ public class GameStateManager : MonoBehaviour
         if (!currentState.unlockedHairstyles.Contains(nextHairIndex))
         {
             currentState.unlockedHairstyles.Add(nextHairIndex);
-            Debug.Log($"Открыта новая прическа: {nextHairIndex}");
+            Debug.Log($"РћС‚РєСЂС‹С‚Р° РЅРѕРІР°СЏ РїСЂРёС‡РµСЃРєР°: {nextHairIndex}");
         }
 
         if (!currentState.unlockedClothes.Contains(nextClothesIndex))
         {
             currentState.unlockedClothes.Add(nextClothesIndex);
-            Debug.Log($"Открыта новая одежда: {nextClothesIndex}");
+            Debug.Log($"РћС‚РєСЂС‹С‚Р° РЅРѕРІР°СЏ РѕРґРµР¶РґР°: {nextClothesIndex}");
         }
 
-        //SaveGameToSlot(GetSelectedSlotIndex()); // Сохраняем прогресс только в выбранный слот
+        //SaveGameToSlot(GetSelectedSlotIndex()); // РЎРѕС…СЂР°РЅСЏРµРј РїСЂРѕРіСЂРµСЃСЃ С‚РѕР»СЊРєРѕ РІ РІС‹Р±СЂР°РЅРЅС‹Р№ СЃР»РѕС‚
 
     }
 

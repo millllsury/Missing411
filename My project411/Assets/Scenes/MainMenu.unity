@@ -2171,6 +2171,8 @@ MonoBehaviour:
     keys: 0
     unlockedHairstyles: 0000000001000000
     unlockedClothes: 0000000001000000
+  isNewGame: 0
+  rewritingGame: 0
 --- !u!4 &544834166
 Transform:
   m_ObjectHideFlags: 0
@@ -9159,12 +9161,47 @@ MonoBehaviour:
   - name: Alice_body-fall
     clip: {fileID: 8300000, guid: f03d6beb87de4a0439186e50f876516e, type: 3}
     loop: 0
-    category: 1
+    category: 2
     source: {fileID: 0}
   - name: birds
     clip: {fileID: 8300000, guid: 00e0301dbae9b2743a46d60d9692d45c, type: 3}
     loop: 0
-    category: 1
+    category: 2
+    source: {fileID: 0}
+  - name: StartStorm
+    clip: {fileID: 8300000, guid: bdbdf176597c4f7468773c19a62b0753, type: 3}
+    loop: 1
+    category: 3
+    source: {fileID: 0}
+  - name: StartStorm2
+    clip: {fileID: 8300000, guid: e287b015b265fc149abf654b6fb93538, type: 3}
+    loop: 1
+    category: 3
+    source: {fileID: 0}
+  - name: StartStorm3
+    clip: {fileID: 8300000, guid: e63bc58833bf2fe489384bdd8fd8d26e, type: 3}
+    loop: 1
+    category: 3
+    source: {fileID: 0}
+  - name: Alice_Scream
+    clip: {fileID: 8300000, guid: c7f1190cdfb8c3548beb266255717218, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: monsters
+    clip: {fileID: 8300000, guid: c6b475ecb4ff4ef4da34adb9691c0048, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: monsterGrowl
+    clip: {fileID: 8300000, guid: 679534e9d9a9d4a4989213ef3647da49, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: earthShaking
+    clip: {fileID: 8300000, guid: 98df078b5d752c24fb0c608a9de211bf, type: 3}
+    loop: 0
+    category: 2
     source: {fileID: 0}
 --- !u!82 &1772688850
 AudioSource:

@@ -7,7 +7,8 @@ public class Choice
     public string text;
     public List<Action> actions;
     public int cost; 
-    public int reward; 
+    public int reward;
+    public string buttonID;  // Если кнопка есть в сцене
 }
 
 [System.Serializable]
@@ -56,6 +57,8 @@ public class Dialogue
 
     public bool unlockNewItem;
     public int reward;
+
+    public bool smoothDisappear;
 }
 
 [System.Serializable]

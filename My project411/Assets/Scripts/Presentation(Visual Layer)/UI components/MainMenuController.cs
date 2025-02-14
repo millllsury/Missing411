@@ -28,8 +28,8 @@ public class MainMenuController : MonoBehaviour
 
     private FeedbackManager feedbackManager;
 
-    public bool isNewGame = false; // Флаг, указывающий, была ли начата новая игра
-
+    //public bool isNewGame = false; // Флаг, указывающий, была ли начата новая игра
+    
 
     private void Start()
     {
@@ -105,10 +105,12 @@ public class MainMenuController : MonoBehaviour
         {
             Debug.LogWarning("Все слоты заняты. Перезаписываем Слот 1.");
             emptySlotIndex = 0; // Перезаписываем первый слот
+            GameStateManager.Instance.rewritingGame = true;
         }
         else
         {
             GameStateManager.Instance.isNewGame = true;
+            
         }
 
         // Инициализируем новый прогресс игры
@@ -124,7 +126,7 @@ public class MainMenuController : MonoBehaviour
             hairIndex = 0,
             clothesIndex = 0,
             episodeNameShowed = false,
-
+            keys = 5,
              // **Очищаем unlockedHairstyles и unlockedClothes**
             unlockedHairstyles = new List<int> { 0, 1 },
             unlockedClothes = new List<int> { 0, 1 }

@@ -344,6 +344,7 @@ MonoBehaviour:
   - {fileID: 8515488412805686252, guid: 940f6d0c91163a24489ddff568806aa2, type: 3}
   hairButton: {fileID: 2082387215}
   clothesButton: {fileID: 1518607492}
+  characterManager: {fileID: 1657282980}
   eyesImage: {fileID: 852178278}
 --- !u!1 &196307503
 GameObject:
@@ -452,9 +453,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   backgroundImage: {fileID: 0}
   darkOverlay: {fileID: 0}
+  animationFrameDelay: 3
+  animationRepeatCount: -1
+  backgroundLastFrame: {fileID: 0}
+  foregroundFrameDelay: 3
+  foregroundRepeatCount: -1
   animationFrame: {fileID: 196307505}
-  frameDelay: 3
-  repeatCount: -1
   characterManager: {fileID: 0}
   uiElements: {fileID: 0}
   charactersParent: {fileID: 0}
@@ -2623,6 +2627,8 @@ MonoBehaviour:
   speakerPanelLeft: {fileID: 0}
   speakerPanelCenter: {fileID: 0}
   speakerPanelRight: {fileID: 0}
+  characterLeft: {fileID: 1657282974}
+  characterRight: {fileID: 0}
   animations: {fileID: 1657282981}
   hairRenderer: {fileID: 1568652507}
   clothesRenderer: {fileID: 869029407}

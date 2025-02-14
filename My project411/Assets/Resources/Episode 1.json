@@ -7,7 +7,6 @@
       "scenes": [
         {
           "sceneId": 1,
-          "background": "background_forest",
           "dialogues": [
             {
               "id": 1,
@@ -90,9 +89,6 @@
               "choices": [
                 {
                   "text": "Keep going.",
-                  "cost": 0,
-                  "reward": 5,
-                  "feedback": "Ты получил 5 ключей!",
                   "actions": [
                     {
                       "key": "keepGoing",
@@ -102,14 +98,10 @@
                 },
                 {
                   "text": "Cheer up brother.",
-                  "cost": 5,
-                  "reward": 0,
                   "actions": [
                     {
                       "key": "cheerUp",
-                      "value": true,
-                      "cost": 5,
-                      "reward": 0
+                      "value": true
                     }
                   ]
                 }
@@ -140,7 +132,6 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
-              "reward": 5,
               "texts": [
                 "Keep up!"
               ]
@@ -373,6 +364,7 @@
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
+              "animation": "sad",
               "texts": [
                 "I’ve only been here once. ",
                 "You know, when I first came to this place, I was seized by the feeling of déjà vu. Like I’ve been here dozens of times."
@@ -823,7 +815,6 @@
             {
               "id": 64,
               "isNarration": true,
-              "soundTrigger":"effect:echo",
               "texts": [
                 "Suddenly time slowed and her ears hissed as if Alice had been placed deep underwater. ",
                 "Losing her concentration, she stumbled over a large rock and flew downward, anticipating her face meeting the ground painfully."
@@ -832,7 +823,6 @@
             {
               "id": 65,
               "isNarration": true,
-              "background": "fall9",
               "texts": [
                 "Her eyes began to darken and her stomach twisted with excitement, as if she were falling into a kilometer-long chasm."
               ]
@@ -841,6 +831,7 @@
               "id": 66,
               "speaker": "Alice",
               "animation": "fall",
+              "background": "fall9",
               "screenRipple": true,
               "character": "Alice",
               "place": 1,
@@ -851,6 +842,7 @@
             {
               "id": 67,
               "isNarration": true,
+              "soundTrigger": "play:StartStorm",
               "texts": [
                 "She lost consciousness."
               ]
@@ -874,15 +866,23 @@
             {
               "id": 1,
               "isNarration": true,
+              "background": "forest_dark",
+              "smoothBgReplacement": true,
               "texts": [
-                "Consciousness was rapidly returning, flurriedly restoring all her senses.",
-                "Alice struggled to open her eyes, trying to focus her attention on what was happening."
+                "Consciousness was rapidly returning, flurriedly restoring all her senses."
+
               ]
             },
             {
               "id": 2,
+              "isNarration": true,
+              "texts": [
+                "Alice struggled to open her eyes, trying to focus her attention on what was happening."
+              ]
+            },
+            {
+              "id": 3,
               "speaker": "Alice",
-              "soundTrigger": "stop:echo",
               "character": "Alice",
               "place": 1,
               "texts": [
@@ -890,9 +890,7 @@
               ]
             },
             {
-              "id": 3,
-              "background": "forest_dark",
-              "smoothBgReplacement": true,
+              "id": 4,
               "isNarration": true,
               "texts": [
                 "The darkness around her was so thick that she could barely see the silhouette of her own hand raised at face level.",
@@ -901,9 +899,10 @@
               ]
             },
             {
-              "id": 4,
+              "id": 5,
               "speaker": "Alice",
               "character": "Alice",
+              "animation": "eyestothesidebase",
               "place": 1,
               "choices": [
                 {
@@ -927,7 +926,7 @@
               ]
             },
             {
-              "id": 5,
+              "id": 6,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -941,7 +940,7 @@
               ]
             },
             {
-              "id": 6,
+              "id": 7,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -957,7 +956,7 @@
               ]
             },
             {
-              "id": 7,
+              "id": 8,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -971,7 +970,7 @@
               ]
             },
             {
-              "id": 8,
+              "id": 9,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -986,7 +985,7 @@
               ]
             },
             {
-              "id": 9,
+              "id": 10,
               "conditions": [
                 {
                   "key": "rememberWhatHappened",
@@ -999,7 +998,7 @@
               ]
             },
             {
-              "id": 10,
+              "id": 11,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -1025,7 +1024,7 @@
               ]
             },
             {
-              "id": 11,
+              "id": 12,
               "conditions": [
                 {
                   "key": "freeze",
@@ -1040,7 +1039,7 @@
               ]
             },
             {
-              "id": 12,
+              "id": 13,
               "conditions": [
                 {
                   "key": "freeze",
@@ -1055,7 +1054,7 @@
               ]
             },
             {
-              "id": 13,
+              "id": 14,
               "conditions": [
                 {
                   "key": "freeze",
@@ -1070,7 +1069,7 @@
               ]
             },
             {
-              "id": 14,
+              "id": 15,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1083,7 +1082,7 @@
               ]
             },
             {
-              "id": 15,
+              "id": 16,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1098,7 +1097,7 @@
               ]
             },
             {
-              "id": 16,
+              "id": 17,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1111,7 +1110,7 @@
               ]
             },
             {
-              "id": 17,
+              "id": 18,
               "conditions": [
                 {
                   "key": "callBrother",
@@ -1126,20 +1125,11 @@
               ]
             },
             {
-              "id": 18,
+              "id": 19,
               "isNarration": true,
               "texts": [
                 "An unfamiliar male voice suddenly sounded just above her head.",
                 "Without expecting it, the girl jerked to the side and tried to see who was speaking."
-              ]
-            },
-            {
-              "id": 19,
-              "speaker": "Meruem",
-              "character": "Meruem",
-              "place": 2,
-              "texts": [
-                "Hey, don't worry, I'm Meruem."
               ]
             },
             {
@@ -1148,11 +1138,20 @@
               "character": "Meruem",
               "place": 2,
               "texts": [
-                "And welcome. "
+                "Hey, don't worry, I'm Meruem."
               ]
             },
             {
               "id": 21,
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "And welcome. "
+              ]
+            },
+            {
+              "id": 22,
               "isNarration": true,
               "texts": [
                 "Speaking very quietly, the stranger slowly approached the girl.",
@@ -1160,7 +1159,7 @@
               ]
             },
             {
-              "id": 22,
+              "id": 23,
               "speaker": "Alice",
               "character": "Alice",
               "place": 1,
@@ -1169,7 +1168,7 @@
               ]
             },
             {
-              "id": 23,
+              "id": 24,
               "speaker": "Meruem",
               "character": "Meruem",
               "place": 2,
@@ -1178,7 +1177,7 @@
               ]
             },
             {
-              "id": 24,
+              "id": 25,
               "isNarration": true,
               "texts": [
                 "The girl saw that the stranger who had ignored her questions extended his hand to her, but she continued to sit where she was, afraid to even move."
@@ -1432,6 +1431,280 @@
               "place": 2,
               "texts": [
                 "Go to the house. I’ll try to get back as soon as possible."
+              ]
+            },
+            {
+              "id": 40,
+              "conditions": [
+                {
+                  "key": "whoareYou",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "The point is that you have come to the Underworld. I am here as a sort of guide. The rest you will find out after. Now go to the house. I’ll try to get back as soon as possible."
+              ]
+            },
+            {
+              "id": 41,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "Who are you and how did you find me?",
+                "What about my brother?",
+                "Did he send you to find me?",
+                "But then why don't you know my name?  What's going on?"
+              ]
+            },
+            {
+              "id": 42,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "soundTrigger": "play:StartStorm3",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Your brother isn't here. And I'm sorry to disappoint you, but no one will ever find you again."
+              ]
+            },
+            {
+              "id": 43,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "These words put the girl on a panic. She did not understand how much to believe a man, but even more did not understand what to do.",
+                "Alice took a deep breath, trying to calm herself down and make some decision.",
+                "The girl didn’t realize that while she was sitting there, something changed in the environment. The air, which the girl already lacked, seemed to grow even thicker."
+              ]
+            },
+            {
+              "id": 44,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "soundTrigger": "play:earthShaking",
+              "texts": [
+                "Birds were howling nearby, soaring into the sky. A terrible toot and heartbreaking howls were heard. It seemed that the whole forest began to come alive and filled with movement."
+              ]
+            },
+            {
+              "id": 45,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "What's going on?"
+              ]
+            },
+            {
+              "id": 46,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "soundTrigger": "play:monsters",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "It's starting. We must get out of here as fast as we can."
+              ]
+            },
+            {
+              "id": 47,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice looked around for the source of the sound, trying to figure out what was happening."
+              ]
+            },
+            {
+              "id": 48,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "soundTrigger": "play:monsterGrowl",
+              "texts": [
+                "When she looked up to the sky, she was almost frozen with horror.",
+                "The enormous creatures, impossible to see in the darkness, were circling in the sky, making monstrous sounds that sent shivers down her spine and aroused Alice's animal fear.",
+                "She felt the deadly danger in her gut. A sense of unreality gripped her. It seemed to Alice that her own body-her sight and hearing-was deceiving her. Alice thought again whether the blow to her head could have had such consequences."
+              ]
+            },
+            {
+              "id": 49,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "soundTrigger": "play:Alice_Scream",
+              "texts": [
+                "In an instant, one of the creatures separated from the others and headed towards Alice and Meruem with all speed."
+              ]
+            },
+            {
+              "id": 50,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "Run if you don't want to stay in this clearing forever. Because I want to survive this night."
+              ]
+            },
+            {
+              "id": 51,
+              "conditions": [
+                {
+                  "key": "keepAsking",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "choices": [
+                {
+                  "text": "Throw a stone at the creature.",
+                  "actions": [
+                    {
+                      "key": "throwStone",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Run after Meruem.",
+                  "actions": [
+                    {
+                      "key": "runAfterMeruem",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 52,
+              "conditions": [
+                {
+                  "key": "throwStone",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "As the unknown creature went downstairs, Alice picked up a stone that lay at her feet and trying to stop the trembling in her hands, threw it at the monster.",
+                "Alice hit something that looked like a beak. The sound of a knock came and the stone bounced away.",
+                "The monster bird shouted loudly right in the face of the girl and Alice saw two rows of sharp fangs hiding in its beak."
+              ]
+            },
+            {
+              "id": 53,
+              "conditions": [
+                {
+                  "key": "runAfterMeruem",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice clearly realized that whoever this Meruem was, the real danger now came only from the creatures that filled the sky above the forest.",
+                "All the emotional turmoil faded into the background. The girl turned and ran after Meruem, taking her eyes off the flying creatures."
+              ]
+            },
+            {
+              "id": 54,
+              "conditions": [
+                {
+                  "key": "runAfterMeruem",
+                  "value": true
+                }
+              ],
+              "speaker": "Alice",
+              "character": "Alice",
+              "place": 1,
+              "texts": [
+                "What the hell was that? What the hell is going on?"
+              ]
+            },
+            {
+              "id": 55,
+              "conditions": [
+                {
+                  "key": "runAfterMeruem",
+                  "value": true
+                }
+              ],
+              "speaker": "Meruem",
+              "character": "Meruem",
+              "place": 2,
+              "texts": [
+                "It's only a couple of minutes from the settlement here, and it's safe. When we get there, I'll tell you all about it."
+              ]
+            },
+            {
+              "id": 56,
+              "conditions": [
+                {
+                  "key": "runAfterMeruem",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Outwardly, Meruem was calm, but his voice betrayed worry.",
+                "Alice tried to shift her unsteady feet as often as she could, but she kept stumbling, struggling to keep her balance. Seeing that the girl was lagging, Meruem grabbed her arm, almost dragging her behind him.",
+                "Soon the outline of a low-lying settlement loomed ahead. The man ran up to the nearest house and practically pushed the girl inside and then ran in too."
               ]
             }
           ]
