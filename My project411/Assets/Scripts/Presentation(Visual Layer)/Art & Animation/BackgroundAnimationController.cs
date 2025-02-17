@@ -36,8 +36,6 @@ public class BackgroundController : MonoBehaviour
     private bool foregroundKeepLastFrame = false;
 
     private string lastStoredFrame = null; // Храним название последнего кадра
-
-
     private bool hasAnimationPlayed = false;
 
     public bool IsTransitioning { get; private set; }
@@ -55,8 +53,8 @@ public class BackgroundController : MonoBehaviour
     [SerializeField] private CanvasGroup uiElements; // CanvasGroup для UI элементов
     [SerializeField] private GameObject charactersParent; // Родительский объект для персонажей
 
-   
-    
+    [SerializeField] private CanvasGroup keysCanvas;
+
     #region Background Management
     public void SetBackgroundSmooth(string backgroundName, bool smoothTransition)
     {
@@ -138,6 +136,11 @@ public class BackgroundController : MonoBehaviour
             uiElements.alpha = isActive ? 1f : 0f;
             uiElements.interactable = isActive;
             uiElements.blocksRaycasts = isActive;
+
+            keysCanvas.alpha = isActive ? 1f : 0f;
+            keysCanvas.interactable = isActive;
+            keysCanvas.blocksRaycasts = isActive;
+
         }
 
          characterManager.StartCoroutine(characterManager.FadeOutCharacters(charactersParent.transform));
@@ -164,6 +167,9 @@ public class BackgroundController : MonoBehaviour
             uiElements.interactable = true;
             uiElements.blocksRaycasts = true;
 
+            keysCanvas.alpha = 1f;
+            keysCanvas.interactable = true;
+            keysCanvas.blocksRaycasts = true;
         }
 
         if (charactersParent != null)
@@ -176,6 +182,13 @@ public class BackgroundController : MonoBehaviour
     public void SetBackground(string backgroundName)
     {
         Sprite bgSprite = Resources.Load<Sprite>("Backgrounds/" + backgroundName);
+
+        if (backgroundName == "fall9")
+        {
+            keysCanvas.alpha = 0f;
+            keysCanvas.interactable = false;
+        }
+
         if (bgSprite != null)
         {
             backgroundImage.sprite = bgSprite; // Устанавливаем спрайт

@@ -75,6 +75,7 @@ public class WardrobeManager : MonoBehaviour
         // Переходим на основную сцену
         string mainSceneName = GameStateManager.Instance.LoadSceneID();
         SoundManager.Instance.StopAllSounds();
+        GameStateManager.Instance.ClearTracksOnSceneChange();
         SceneManager.LoadScene("Scene"+ mainSceneName);
         
         

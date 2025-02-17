@@ -455,6 +455,35 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Names Saved: Левый = {leftCharacter}, Правый = {rightCharacter}");
     }
 
+    //cохранение позиций 
+    private Dictionary<int, Dictionary<string, int>> savedCharacterPositions = new Dictionary<int, Dictionary<string, int>>();
+
+    // Сохранение позиций для текущего слота
+    public void SaveCharacterPositions(int slotIndex, Dictionary<string, int> positions)
+    {
+        if (!savedCharacterPositions.ContainsKey(slotIndex))
+        {
+            savedCharacterPositions[slotIndex] = new Dictionary<string, int>();
+        }
+        savedCharacterPositions[slotIndex] = new Dictionary<string, int>(positions);
+
+        Debug.Log($"[SaveCharacterPositions] Слот {slotIndex}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
+    }
+
+    // Загрузка позиций для текущего слота
+    public Dictionary<string, int> LoadCharacterPositions(int slotIndex)
+    {
+        if (savedCharacterPositions.TryGetValue(slotIndex, out Dictionary<string, int> positions))
+        {
+            Debug.Log($"[LoadCharacterPositions] Загружены позиции для слота {slotIndex}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
+            return new Dictionary<string, int>(positions);
+        }
+
+        Debug.Log($"[LoadCharacterPositions] Нет сохраненных позиций для слота {slotIndex}, создаю пустой словарь.");
+        return new Dictionary<string, int>(); // Если нет данных, возвращаем пустой словарь
+    }
+
+
     public void SaveBackground(string backgroundName)
     {
         currentState.currentBackgroundName = backgroundName;
@@ -649,7 +678,7 @@ public class GameStateManager : MonoBehaviour
         Debug.Log("All tracks have been stopped and removed from the playing list.");
     }
 
-
+    #region keys
     public void SetKeys(int amount)
     {
         currentState.keys = amount;
@@ -675,7 +704,39 @@ public class GameStateManager : MonoBehaviour
         return false;
     }
 
+    private Dictionary<int, HashSet<string>> collectedKeys = new Dictionary<int, HashSet<string>>();
 
+    // Сохранение информации о собранном ключе
+    public void SaveKeyCollected(int slotIndex, string keyID)
+    {
+        if (!collectedKeys.ContainsKey(slotIndex))
+        {
+            collectedKeys[slotIndex] = new HashSet<string>();
+        }
+
+        collectedKeys[slotIndex].Add(keyID);
+        Debug.Log($"[SaveKeyCollected] Ключ {keyID} сохранен в слот {slotIndex}");
+    }
+
+    // Проверка, был ли ключ уже собран
+    public bool IsKeyCollected(int slotIndex, string keyID)
+    {
+        return collectedKeys.ContainsKey(slotIndex) && collectedKeys[slotIndex].Contains(keyID);
+    }
+
+    // Получаем все собранные ключи (для загрузки)
+    public HashSet<string> LoadCollectedKeys(int slotIndex)
+    {
+        if (collectedKeys.TryGetValue(slotIndex, out HashSet<string> keys))
+        {
+            return new HashSet<string>(keys);
+        }
+        return new HashSet<string>();
+    }
+
+    #endregion
+
+    #region Unlock clothes
     public void UnlockNextItem()
     {
         int nextHairIndex = currentState.unlockedHairstyles.Max() + 1;
@@ -697,12 +758,14 @@ public class GameStateManager : MonoBehaviour
 
     }
 
-
-
-
-
     public List<int> GetUnlockedHairstyles() => currentState.unlockedHairstyles;
     public List<int> GetUnlockedClothes() => currentState.unlockedClothes;
+
+
+    #endregion
+
+
+
 
 
     #endregion

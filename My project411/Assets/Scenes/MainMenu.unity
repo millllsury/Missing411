@@ -9106,7 +9106,7 @@ MonoBehaviour:
   - name: rain
     clip: {fileID: 8300000, guid: bac25a66a21350c4b9c75bf79fe4379f, type: 3}
     loop: 1
-    category: 1
+    category: 2
     source: {fileID: 0}
   - name: owl
     clip: {fileID: 8300000, guid: f2eb8fb09461c6543ba2f2ce08b225d6, type: 3}
@@ -9212,7 +9212,7 @@ AudioSource:
   m_GameObject: {fileID: 1772688847}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 715736d21786e6044b8f5f75d7564dff, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0

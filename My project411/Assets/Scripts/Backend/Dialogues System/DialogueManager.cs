@@ -35,7 +35,7 @@ public class DialogueManager : MonoBehaviour
     private int currentDialogueId=1;
     private int textCounter = 0;
 
-    private bool firstTimeSceneSound = false;
+    private bool firstTimeSceneSound;
 
     public bool isChoosing = false;
     public bool isEpisodeScreenActive = false;
@@ -52,10 +52,28 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject choiceButtonCostPrefab;   // Префаб кнопки с ценой
     [SerializeField] private Transform choicesPanel; // Панель, куда добавляются кнопки
 
+
+    private Dictionary<string, int> characterPositions = new Dictionary<string, int>(); // для позиций персонажей
+    private int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+
     void Start()
     {
+
         InitializeComponents();
-        LoadInitialData();        
+        LoadInitialData();
+
+        HashSet<string> collectedKeys = GameStateManager.Instance.LoadCollectedKeys(selectedSlotIndex);
+
+        foreach (Button keyButton in FindObjectsByType<Button>(FindObjectsSortMode.None))
+        {
+            string keyID = keyButton.gameObject.name; // Используем имя объекта как уникальный ID ключа
+
+            if (collectedKeys.Contains(keyID))
+            {
+                keyButton.gameObject.SetActive(false);
+                Debug.Log($"[Start] Ключ {keyID} уже собран в слоте {selectedSlotIndex}, скрываем объект.");
+            }
+        }
     }
 
     private void InitializeComponents()
@@ -140,8 +158,7 @@ public class DialogueManager : MonoBehaviour
 
     public void LoadScene(int sceneId)
     {
-        
-
+        firstTimeSceneSound = true;
         currentScene = currentEpisode.scenes.Find(scene => scene.sceneId == sceneId);
         if (currentScene == null)
         {
@@ -208,7 +225,6 @@ public class DialogueManager : MonoBehaviour
             Debug.LogWarning($"Диалог с ID {startingDialogueId} не найден.");
         }
 
-        HandleScreenRippleEffect(dialogue);
     }
 
     public void ShowNextDialogueText()
@@ -239,7 +255,7 @@ public class DialogueManager : MonoBehaviour
         // Проверка, была ли уже проиграна анимация
         if (!string.IsNullOrEmpty(dialogue.animation) && !dialogue.isAnimationPlayed)
         {
-            animations.PlayAnimation(GetCharacterPosition(dialogue.place), dialogue.animation, dialogue.character);
+            animations.PlayAnimation(GetCharacterPosition(dialogue.character, dialogue.place), dialogue.animation, dialogue.character);
 
             Debug.Log($"HandleDialogueAnimation вызван с animationName: {dialogue.animation}");
 
@@ -272,17 +288,62 @@ public class DialogueManager : MonoBehaviour
         backgroundController.StartBackgroundAnimation(dialogue.backgroundAnimation, frameDelay, repeatCount, keepLastFrame, soundName, animationType);
     }
 
-
+    
     private Dialogue GetCurrentDialogue()
     {
-        return currentScene.dialogues.FirstOrDefault(d => d.id == currentDialogueId);
+        var dialogue = currentScene.dialogues.FirstOrDefault(Dialogue => Dialogue.id == currentDialogueId);
+
+        if (dialogue != null)
+        {
+            // Если это нарративный текст, place не нужен
+            if (dialogue.isNarration)
+            {
+                dialogue.isNarration = true;
+            }
+            else if (!string.IsNullOrEmpty(dialogue.character))
+            {
+                // Если персонаж уже был в сцене, берем последнее запомненное место
+                if (characterPositions.TryGetValue(dialogue.character, out int lastPlace))
+                {
+                    dialogue.place = lastPlace;
+                }
+                else
+                {
+                    // Если персонаж новый, ставим слева (1) по умолчанию и сохраняем
+                    dialogue.place = characterPositions.Count == 0 ? 1 : 2;
+                    characterPositions[dialogue.character] = dialogue.place;
+                    
+                    GameStateManager.Instance.SaveCharacterPositions(selectedSlotIndex, characterPositions);
+                    //Debug.Log($"SaveCharacterPositions/ Character: {dialogue.character}, Place: {dialogue.place}");
+                }
+            }
+            else
+            {
+                Debug.LogWarning($"Dialogue {dialogue.id} has no character and is not narration.");
+            }
+
+            // **Гарантируем, что speaker устанавливается всегда**
+            if (string.IsNullOrEmpty(dialogue.speaker) && !string.IsNullOrEmpty(dialogue.character))
+            {
+                dialogue.speaker = dialogue.character; // Устанавливаем speaker как имя персонажа
+            }
+        }
+
+        return dialogue;
     }
 
-
-    private string GetCharacterPosition(int place)
+    private string GetCharacterPosition(string character, int place)
     {
+        // Если персонаж уже был, берем его последнюю позицию из characterPositions
+        if (!string.IsNullOrEmpty(character) && characterPositions.TryGetValue(character, out int lastPlace))
+        {
+            return lastPlace == 1 ? "left" : "right";
+        }
+
+        // Если персонажа нет в словаре, используем переданное значение place
         return place == 1 ? "left" : "right";
     }
+
 
     bool goBackButtonActivated = false;
 
@@ -481,8 +542,6 @@ public class DialogueManager : MonoBehaviour
         //GameStateManager.Instance.SaveBackground(null);
         GameStateManager.Instance.ClearBackgroundAnimation();
         GameStateManager.Instance.ClearForegroundAnimation();
-
-        int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
         GameStateManager.Instance.SaveGameToSlot(selectedSlotIndex);
 
         Debug.Log($"Сохранено состояние для перехода. Scene={nextScene.sceneId}, Dialogue=0, TextCounter=0");
@@ -721,7 +780,6 @@ public class DialogueManager : MonoBehaviour
 
     public void SaveProgress()
     {
-        int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
         if (selectedSlotIndex == -1)
         {
             Debug.LogError("No save slot selected. Saving is not possible.");
@@ -810,6 +868,9 @@ public class DialogueManager : MonoBehaviour
         LoadScene(int.Parse(loadedState.currentScene));
         InitializeDialogue(int.Parse(loadedState.currentDialogue), loadedState.textCounter);
         Debug.Log($"Диалог: {loadedState.currentDialogue}");
+
+        characterPositions = GameStateManager.Instance.LoadCharacterPositions(selectedSlotIndex);
+
         // Recover other data such as background, characters and flags
         if (!GameStateManager.Instance.isNewGame || !GameStateManager.Instance.rewritingGame)
         {
@@ -857,11 +918,28 @@ public class DialogueManager : MonoBehaviour
 
     public void GotKeyReward(Button button)
     {
-        
+
+        string keyID = button.gameObject.name;
+
+        // Checking if the key has already been got
+        if (GameStateManager.Instance.IsKeyCollected(selectedSlotIndex, keyID))
+        {
+            Debug.Log($"[GotKeyReward] Ключ {keyID} уже собран, пропускаем.");
+            if (button != null)
+            {
+                button.gameObject.SetActive(false);
+            }
+            return;
+        }
+
+        // Add the key to the saved ones
+        GameStateManager.Instance.SaveKeyCollected(selectedSlotIndex, keyID);
+
+        // We are giving out a reward
         CurrencyManager.Instance.AddKeys(1);
         feedbackManager.ShowMessage("You've found a key!");
 
-        
+        // Torn off the btn
         if (button != null)
         {
             button.gameObject.SetActive(false);
@@ -871,6 +949,7 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError("Error in GotKeyReward!");
         }
     }
+
 
 
 }
@@ -883,17 +962,17 @@ public static class ButtonExtensions
     {
         button.gameObject.SetActive(true);
 
-        // Находим элементы UI внутри кнопки
+        // Find UI elements inside the button
         TextMeshProUGUI buttonText = button.GetComponentInChildren<TextMeshProUGUI>();
         Transform costContainer = button.transform.Find("CostContainer");
         TextMeshProUGUI costText = costContainer?.Find("CostText")?.GetComponent<TextMeshProUGUI>();
         Image keyIcon = costContainer?.Find("KeyIcon")?.GetComponent<Image>();
 
-        // Устанавливаем основной текст кнопки
+        // Set the main text of the button
         if (buttonText != null)
             buttonText.text = choice.text;
 
-        // Если выбор стоит ключей, показываем стоимость и иконку
+        // If the choice is worth the keys, we show the cost and the iconу
         if (choice.cost > 0)
         {
             if (costText != null)
@@ -912,7 +991,7 @@ public static class ButtonExtensions
             if (keyIcon != null) keyIcon.gameObject.SetActive(false);
         }
 
-        // Убираем старые события и добавляем новый обработчик клика
+        // Remove old events and add a new click handler
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => onClick(choice));
     }

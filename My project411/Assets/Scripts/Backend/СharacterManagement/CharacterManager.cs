@@ -311,6 +311,10 @@ public class CharacterManager : MonoBehaviour
 
     public void SmoothDisappearCharacter(bool smoothDisappear, int place)
     {
+        if (smoothDisappear)
+        {
+
+        }
         if (place == 1)
         {
             avatarToBeHidden = leftAvatar;

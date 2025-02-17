@@ -9,10 +9,21 @@ public class FeedbackManager : MonoBehaviour
     [SerializeField] private CanvasGroup feedbackPanel; // Панель, которая будет анимироваться
     [SerializeField] private float displayTime = 3f; // Время показа
     [SerializeField] private float fadeSpeed = 1f; // Скорость исчезновения
-
+    public static FeedbackManager Instance { get; private set; }
     private Queue<string> messageQueue = new Queue<string>(); // Очередь уведомлений
     private bool isDisplaying = false;
 
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public void ShowMessage(string message)
     {
         messageQueue.Enqueue(message);
