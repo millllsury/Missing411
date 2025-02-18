@@ -8,8 +8,8 @@ public class ButtonMover : MonoBehaviour
 
     private Dictionary<Transform, Vector3> initialPositions = new Dictionary<Transform, Vector3>(); // Запоминаем исходные позиции кнопок
     private Dictionary<Transform, bool> buttonStates = new Dictionary<Transform, bool>(); // Хранит состояния кнопок (сдвинута/нет)
-    private float moveDistance = 50f; // Насколько двигаем кнопку влево
-    private float moveSpeed = 0.2f; // Скорость движения
+    [SerializeField] private float moveDistance = 50f; // Насколько двигаем кнопку влево
+    [SerializeField] private float moveSpeed = 0.2f; // Скорость движения
 
     private void Start()
     {

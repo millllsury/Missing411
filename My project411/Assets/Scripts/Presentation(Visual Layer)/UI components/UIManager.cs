@@ -28,19 +28,7 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        // Инициализация episodeImage
-        if (episodeNamePanel != null)
-        {
-            episodeImage = episodeNamePanel.GetComponent<Image>();
-            if (episodeImage == null)
-            {
-                Debug.LogError("Компонент Image не найден на episodeNamePanel.");
-            }
-        }
-        else
-        {
-            Debug.LogError("episodeNamePanel не назначена в инспекторе.");
-        }
+        
     }
 
 

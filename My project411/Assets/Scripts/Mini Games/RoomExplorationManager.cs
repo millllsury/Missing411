@@ -30,10 +30,10 @@ public class RoomExplorationManager : MonoBehaviour
         FeedbackManager.Instance.ShowMessage("Look around the room!");
         keyObject1.gameObject.SetActive(false);
         keyObject2.gameObject.SetActive(false);
-        bgSprite.sprite = Resources.Load<Sprite>("Backgrounds/houseMainRoomNight");
+        bgSprite.sprite = Resources.Load<Sprite>("Backgrounds/MainRoom/houseMainRoomNight");
         interactableObjectsContainer.SetActive(false); // Скрываем предметы в тёмной комнате
         arrowHint.SetActive(false); // Скрываем стрелку изначально
-        Invoke(nameof(ShowArrowHint), 2f); // Показываем через 2 секунды
+        Invoke(nameof(ShowArrowHint), 1f); // Показываем через 2 секунды
     }
 
   
@@ -58,7 +58,7 @@ public class RoomExplorationManager : MonoBehaviour
         if (!isRoomLit)
         {
             isRoomLit = true;
-            bgSprite.sprite = Resources.Load<Sprite>("Backgrounds/houseMainRoom");
+            bgSprite.sprite = Resources.Load<Sprite>("Backgrounds/MainRoom/houseMainRoom");
             interactableObjectsContainer.SetActive(true); // Делаем предметы доступными
             candle.gameObject.SetActive(false);
             keyObject1.gameObject.SetActive(true);

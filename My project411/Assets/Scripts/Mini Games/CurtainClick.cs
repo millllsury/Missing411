@@ -11,6 +11,7 @@ public class CurtainClick : MonoBehaviour
     [SerializeField] private float fadeDuration = 0.2f; // Длительность появления
     [SerializeField] private float curtainCloseDelay = 2f; // Задержка перед закрытием занавесок
     [SerializeField] private Animator wolfnAnimator;
+    [SerializeField] private Button closeWindow;
 
     public bool scenePlayed = false;
     public void CurtainOnClick()
@@ -48,8 +49,14 @@ public class CurtainClick : MonoBehaviour
         yield return StartCoroutine(FadeOutImage(wolfImage));
         scenePlayed = true;
         curtainClosedImage.gameObject.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
+        closeWindow.gameObject.SetActive(true);
     }
 
+    public void CloseWindow()
+    {
+        windowCanvas.gameObject.SetActive(false);
+    }
 
     private IEnumerator FadeCanvas(CanvasGroup canvas, float startAlpha, float endAlpha, float duration)
     {
