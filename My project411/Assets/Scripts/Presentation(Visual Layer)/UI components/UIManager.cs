@@ -59,13 +59,7 @@ public class UIManager : MonoBehaviour
         {
             episodeImage.sprite = backgroundImage; // Устанавливаем изображение фона
         }
-        else
-        {
-            if (episodeImage == null)
-                Debug.LogError("Компонент Image отсутствует на episodeNamePanel.");
-            if (backgroundImage == null)
-                Debug.LogError("Передан пустой фон для эпизода.");
-        }
+       
 
         StartCoroutine(ShowTextWithTypingEffect(episodeName, 0.1f));
     }

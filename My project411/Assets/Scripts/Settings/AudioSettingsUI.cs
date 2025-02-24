@@ -11,11 +11,10 @@ public class AudioSettingsUI : MonoBehaviour
     [SerializeField] private Slider backgroundMusicVolumeSlider;
     [SerializeField] private Slider uisoundSlider;
 
-    [SerializeField]  private FeedbackManager feedbackManager;
 
     private void Start()
     {
-        feedbackManager = FindFirstObjectByType<FeedbackManager>();
+        
         if (SoundManager.Instance == null)
         {
            
@@ -116,7 +115,7 @@ public class AudioSettingsUI : MonoBehaviour
         uisoundSlider.SetValueWithoutNotify(GameStateManager.Instance.uiVolume);
         GameStateManager.Instance.SaveGlobalSettings();
         SoundManager.Instance.UpdateAllVolumes();
-        feedbackManager.ShowMessage("Audio settings are reset to default values.");
+        FeedbackManager.Instance.ShowMessage("Audio settings are reset to default values.");
         Debug.Log("Audio settings are reset to default values.");
     }
 }

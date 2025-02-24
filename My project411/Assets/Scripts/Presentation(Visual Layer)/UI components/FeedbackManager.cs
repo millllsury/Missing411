@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FeedbackManager : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI feedbackText; // Поле для отображения текста
-    [SerializeField] private CanvasGroup feedbackPanel; // Панель, которая будет анимироваться
-    [SerializeField] private float displayTime = 3f; // Время показа
-    [SerializeField] private float fadeSpeed = 1f; // Скорость исчезновения
+    [SerializeField] private TextMeshProUGUI feedbackText;
+    [SerializeField] private CanvasGroup feedbackPanel;
+    [SerializeField] private float displayTime = 3f;
+    [SerializeField] private float fadeSpeed = 1f;
     public static FeedbackManager Instance { get; private set; }
-    private Queue<string> messageQueue = new Queue<string>(); // Очередь уведомлений
+
+    private Queue<string> messageQueue = new Queue<string>();
     private bool isDisplaying = false;
 
     private void Awake()
@@ -18,14 +20,35 @@ public class FeedbackManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += ClearMessagesOnSceneChange;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= ClearMessagesOnSceneChange;
+    }
+
+    private void ClearMessagesOnSceneChange(Scene scene, LoadSceneMode mode)
+    {
+        messageQueue.Clear();
+        feedbackText.text = "";
+        feedbackPanel.alpha = 0f;
+    }
+
     public void ShowMessage(string message)
     {
+        if (string.IsNullOrWhiteSpace(message)) return;
+
         messageQueue.Enqueue(message);
 
         if (!isDisplaying)
@@ -44,7 +67,6 @@ public class FeedbackManager : MonoBehaviour
             feedbackPanel.alpha = 1f;
             yield return new WaitForSeconds(displayTime);
 
-            // Анимация исчезновения
             while (feedbackPanel.alpha > 0)
             {
                 feedbackPanel.alpha -= Time.deltaTime * fadeSpeed;

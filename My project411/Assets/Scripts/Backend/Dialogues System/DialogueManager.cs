@@ -26,7 +26,6 @@ public class DialogueManager : MonoBehaviour
     private BackgroundController backgroundController;
     private CharacterManager characterManager;
     private GameFlagsManager flagsManager;
-    private FeedbackManager feedbackManager;
 
     private VisualNovelData visualNovelData;
     private Episode currentEpisode;
@@ -82,7 +81,6 @@ public class DialogueManager : MonoBehaviour
         backgroundController = FindComponent<BackgroundController>("BackgroundController");
         characterManager = FindComponent<CharacterManager>("CharacterManager");
         flagsManager = FindComponent<GameFlagsManager>("FlagsManager");
-        feedbackManager = FindComponent<FeedbackManager>("FeedbackManager");
         if (UIManager == null)
         {
             Debug.LogError("Не удалось найти UIManager.");
@@ -395,21 +393,21 @@ public class DialogueManager : MonoBehaviour
                 // Показываем Feedback перед завершением диалога
                 if (!string.IsNullOrEmpty(dialogue.feedback))
                 {
-                    feedbackManager.ShowMessage(dialogue.feedback);
+                    FeedbackManager.Instance.ShowMessage(dialogue.feedback);
                 }
 
                 if (dialogue.unlockNewItem)
                 {
                         GameStateManager.Instance.UnlockNextItem();
-                      
-                        feedbackManager.ShowMessage("Ты открыл новый наряд и прическу!");
+
+                    FeedbackManager.Instance.ShowMessage("Ты открыл новый наряд и прическу!");
                     
                 }
 
                 if (dialogue.reward > 0)
                 {
                     CurrencyManager.Instance.AddKeys(dialogue.reward);
-                    feedbackManager.ShowMessage($"You've received {dialogue.reward} keys!");
+                    FeedbackManager.Instance.ShowMessage($"You've received {dialogue.reward} keys!");
                 }
 
 
@@ -746,7 +744,7 @@ public class DialogueManager : MonoBehaviour
             if (!CurrencyManager.Instance.SpendKeys(choice.cost))
             {
                 //Debug.Log("Not enough keys to select!");
-                feedbackManager.ShowMessage("There are not enough keys to select!");
+                FeedbackManager.Instance.ShowMessage("There are not enough keys to select!");
                 return;
 
             }
@@ -756,7 +754,7 @@ public class DialogueManager : MonoBehaviour
         if (choice.reward > 0)
         {
             CurrencyManager.Instance.AddKeys(choice.reward);
-            feedbackManager.ShowMessage($"You've received {choice.reward} keys!");
+            FeedbackManager.Instance.ShowMessage($"You've received {choice.reward} keys!");
         }
 
         if (choice.actions != null)
@@ -937,7 +935,7 @@ public class DialogueManager : MonoBehaviour
 
         // We are giving out a reward
         CurrencyManager.Instance.AddKeys(1);
-        feedbackManager.ShowMessage("You've found a key!");
+        FeedbackManager.Instance.ShowMessage("You've found a key!");
 
         // Torn off the btn
         if (button != null)

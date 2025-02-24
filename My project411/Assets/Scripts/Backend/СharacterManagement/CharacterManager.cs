@@ -36,7 +36,6 @@ public class CharacterManager : MonoBehaviour
     private void Start()
     {
        LoadAppearance();
-        //LoadCharacters();
     }
 
     public void LoadCharacters()
@@ -404,7 +403,6 @@ public class CharacterManager : MonoBehaviour
 
     private void OnDisable()
     {
-        // Остановить все моргания при отключении
         blinkingManager.StopAllBlinking();
     }
 
