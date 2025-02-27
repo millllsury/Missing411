@@ -35,15 +35,17 @@ public class AnimationPresetManager : MonoBehaviour
 
     private void LoadPresets()
     {
-        string filePath = Path.Combine(Application.dataPath, "Resources/AnimationPresets.json");
-        if (!File.Exists(filePath))
+        // Загружаем JSON-файл из папки Resources
+        TextAsset jsonFile = Resources.Load<TextAsset>("AnimationPresets");
+
+        if (jsonFile == null)
         {
-            Debug.LogError($"Файл {filePath} не найден!");
+            Debug.LogError("Файл AnimationPresets.json не найден в Resources!");
             animationPresets = new Dictionary<string, AnimationPreset>();
             return;
         }
 
-        string json = File.ReadAllText(filePath);
+        string json = jsonFile.text;
         AnimationPresetDictionary presetDictionary = JsonUtility.FromJson<AnimationPresetDictionary>(json);
 
         animationPresets = new Dictionary<string, AnimationPreset>();
@@ -54,6 +56,7 @@ public class AnimationPresetManager : MonoBehaviour
 
         Debug.Log("Animation presets were loaded successfully.");
     }
+
 
 
     public AnimationPreset GetPreset(string animationFolder)

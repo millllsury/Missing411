@@ -9,6 +9,8 @@ public class Choice
     public int cost; 
     public int reward;
     public string buttonID;  // Если кнопка есть в сцене
+    public string feedback;
+    
 }
 
 [System.Serializable]
@@ -59,6 +61,10 @@ public class Dialogue
     public int reward;
 
     public bool smoothDisappear;
+
+    public bool miniGame;
+    public bool blockMovingForward = false;
+
 }
 
 [System.Serializable]

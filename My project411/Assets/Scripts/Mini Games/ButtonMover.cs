@@ -1,15 +1,17 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.UI;
 
 public class ButtonMover : MonoBehaviour
 {
     [SerializeField] private List<Transform> buttonsToMove; // Список кнопок
 
-    private Dictionary<Transform, Vector3> initialPositions = new Dictionary<Transform, Vector3>(); // Запоминаем исходные позиции кнопок
-    private Dictionary<Transform, bool> buttonStates = new Dictionary<Transform, bool>(); // Хранит состояния кнопок (сдвинута/нет)
-    [SerializeField] private float moveDistance = 50f; // Насколько двигаем кнопку влево
-    [SerializeField] private float moveSpeed = 0.2f; // Скорость движения
+    private Dictionary<Transform, Vector3> initialPositions = new Dictionary<Transform, Vector3>(); 
+    private Dictionary<Transform, bool> buttonStates = new Dictionary<Transform, bool>(); 
+    [SerializeField] private float moveDistance = 50f;
+    [SerializeField] private float moveSpeed = 0.2f;
 
     private void Start()
     {
@@ -17,8 +19,8 @@ public class ButtonMover : MonoBehaviour
         {
             if (button != null)
             {
-                initialPositions[button] = button.localPosition; // Запоминаем исходную позицию
-                buttonStates[button] = false; // Все кнопки изначально не сдвинуты
+                initialPositions[button] = button.localPosition; 
+                buttonStates[button] = false; 
             }
         }
     }
@@ -27,23 +29,39 @@ public class ButtonMover : MonoBehaviour
     {
         if (!buttonStates.ContainsKey(button)) return;
 
-        bool isMoved = buttonStates[button]; // Получаем текущее состояние кнопки
+        bool isMoved = buttonStates[button]; 
 
         StopAllCoroutines();
         if (isMoved)
         {
-            StartCoroutine(MoveButton(button, initialPositions[button])); // Возвращаем в исходное положение
+            StartCoroutine(MoveButton(button, initialPositions[button])); 
         }
         else
         {
-            StartCoroutine(MoveButton(button, initialPositions[button] + new Vector3(-moveDistance, 0, 0))); // Сдвигаем влево
+            StartCoroutine(MoveButton(button, initialPositions[button] + new Vector3(-moveDistance, 0, 0))); 
         }
 
-        buttonStates[button] = !isMoved; // Инвертируем состояние
+        buttonStates[button] = !isMoved; 
     }
 
-    private IEnumerator MoveButton(Transform button, Vector3 targetPosition)
+    private bool moved = false;
+   private IEnumerator MoveButton(Transform button, Vector3 targetPosition)
     {
+        if (button.name == "Books")
+        {
+            moved = !moved;
+
+            if (moved)
+            {
+
+                button.transform.SetAsFirstSibling();
+            }
+            else
+            {
+                button.transform.SetAsLastSibling();
+            }      
+        }
+
         Vector3 startPosition = button.localPosition;
         float t = 0;
 
@@ -55,6 +73,7 @@ public class ButtonMover : MonoBehaviour
         }
 
         button.localPosition = targetPosition;
+
     }
 }
 

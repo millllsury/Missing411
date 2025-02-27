@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 public class RotationManager : MonoBehaviour
 {
-    [SerializeField] private List<RectTransform> buttonsToRotate; // Список кнопок
+    [SerializeField] private List<RectTransform> buttonsToRotate; 
 
-    private Dictionary<RectTransform, bool> rotationStates = new Dictionary<RectTransform, bool>(); // Запоминаем состояние
-    private float rotationAngle = -30f; // Насколько градусов поворачивать
-    private float rotationSpeed = 0.2f; // Скорость поворота
+    private Dictionary<RectTransform, bool> rotationStates = new Dictionary<RectTransform, bool>(); 
+    private float rotationAngle = -30f; 
+    private float rotationSpeed = 0.2f; 
 
     private void Start()
     {
@@ -16,7 +16,7 @@ public class RotationManager : MonoBehaviour
         {
             if (button != null)
             {
-                rotationStates[button] = false; // Все кнопки изначально не повернуты
+                rotationStates[button] = false; 
             }
         }
     }
@@ -26,12 +26,12 @@ public class RotationManager : MonoBehaviour
         RectTransform button = buttonObject.GetComponent<RectTransform>();
         if (button == null || !rotationStates.ContainsKey(button)) return;
 
-        bool isRotated = rotationStates[button]; // Получаем текущее состояние
+        bool isRotated = rotationStates[button]; 
 
         StopAllCoroutines();
         StartCoroutine(RotateSmoothly(button, isRotated ? 0f : rotationAngle));
 
-        rotationStates[button] = !isRotated; // Инвертируем состояние
+        rotationStates[button] = !isRotated; 
     }
 
     private IEnumerator RotateSmoothly(RectTransform button, float targetZRotation)

@@ -51,6 +51,7 @@ public class BackgroundController : MonoBehaviour
 
 
     [SerializeField] private CanvasGroup uiElements; // CanvasGroup для UI элементов
+    [SerializeField] private CanvasGroup uiButtons;
     [SerializeField] private GameObject charactersParent; // Родительский объект для персонажей
 
     [SerializeField] private CanvasGroup keysCanvas;
@@ -85,7 +86,7 @@ public class BackgroundController : MonoBehaviour
         ToggleElements(false);
 
         // 2. Плавное затемнение экрана (до 50%)
-        float fadeDuration = 3f;
+        float fadeDuration = 1.5f;
         float elapsedTime = 0f;
 
         while (elapsedTime < fadeDuration)
@@ -131,6 +132,11 @@ public class BackgroundController : MonoBehaviour
 
     private void ToggleElements(bool isActive)
     {
+        if(uiButtons != null) {
+            uiButtons.interactable = isActive;
+            uiElements.blocksRaycasts = isActive;
+        }
+
         if (uiElements != null)
         {
             uiElements.alpha = isActive ? 1f : 0f;
@@ -150,7 +156,7 @@ public class BackgroundController : MonoBehaviour
 
     private IEnumerator FadeInElements()
     {
-        float duration = 1.5f;
+        float duration = 1f;
         float elapsedTime = 0f;
 
         if (uiElements != null)
@@ -167,10 +173,19 @@ public class BackgroundController : MonoBehaviour
             uiElements.interactable = true;
             uiElements.blocksRaycasts = true;
 
+            if (uiButtons != null)
+            {
+                uiButtons.interactable = true;
+                uiElements.blocksRaycasts = true;
+            }
+
+
             keysCanvas.alpha = 1f;
             keysCanvas.interactable = true;
             keysCanvas.blocksRaycasts = true;
         }
+
+        
 
         if (charactersParent != null)
         {

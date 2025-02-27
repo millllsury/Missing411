@@ -218,7 +218,7 @@ public class UIManager : MonoBehaviour
         int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
         dialogueManager.SaveProgress();
         SoundManager.Instance.StopAllSounds();
-        //GameStateManager.Instance.ClearTracksOnSceneChange();
+        GameStateManager.Instance.ClearTracksOnSceneChange();
         SceneManager.LoadScene(wardrobeSceneName);
 
     }

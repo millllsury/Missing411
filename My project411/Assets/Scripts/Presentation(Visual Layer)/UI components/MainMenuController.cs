@@ -28,7 +28,6 @@ public class MainMenuController : MonoBehaviour
 
     private FeedbackManager feedbackManager;
 
-    //public bool isNewGame = false; // Флаг, указывающий, была ли начата новая игра
     
 
     private void Start()
@@ -93,18 +92,17 @@ public class MainMenuController : MonoBehaviour
 
         if (GameStateManager.Instance == null)
         {
-            Debug.LogError("GameStateManager не инициализирован.");
             return;
         }
 
-        // Проверяем, есть ли пустой слот
+        // checks if there is any empty slot
         var emptySlotIndex = GameStateManager.Instance.GetSaveSlots()
             .FindIndex(slot => slot.gameState == null);
 
         if (emptySlotIndex == -1)
         {
-            Debug.LogWarning("Все слоты заняты. Перезаписываем Слот 1.");
-            emptySlotIndex = 0; // Перезаписываем первый слот
+            Debug.LogWarning("All slots are full. Overwriting Slot 1.");
+            emptySlotIndex = 0; 
             GameStateManager.Instance.rewritingGame = true;
         }
         else
@@ -113,7 +111,6 @@ public class MainMenuController : MonoBehaviour
             
         }
 
-        // Инициализируем новый прогресс игры
         var saveSlots = GameStateManager.Instance.GetSaveSlots();
         var emptySlot = saveSlots[emptySlotIndex];
         emptySlot.gameState = new GameState
@@ -127,22 +124,18 @@ public class MainMenuController : MonoBehaviour
             clothesIndex = 0,
             episodeNameShowed = false,
             keys = 5,
-             // **Очищаем unlockedHairstyles и unlockedClothes**
             unlockedHairstyles = new List<int> { 0, 1 },
             unlockedClothes = new List<int> { 0, 1 }
 
         };
         emptySlot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-
-        // Устанавливаем выбранный слот
         GameStateManager.Instance.SelectSlot(emptySlotIndex);
 
-        // Сохраняем слоты в файл
         GameStateManager.Instance.SaveSlotsToFile();
 
-        progress = 0f; // Сброс прогресса
-        loadingScreen.SetActive(true); // Показать экран загрузки
+        progress = 0f; //for loading screen
+        loadingScreen.SetActive(true); 
         StartCoroutine(LoadSceneAsync("Scene1"));
         menuCanvasGroup.alpha = 0f;
     }
@@ -272,29 +265,25 @@ public class MainMenuController : MonoBehaviour
 
     private void HandleSlotSelection(int slotIndex)
     {
-        Debug.Log($"Выбран слот {slotIndex + 1}");
+        Debug.Log($"Slot {slotIndex + 1} selected");
 
-        // Проверяем наличие GameStateManager
         if (GameStateManager.Instance == null)
         {
-            Debug.LogError("GameStateManager.Instance не инициализирован.");
             return;
         }
-
-        // Получаем список слотов
+        //getting all slots
         var slots = GameStateManager.Instance.GetSaveSlots();
 
-        // Проверяем корректность индекса
         if (slotIndex < 0 || slotIndex >= slots.Count)
         {
-            Debug.LogError($"Индекс слота {slotIndex} вне диапазона. Всего слотов: {slots.Count}");
+            Debug.LogError($"Slot index {slotIndex} is out of r=the range.");
             return;
         }
 
         var selectedSlot = slots[slotIndex];
         if (selectedSlot == null)
         {
-            Debug.LogError($"Слот с индексом {slotIndex} не найден.");
+            Debug.LogError($"Slot {slotIndex} isn't found.");
             return;
         }
 
@@ -308,10 +297,10 @@ public class MainMenuController : MonoBehaviour
         Debug.Log($"slotIndex: {slotIndex}");
 
 
-        // Загружаем прогресс из слота
+        // loading progress
         GameStateManager.Instance.SelectSlot(slotIndex);
 
-        loadingScreen.SetActive(true); // Показать экран загрузки
+        loadingScreen.SetActive(true);
         StartCoroutine(LoadSceneAsync("Scene" + selectedSlot.gameState.currentScene));
 
         menuCanvasGroup.alpha = 0f;

@@ -22,7 +22,7 @@ public class CurtainClick : MonoBehaviour
 
     private IEnumerator ShowWindowScene()
     {
-        // Включаем Canvas и затемняем сцену
+      
         windowCanvas.gameObject.SetActive(true);
         yield return StartCoroutine(FadeCanvas(windowCanvas, 0f, 1f, fadeDuration));
 
@@ -37,7 +37,7 @@ public class CurtainClick : MonoBehaviour
 
     private IEnumerator ShowWolfScene()
     {
-        // Ждём перед закрытием занавесок
+     
         yield return new WaitForSeconds(curtainCloseDelay);
 
         wolfnAnimator.SetTrigger("Run");
@@ -45,7 +45,7 @@ public class CurtainClick : MonoBehaviour
         StartCoroutine(FadeOutImage(curtainClosedImage));
         StartCoroutine(FadeInImage(curtainOpenImage));
 
-        yield return new WaitForSeconds(0.5f); // Волк исчезает чуть позже
+        yield return new WaitForSeconds(0.5f); 
         yield return StartCoroutine(FadeOutImage(wolfImage));
         scenePlayed = true;
         curtainClosedImage.gameObject.SetActive(false);

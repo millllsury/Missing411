@@ -223,7 +223,10 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      DeleteButton_0: -921086426717527885
+      DeleteButton_1: -6309703165640081185
+      DeleteButton_2: 1911762572684375126
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -55,7 +55,7 @@ public class BlinkingManager : MonoBehaviour
         {
             StopCoroutine(coroutine);
             blinkingCoroutines.Remove(characterPosition);
-            Debug.Log("Coroutine Stopped");
+            Debug.Log($"Coroutine Stopped for : {characterPosition}");
         }
     }
 

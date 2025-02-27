@@ -29,28 +29,44 @@ public class CharacterManager : MonoBehaviour
     private bool isLeftAvatarAnimating = false;
     private bool isRightAvatarAnimating = false;
 
-    [SerializeField]  private SpriteRenderer hairRenderer;
-    [SerializeField]  private SpriteRenderer clothesRenderer;
+    [SerializeField] private SpriteRenderer hairRenderer;
+    [SerializeField] private SpriteRenderer clothesRenderer;
     private SpriteRenderer avatarToBeHidden;
+
 
     private void Start()
     {
-       LoadAppearance();
+        
     }
 
     public void LoadCharacters()
     {
         var (leftCharacter, rightCharacter) = GameStateManager.Instance.LoadCharacterNames();
 
-        Debug.Log($"Load characters: Left = {leftCharacter}, Right = {rightCharacter}");
+        Debug.Log($"Загрузка персонажей: Левый = {leftCharacter}, Правый = {rightCharacter}");
 
-        // Восстанавливаем только если имя персонажа задано
         if (!string.IsNullOrEmpty(leftCharacter))
+        {
             SetCharacter(leftCharacter, 1, false, leftCharacter);
+            LoadAppearance();
+        }
+        else
+        {
+            leftAvatar.sprite = null; // Удаляем спрайт, если персонаж удалён
+        }
 
         if (!string.IsNullOrEmpty(rightCharacter))
+        {
             SetCharacter(rightCharacter, 2, false, rightCharacter);
+        }
+        else
+        {
+            rightAvatar.sprite = null; // Удаляем спрайт, если персонаж удалён
+        }
+        
+
     }
+
 
 
 
@@ -58,7 +74,7 @@ public class CharacterManager : MonoBehaviour
     {
         var (hairIndex, clothesIndex) = GameStateManager.Instance.LoadAppearance();
 
-       
+
 
         // Загружаем спрайты по пути
         string hairPath = $"Characters/Alice/Hair/hair{hairIndex}";
@@ -70,7 +86,7 @@ public class CharacterManager : MonoBehaviour
         if (hairSprite != null)
         {
             hairRenderer.sprite = hairSprite;
-            
+
         }
         else
         {
@@ -80,7 +96,7 @@ public class CharacterManager : MonoBehaviour
         if (clothesSprite != null)
         {
             clothesRenderer.sprite = clothesSprite;
-            
+
         }
         else
         {
@@ -103,31 +119,27 @@ public class CharacterManager : MonoBehaviour
         GameObject activePanel = null;
 
         if (place == 1)
-        { 
+        {
             // Передаем leftEyesImage и указываем isLeft = true
             UpdateCharacter(ref currentLeftCharacter, leftAvatar, ref leftBlinkCoroutine, leftEyesImage, character, true);
             activePanel = speakerPanelLeft;
             GetCurrentLeftCharacter();
-            
+            LoadAppearance();
+
         }
         else if (place == 2)
         {
-            
+
             UpdateCharacter(ref currentRightCharacter, rightAvatar, ref rightBlinkCoroutine, rightEyesImage, character, false);
             activePanel = speakerPanelRight;
             GetCurrentRightCharacter();
-            
+
         }
         else if (isNarration)
         {
             activePanel = speakerPanelCenter;
         }
-        else
-        {
-            HideAvatars();
-            Debug.LogWarning("Incorrect value: 'place' для SetCharacter: " + place);
-            return;
-        }
+
 
         if (activePanel != null)
         {
@@ -144,7 +156,7 @@ public class CharacterManager : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(currentCharacter))
             {
-                blinkingManager.StopBlinking(currentCharacter); 
+                blinkingManager.StopBlinking(currentCharacter);
             }
 
             currentCharacter = character;
@@ -158,54 +170,47 @@ public class CharacterManager : MonoBehaviour
 
 
 
-    private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)
+   private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)
+{
+    if (avatar == null)
     {
-
-        if (avatar == null)
-        {
-            Debug.LogError("Avatar is null!");
-            return;
-        }
-
-        if (string.IsNullOrEmpty(character))
-        {
-            Debug.LogWarning("Name of character is not initialised.");
-            StartCoroutine(SmoothDisappear(avatar, false));
-            return;
-        }
-
-        Sprite loadedSprite = Resources.Load<Sprite>("Characters/" + character + "/" + character);
-        if (loadedSprite == null)
-        {
-            Debug.LogError($"Sprite for {character} hasn't been found in Resources/Characters!");
-            return;
-        }
-
-        avatar.sprite = loadedSprite;
-
-        if (avatar.sprite != null)
-        {
-            if (avatar.gameObject.activeSelf)
-            {
-                StartCoroutine(SmoothDisappear(avatar, false));
-                StartCoroutine(WaitAndShowNewAvatar(avatar, character, isLeft));
-            }
-            else
-            {
-                float targetX = isLeft ? -3f : 3f;
-                StartCoroutine(SmoothAppear(avatar, targetX, character));
-            }
-
-            Debug.Log("Sprite for the character was set: " + character);
-
-        }
-        else
-        {
-            StartCoroutine(SmoothDisappear(avatar, false));
-            Debug.LogWarning("Sprite for the character hasn't been found: " + character);
-        }
-
+        Debug.LogError("Avatar is null!");
+        return;
     }
+
+    if (string.IsNullOrEmpty(character))
+    {
+        Debug.LogWarning("Name of character is not initialised.");
+        StartCoroutine(SmoothDisappear(avatar, false));
+        return;
+    }
+
+    Sprite loadedSprite = Resources.Load<Sprite>("Characters/" + character + "/" + character);
+    if (loadedSprite == null)
+    {
+        Debug.LogError($"Sprite for {character} hasn't been found in Resources/Characters!");
+        return;
+    }
+
+    // Проверяем, был ли персонаж уже установлен
+    bool isNewCharacter = avatar.sprite == null || avatar.sprite.name != character;
+    
+    avatar.sprite = loadedSprite;
+
+    if (isNewCharacter)
+    {
+        float targetX = isLeft ? -3f : 3f;
+        StartCoroutine(SmoothAppear(avatar, targetX, character));
+    }
+    else
+    {
+        StartCoroutine(SmoothDisappear(avatar, false));
+        StartCoroutine(WaitAndShowNewAvatar(avatar, character, isLeft));
+    }
+
+    Debug.Log($"Sprite for the character was set: {character}, isNew: {isNewCharacter}");
+}
+
 
 
     public void AdjustCharacterAppearance(string sceneName)
@@ -216,7 +221,7 @@ public class CharacterManager : MonoBehaviour
 
         switch (sceneName)
         {
-           
+
             case "WardrobeScene":
                 scaleFactor = 1.2f;
                 break;
@@ -224,7 +229,7 @@ public class CharacterManager : MonoBehaviour
                 brightness = 0.8f; // Добавим холодных тонов
                 break;
             default:
-                
+
                 break;
         }
 
@@ -274,6 +279,7 @@ public class CharacterManager : MonoBehaviour
 
     private IEnumerator SmoothAppear(SpriteRenderer avatar, float endPositionX, string character = null)
     {
+        
         while (isLeftAvatarAnimating || isRightAvatarAnimating)
         {
             yield return null;
@@ -284,7 +290,6 @@ public class CharacterManager : MonoBehaviour
         Vector3 startPosition = avatar.transform.position;
         Vector3 endPosition = new Vector3(endPositionX, avatar.transform.position.y, avatar.transform.position.z);
 
-        avatar.gameObject.SetActive(true);
 
         // Анимация появления
         float duration = 0.2f;
@@ -302,6 +307,10 @@ public class CharacterManager : MonoBehaviour
 
         avatar.transform.position = endPosition;
         avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 1f);
+        foreach (SpriteRenderer childSprite in avatar.GetComponentsInChildren<SpriteRenderer>())
+        {
+            childSprite.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 1f);
+        }
 
         isLeftAvatarAnimating = false; // или isRightAvatarAnimating в зависимости от того, какой аватар обновляется
     }
@@ -310,22 +319,24 @@ public class CharacterManager : MonoBehaviour
 
     public void SmoothDisappearCharacter(bool smoothDisappear, int place)
     {
-        if (smoothDisappear)
-        {
-
-        }
         if (place == 1)
         {
             avatarToBeHidden = leftAvatar;
-            
+            currentLeftCharacter = null; // Очищаем данные о левом персонаже
+            GameStateManager.Instance.SaveCharacterNames(null, GetCurrentRightCharacter());
         }
         else
         {
             avatarToBeHidden = rightAvatar;
+            currentRightCharacter = null; // Очищаем данные о правом персонаже
+            GameStateManager.Instance.SaveCharacterNames(GetCurrentLeftCharacter(), null);
         }
 
         StartCoroutine(SmoothDisappear(avatarToBeHidden, smoothDisappear));
+
+        Debug.Log($"После удаления: GetCurrentLeftCharacter(): {GetCurrentLeftCharacter()}, GetCurrentRightCharacter(): {GetCurrentRightCharacter()}");
     }
+
 
 
     private IEnumerator SmoothDisappear(SpriteRenderer avatar, bool smoothDisappear)
@@ -357,14 +368,23 @@ public class CharacterManager : MonoBehaviour
             yield return null;
         }
 
-        avatar.gameObject.SetActive(false);
         avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 0f);
+        avatar.sprite = null;
+        foreach (SpriteRenderer childSprite in avatar.GetComponentsInChildren<SpriteRenderer>())
+        {
+            childSprite.sprite = null;
+
+        }
 
         // Если было смещение, возвращаем персонажа в исходную позицию
         if (smoothDisappear)
         {
             avatar.transform.position = startPosition;
         }
+
+
+        Debug.Log($"GetCurrentLeftCharacter(): {GetCurrentLeftCharacter()},GetCurrentRightCharacter(): {GetCurrentRightCharacter()}");
+       
     }
 
 
@@ -418,14 +438,14 @@ public class CharacterManager : MonoBehaviour
 
     public IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 0.5f)
     {
-       if (blinkingManager != null)
+        if (blinkingManager != null)
         {
             blinkingManager.StopAllBlinking();
         }
 
         SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
         float elapsedTime = 0f;
-        
+
 
         while (elapsedTime < duration)
         {
@@ -445,7 +465,6 @@ public class CharacterManager : MonoBehaviour
     }
     public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 0.5f)
     {
-
         SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
         float elapsedTime = 0f;
 
@@ -453,7 +472,7 @@ public class CharacterManager : MonoBehaviour
         {
             foreach (var character in characters)
             {
-                if (character != null)
+                if (character != null && character.sprite != null) // Проверяем, есть ли спрайт
                 {
                     Color color = character.color;
                     color.a = Mathf.Lerp(0f, 1f, elapsedTime / duration);
@@ -465,15 +484,23 @@ public class CharacterManager : MonoBehaviour
             yield return null;
         }
 
-        Debug.Log($"left Character Name: {currentLeftCharacter}, right Character Name: {currentRightCharacter}");
-        
+        Debug.Log($"После FadeInCharacters: Left = {currentLeftCharacter}, Right = {currentRightCharacter}");
+
+        // Проверяем перед морганием
         if (blinkingManager != null)
         {
-            blinkingManager.StartBlinking(currentLeftCharacter, leftEyesImage);
-            blinkingManager.StartBlinking(currentRightCharacter, rightEyesImage);
-            Debug.Log($"Started coroutine in FadeInCharacters.");
+            if (!string.IsNullOrEmpty(currentLeftCharacter) && leftEyesImage != null)
+            {
+                blinkingManager.StartBlinking(currentLeftCharacter, leftEyesImage);
+            }
+
+            if (!string.IsNullOrEmpty(currentRightCharacter) && rightEyesImage != null)
+            {
+                blinkingManager.StartBlinking(currentRightCharacter, rightEyesImage);
+            }
         }
     }
+
 
 
 

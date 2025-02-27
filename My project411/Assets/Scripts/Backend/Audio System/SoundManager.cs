@@ -24,7 +24,7 @@ public class Sound
 }
 public class SoundManager : MonoBehaviour
 {
-    
+
     public float uiVolume = 1f;
     public float backgroundEffectsVolume = 1f;
     public float backgroundVolume = 1f;
@@ -63,7 +63,7 @@ public class SoundManager : MonoBehaviour
         {
             AudioSource source = gameObject.AddComponent<AudioSource>();
             source.clip = sound.clip;
-      
+
             source.loop = sound.loop;
             source.volume = GetVolumeForSound(sound);
             sound.source = source;
@@ -183,12 +183,12 @@ public class SoundManager : MonoBehaviour
 
         if (newSound.category == SoundCategory.Background || newSound.category == SoundCategory.BackgroundEffects)
         {
-            
-         GameStateManager.Instance.AddPlayingTrack(newSound.name);
- 
-                
+
+            GameStateManager.Instance.AddPlayingTrack(newSound.name);
+
+            Debug.Log($"[AddPlayingTrack]: {soundName}");
         }
-        
+
         Debug.Log($"Playing sound: {soundName}");
     }
 
@@ -239,7 +239,7 @@ public class SoundManager : MonoBehaviour
             return;
         }
 
-        if(!sound.source.isPlaying)
+        if (!sound.source.isPlaying)
         {
             sound.source.volume = GetVolumeForSound(sound);
             sound.source.mute = true;
@@ -335,7 +335,7 @@ public class SoundManager : MonoBehaviour
                 return gameState.masterVolume * gameState.backgroundEffectsVolume;
             case SoundCategory.Characters:
                 return gameState.masterVolume * gameState.characterVolume;
-            case SoundCategory.Background: 
+            case SoundCategory.Background:
                 return gameState.masterVolume * gameState.backgroundVolume;
             default:
                 return gameState.masterVolume;

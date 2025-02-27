@@ -131,8 +131,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Invite Chris to sit down and rest.
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
-  m_sharedMaterial: {fileID: 2164040, guid: 5302535af1044152a457ed104f1f4b91, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c7b396714593fad4b871e4ec5406cb9c, type: 2}
+  m_sharedMaterial: {fileID: 4336577433977567826, guid: c7b396714593fad4b871e4ec5406cb9c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 33
+  m_fontSize: 32.2
   m_fontSizeBase: 33
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: -2
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -605,8 +605,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 6
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2b3c2a7fbe137ad49b13e68705aeeece, type: 2}
-  m_sharedMaterial: {fileID: -753300082360871061, guid: 2b3c2a7fbe137ad49b13e68705aeeece, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c7b396714593fad4b871e4ec5406cb9c, type: 2}
+  m_sharedMaterial: {fileID: 4336577433977567826, guid: c7b396714593fad4b871e4ec5406cb9c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

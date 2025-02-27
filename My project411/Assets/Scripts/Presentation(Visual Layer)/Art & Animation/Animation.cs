@@ -20,11 +20,10 @@ public class Animations : MonoBehaviour
     public bool IsLeftAvatarAnimating => isLeftAvatarAnimation;
     public bool IsRightAvatarAnimating => isRightAvatarAnimation;
 
-    private SoundManager soundManager;
+
 
     private void Start()
     {
-        soundManager = SoundManager.Instance;
         emotionRenderers = new Dictionary<string, SpriteRenderer>
         {
             { "left", emotionImageLeft },
@@ -48,12 +47,22 @@ public class Animations : MonoBehaviour
     public void PlayAnimation(string characterPosition, string animationName, string character)
     {
 
-
         if (string.IsNullOrEmpty(characterPosition) || string.IsNullOrEmpty(animationName) || string.IsNullOrEmpty(character))
         {
-            Debug.LogWarning("Недостаточно данных для воспроизведения анимации.");
+            Debug.LogWarning("Not enough data to play the animation.");
             return;
         }
+
+
+        int slotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+        Dictionary<string, int> characterPositions = GameStateManager.Instance.LoadCharacterPositions(slotIndex);
+
+        if (!characterPositions.TryGetValue(character, out int place))
+        {
+            place = 1; // If the character is new, put it to the left
+        }
+
+        characterPosition = place == 1 ? "left" : "right";
 
         if (!emotionRenderers.TryGetValue(characterPosition, out var emotionRenderer) ||
             !eyesRenderers.TryGetValue(characterPosition, out var eyesRenderer))
@@ -61,7 +70,7 @@ public class Animations : MonoBehaviour
             return;
         }
 
-        Transform characterTransform = emotionRenderer.transform.parent; // Предполагаем, что эмоции внутри родителя (главного объекта)
+        Transform characterTransform = emotionRenderer.transform.parent; // emotions are inside the parent (the main object)
 
 
         SpriteNull(emotionRenderer);
@@ -74,7 +83,7 @@ public class Animations : MonoBehaviour
         string eyes = null;
         string sound = null;
         bool leaveLastFrame = false;
-        bool stopBlinkingPermanently = false; // Новый флаг
+        bool stopBlinkingPermanently = false; // new
         Debug.Log($"Получено animationName: {animationName}");
         switch (animationName.ToLower())
         {
@@ -138,7 +147,7 @@ public class Animations : MonoBehaviour
             yield return null;
         }
 
-        // Возвращаем персонажа в исходное положение
+        // Return the character to its original position
         characterTransform.localPosition = originalPosition;
     }
 
@@ -147,7 +156,7 @@ public class Animations : MonoBehaviour
     private void PlaySoundForEmotion(string character, string sound = null)
     {
         if (sound == null) return;
-        if (soundManager == null)
+        if (SoundManager.Instance == null)
         {
             Debug.LogError("SoundManager is null! Ensure it is assigned in the inspector.");
             return;

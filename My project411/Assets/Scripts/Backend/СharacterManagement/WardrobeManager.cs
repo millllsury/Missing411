@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
 using System.Collections.Generic;
+//using UnityEditor.SearchService;
 
 public class WardrobeManager : MonoBehaviour
 {
@@ -77,8 +78,7 @@ public class WardrobeManager : MonoBehaviour
         SoundManager.Instance.StopAllSounds();
         GameStateManager.Instance.ClearTracksOnSceneChange();
         SceneManager.LoadScene("Scene"+ mainSceneName);
-        
-        
+        Debug.Log($"LoadScene вызван: {"Scene"+ mainSceneName}");
     }
 
 

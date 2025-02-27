@@ -173,7 +173,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      suitcaseOpenLockView_0: 1617341019262530770
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

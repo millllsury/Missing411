@@ -453,6 +453,13 @@ public class GameStateManager : MonoBehaviour
         currentState.leftCharacterName = leftCharacter;
         currentState.rightCharacterName = rightCharacter;
         Debug.Log($"Names Saved: Левый = {leftCharacter}, Правый = {rightCharacter}");
+
+        int selectedSlotIndex = GetSelectedSlotIndex();
+        if (selectedSlotIndex != -1)
+        {
+            SaveGameToSlot(selectedSlotIndex);
+
+        }
     }
 
     //cохранение позиций 
@@ -475,7 +482,7 @@ public class GameStateManager : MonoBehaviour
     {
         if (savedCharacterPositions.TryGetValue(slotIndex, out Dictionary<string, int> positions))
         {
-            Debug.Log($"[LoadCharacterPositions] Загружены позиции для слота {slotIndex}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
+            Debug.Log($"[LoadCharacterPositions] Загружены позиции для слота {slotIndex+1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
             return new Dictionary<string, int>(positions);
         }
 
@@ -619,6 +626,7 @@ public class GameStateManager : MonoBehaviour
 
     public void LoadPlayingTracks()
     {
+        Debug.Log("LoadPlayingTracks() вызван!");
         foreach (var track in currentState.playingTracks)
         {
             if (!SoundManager.Instance.sounds.Any(s => s.name == track && s.source.isPlaying))

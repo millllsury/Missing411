@@ -88,6 +88,7 @@ public class LockSystem : MonoBehaviour
             if (currentDigits[i] != correctCode[i])
             {
                 Debug.Log(" Код неверный! Попробуйте ещё раз.");
+                //SoundManager.Instance.PlaySoundByName("");
                 return;
             }
         }
@@ -138,4 +139,6 @@ public class LockSystem : MonoBehaviour
         FeedbackManager.Instance.ShowMessage("You've got a new outfit!");
         clothes.SetActive(false);
     }
+
+
 }

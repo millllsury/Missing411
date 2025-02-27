@@ -22,8 +22,8 @@ public class RoomExplorationManager : MonoBehaviour
     [SerializeField] private GameObject keyObject2;
 
     [SerializeField] private GameObject arrowHint; // Ссылка на стрелку
-
     
+
 
     void Start()
     {
@@ -43,12 +43,9 @@ public class RoomExplorationManager : MonoBehaviour
         if (isRoomLit) return;
         arrowHint.SetActive(true);
     }
-    // Функция, которая вызывается при клике на свечу
+    
     public void LightCandle()
     {
-        //BlinkEffect blink = candle.GetComponent<BlinkEffect>();
-        //blink.StopBlinking();
-
         if (arrowHint != null)
         {
             arrowHint.SetActive(false);
@@ -59,14 +56,14 @@ public class RoomExplorationManager : MonoBehaviour
         {
             isRoomLit = true;
             bgSprite.sprite = Resources.Load<Sprite>("Backgrounds/MainRoom/houseMainRoom");
-            interactableObjectsContainer.SetActive(true); // Делаем предметы доступными
+            interactableObjectsContainer.SetActive(true); 
             candle.gameObject.SetActive(false);
             keyObject1.gameObject.SetActive(true);
         }
     }
 
-    private string boxOpenPath = "UI/boxOpen"; // Без "Resources/"
-    private string boxClosedPath = "UI/boxClosed"; // Без "Resources/"
+    private string boxOpenPath = "UI/boxOpen"; 
+    private string boxClosedPath = "UI/boxClosed";
 
     public void OnBoxClick()
     {
@@ -83,7 +80,7 @@ public class RoomExplorationManager : MonoBehaviour
             }
             else
             {
-                Debug.LogError($"Ошибка: Спрайт не найден в Resources/{spritePath}");
+                Debug.LogError($"Sprite not found in Resources/{spritePath}");
             }
         }
 
@@ -96,6 +93,7 @@ public class RoomExplorationManager : MonoBehaviour
             keyObject2.gameObject.SetActive(false);
         }
     }
+
 
     // Добавление предметов в инвентарь
     public void GotKeyReward(Button button)
