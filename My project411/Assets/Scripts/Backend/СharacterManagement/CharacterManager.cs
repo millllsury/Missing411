@@ -292,7 +292,7 @@ public class CharacterManager : MonoBehaviour
 
 
         // Анимация появления
-        float duration = 0.2f;
+        float duration = 0.1f;
         float elapsedTime = 0f;
 
         while (elapsedTime < duration)
@@ -348,7 +348,7 @@ public class CharacterManager : MonoBehaviour
             yield return null;
         }
 
-        float duration = 0.2f; // Время анимации исчезновения
+        float duration = 0.1f; // Время анимации исчезновения
         float elapsedTime = 0f;
         Vector3 startPosition = avatar.transform.position;
         Vector3 endPosition = startPosition; // По умолчанию остается на месте
@@ -436,7 +436,7 @@ public class CharacterManager : MonoBehaviour
         return string.IsNullOrEmpty(currentRightCharacter) ? null : currentRightCharacter;
     }
 
-    public IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 0.5f)
+    public IEnumerator FadeOutCharacters(Transform charactersParent, float duration = 0.3f)
     {
         if (blinkingManager != null)
         {
@@ -463,7 +463,7 @@ public class CharacterManager : MonoBehaviour
             yield return null;
         }
     }
-    public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 0.5f)
+    public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 0.2f)
     {
         SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
         float elapsedTime = 0f;

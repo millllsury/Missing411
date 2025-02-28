@@ -15433,11 +15433,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7830324738891455520}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: OnMainMenuClick
-        m_Mode: 2
+        m_MethodName: MainMenuButtonClick
+        m_Mode: 1
         m_Arguments:
-          m_ObjectArgument: {fileID: 4112982111796462079}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -17239,6 +17239,7 @@ MonoBehaviour:
   backButton: {fileID: 4038232622025126958}
   UIManager: {fileID: 7830324738891455520}
   animations: {fileID: 2530418757318969264}
+  doorBehaviour: {fileID: 0}
   blinkingManager: {fileID: 6683295833931337226}
   isChoosing: 0
   isEpisodeScreenActive: 0
@@ -17246,6 +17247,7 @@ MonoBehaviour:
   choiceButtonNormalPrefab: {fileID: 5673102573916120396, guid: 448aab0fa2f59aa44819c533f5fbe361, type: 3}
   choiceButtonCostPrefab: {fileID: 6809820272699934589, guid: 9ddc035bdd703a1478a50ce7819ef9cb, type: 3}
   choicesPanel: {fileID: 5852680283606098137}
+  blockMovingForward: 0
 --- !u!224 &8731990437806093717
 RectTransform:
   m_ObjectHideFlags: 0

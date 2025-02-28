@@ -6,34 +6,34 @@ using System.Collections;
 
 public class LockSystem : MonoBehaviour
 {
-    [SerializeField] private TMP_Text[] digitTexts; // 4 текста для цифр
+    [SerializeField] private TMP_Text[] digitTexts; 
     [SerializeField] private GameObject digits;
     [SerializeField] private GameObject laggageClose;
 
-    [SerializeField] private Button laggageButton; // Ссылка на кнопку
-    [SerializeField] private ButtonMover buttonMover; // Ссылка на объект с ToggleMove
+    [SerializeField] private Button laggageButton; 
+    [SerializeField] private ButtonMover buttonMover; 
 
     [SerializeField] private GameObject clothes;
     [SerializeField] private GameObject openLaggage;
 
-    [SerializeField] private Button[] increaseButtons; // Кнопки "+"
-    [SerializeField] private Button[] decreaseButtons; // Кнопки "-"
-    [SerializeField] private Button unlockButton; // Кнопка проверки кода
+    [SerializeField] private Button[] increaseButtons; 
+    [SerializeField] private Button[] decreaseButtons; 
+    [SerializeField] private Button unlockButton; 
 
-    private int[] currentDigits = new int[4]; // Храним текущие цифры
-    private int[] correctCode = { 7, 2, 4, 9 }; // Правильный код
+    private int[] currentDigits = new int[4]; 
+    private int[] correctCode = { 7, 2, 4, 9 }; 
 
     public bool isPulledOut = true;
     [SerializeField] private CanvasGroup lockGameCanvas;
     [SerializeField] private Button closeCanvas;
     private void Start()
     {
-        UpdateDigits(); // Обновляем начальное отображение цифр
+        UpdateDigits();
 
-        // Привязываем кнопки к изменениям чисел
+        
         for (int i = 0; i < increaseButtons.Length; i++)
         {
-            int index = i; // Создаем локальную копию индекса для лямбды
+            int index = i; 
             increaseButtons[i].onClick.AddListener(() => ChangeDigit(index, 1));
             decreaseButtons[i].onClick.AddListener(() => ChangeDigit(index, -1));
         }
@@ -43,7 +43,7 @@ public class LockSystem : MonoBehaviour
 
     private void ChangeDigit(int index, int change)
     {
-        currentDigits[index] = (currentDigits[index] + change + 10) % 10; // Меняем цифру (0-9)
+        currentDigits[index] = (currentDigits[index] + change + 10) % 10; 
         UpdateDigits();
     }
 
@@ -87,8 +87,7 @@ public class LockSystem : MonoBehaviour
         {
             if (currentDigits[i] != correctCode[i])
             {
-                Debug.Log(" Код неверный! Попробуйте ещё раз.");
-                //SoundManager.Instance.PlaySoundByName("");
+                SoundManager.Instance.PlaySoundByName("error");
                 return;
             }
         }
@@ -103,11 +102,11 @@ public class LockSystem : MonoBehaviour
 
         if (laggageAnimator != null)
         {
-            laggageAnimator.SetTrigger("laggageOpen"); // Устанавливаем триггер анимации
+            laggageAnimator.SetTrigger("laggageOpen"); 
         }
         else
         {
-            Debug.LogError("Аниматор не найден!");
+            Debug.LogError("Animator isn't");
         }
 
         StartCoroutine(EndGameRoutine());
@@ -117,8 +116,7 @@ public class LockSystem : MonoBehaviour
 
     private IEnumerator EndGameRoutine()
     {
-        yield return new WaitForSeconds(2f); // Ждем 5 секунд
-        Debug.Log("5 секунд прошло, продолжаем выполнение кода.");
+        yield return new WaitForSeconds(2f); 
         SoundManager.Instance.PlaySoundByName("laggageOpen");
         GettingReward();
     }
@@ -135,7 +133,7 @@ public class LockSystem : MonoBehaviour
 
     public void OnClothesClick()
     {
-        //GameStateManager.Instance.UnlockNextItem();
+        GameStateManager.Instance.UnlockNextItem();
         FeedbackManager.Instance.ShowMessage("You've got a new outfit!");
         clothes.SetActive(false);
     }

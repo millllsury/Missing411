@@ -51,7 +51,7 @@ public class FrameInteraction : MonoBehaviour
     private void ToggleFrameSide()
     {
         isFrontSide = !isFrontSide;
-        frameImage.sprite = isFrontSide ? originalSprite : backSprite; // Переключаем спрайт
+        frameImage.sprite = isFrontSide ? originalSprite : backSprite; 
     }
 
     private void CloseFrame()

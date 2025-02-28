@@ -6,9 +6,6 @@ using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-//using Newtonsoft.Json;
-//using Unity.VisualScripting;
-//using static UnityEngine.InputSystem.LowLevel.InputStateHistory;
 
 
 public class DialogueManager : MonoBehaviour
@@ -16,7 +13,6 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private GameObject dialogueTextPanel;
 
-   
     [SerializeField] private Button backButton;
 
     public UIManager UIManager;
@@ -26,7 +22,7 @@ public class DialogueManager : MonoBehaviour
     private BackgroundController backgroundController;
     private CharacterManager characterManager;
     private GameFlagsManager flagsManager;
-
+    [SerializeField] private DoorBehaviour doorBehaviour;
     [SerializeField] private BlinkingManager blinkingManager;
 
     private VisualNovelData visualNovelData;
@@ -57,7 +53,11 @@ public class DialogueManager : MonoBehaviour
     private Dictionary<string, int> characterPositions = new Dictionary<string, int>(); // для позиций персонажей
     private int selectedSlotIndex;
 
-    private bool blockMovingForward = false;
+    public bool blockMovingForward = false;
+
+   
+
+   
 
     void Start()
     {
@@ -87,13 +87,14 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError("GameStateManager.Instance is null!");
         }
     }
-
+   
     private void InitializeComponents()
     {
         dataLoader = FindComponent<DataLoader>("DataLoader");
         backgroundController = FindComponent<BackgroundController>("BackgroundController");
         characterManager = FindComponent<CharacterManager>("CharacterManager");
         flagsManager = FindComponent<GameFlagsManager>("FlagsManager");
+
         if (UIManager == null)
         {
             Debug.LogError("Не удалось найти UIManager.");
@@ -118,7 +119,7 @@ public class DialogueManager : MonoBehaviour
                 Debug.Log($"Scene {scene.sceneId}, Dialogues: {scene.dialogues?.Count ?? 0}");
             }
         }
-        Debug.Log("Вызов LoadProgress()");
+
         LoadProgress();
     }
 
@@ -133,11 +134,14 @@ public class DialogueManager : MonoBehaviour
     }
 
 
+
     void Update()
     {
+       
         // Блокируем любые действия при активном экране эпизода, выборе или недоступности ввода
         if (isEpisodeScreenActive || isChoosing || backgroundController.IsTransitioning || inputUnavailable || blockMovingForward)
             return;
+
 
         // Обработка нажатия клавиш
         if (Input.GetKeyDown(KeyCode.Space))
@@ -152,6 +156,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+ 
     private bool IsPointerOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
@@ -186,15 +191,15 @@ public class DialogueManager : MonoBehaviour
     {
         EpisodeNameShowed = GameStateManager.Instance.GetGameState().episodeNameShowed;
 
-        if (EpisodeNameShowed) return; // Если уже показывали, не показываем снова
+        if (EpisodeNameShowed) return; 
 
-        if (isEpisodeScreenActive) return; // Проверяем, активен ли уже экран
+        if (isEpisodeScreenActive) return; 
 
         Sprite backgroundImage = Resources.Load<Sprite>(currentEpisode.backgroundImage);
         isEpisodeScreenActive = true;
         UIManager.ShowEpisodeScreen(currentEpisode.episodeName, backgroundImage);
 
-        EpisodeNameShowed = true; // Устанавливаем флаг, что экран был показан
+        EpisodeNameShowed = true; 
     }
 
 
@@ -605,7 +610,10 @@ public class DialogueManager : MonoBehaviour
         if(dialogue.blockMovingForward== true)
         {
             blockMovingForward = true;
+            doorBehaviour.HideObjects();
         }
+
+       
     }
 
 
@@ -767,25 +775,10 @@ public class DialogueManager : MonoBehaviour
     }
 
     
-    public void ShowContinueButton()
-    {
-       
-    }
-
 
     public void OnChoiceSelected(Choice choice)
     {
-        if (flagsManager.GetFlag("leftBedroom") && flagsManager.GetFlag("rightMainRoom"))
-        {
-            ShowContinueButton();
-            
-        }
-
-        // Если нельзя двигаться дальше, оставляем кнопки выбора на экране
-        if (blockMovingForward)
-        {
-            return;
-        }
+       
 
         if (choice.cost > 0)
         {
@@ -1000,6 +993,10 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        SaveProgress();
+    }
 
 
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Security.Cryptography;
+
 
 public class Bedroom : MonoBehaviour
 {
@@ -64,8 +64,5 @@ public class Bedroom : MonoBehaviour
         BoxCanvas.blocksRaycasts = false;
     }
 
-    void Update()
-    {
-        
-    }
+   
 }

@@ -20,6 +20,7 @@ public class Animations : MonoBehaviour
     public bool IsLeftAvatarAnimating => isLeftAvatarAnimation;
     public bool IsRightAvatarAnimating => isRightAvatarAnimation;
 
+    private Animator characterAnimator;
 
 
     private void Start()
@@ -85,6 +86,8 @@ public class Animations : MonoBehaviour
         bool leaveLastFrame = false;
         bool stopBlinkingPermanently = false; // new
         Debug.Log($"Получено animationName: {animationName}");
+
+       
         switch (animationName.ToLower())
         {
             case "laugh":
@@ -116,6 +119,36 @@ public class Animations : MonoBehaviour
                 leaveLastFrame = true;
                 StartCoroutine(ShakeCharacter(characterTransform, 0.1f, 1f)); // Теперь трясется весь объект
                 sound = "body-fall";
+                break;
+            case "moving":
+                GameObject characterObject = null;
+
+                if (characterPosition == "left")
+                {
+                    characterObject = GameObject.Find("CharacterAvatarLeft");
+                }
+                else if (characterPosition == "right")
+                {
+                    characterObject = GameObject.Find("CharacterAvatarRight");
+                }
+
+                if (characterObject != null)
+                {
+                    characterAnimator = characterObject.GetComponent<Animator>();
+
+                    if (characterAnimator != null)
+                    {
+                        characterAnimator.SetTrigger("Moving");
+                    }
+                    else
+                    {
+                        Debug.LogError($"Animator не найден у {characterObject.name}!");
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Объект персонажа ({characterPosition}) не найден!");
+                }
                 break;
             default:
                 Debug.LogWarning($"Анимация {animationName} не найдена.");

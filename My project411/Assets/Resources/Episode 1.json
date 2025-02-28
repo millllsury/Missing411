@@ -1471,7 +1471,6 @@
                   "value": true
                 }
               ],
-              "soundTrigger": "play:monsters",
               "character": "Meruem",
               "texts": [
                 "It's starting. We must get out of here as fast as we can."
@@ -1499,7 +1498,6 @@
                 }
               ],
               "isNarration": true,
-              "soundTrigger": "play:monsterGrowl",
               "texts": [
                 "When she looked up to the sky, she was almost frozen with horror.",
                 "The enormous creatures, impossible to see in the darkness, were circling in the sky, making monstrous sounds that sent shivers down her spine and aroused Alice's animal fear.",
@@ -1515,7 +1513,6 @@
                 }
               ],
               "isNarration": true,
-              "soundTrigger": "play:Alice_Scream",
               "texts": [
                 "In an instant, one of the creatures separated from the others and headed towards Alice and Meruem with all speed."
               ]
@@ -1796,6 +1793,7 @@
               ],
               "isNarration": true,
               "background": "ChoosingDoorsAll",
+              "soundTrigger": "play:StartStorm",
               "smoothBgReplacement": true,
               "texts": [
                 "..."
@@ -1877,6 +1875,7 @@
                 }
               ],
               "background": "ChoosingDoorsAll",
+              "soundTrigger": "play:StartStorm",
               "smoothBgReplacement": true,
               "isNarration": true,
               "texts": [
@@ -2039,6 +2038,7 @@
                 }
               ],
               "background": "ChoosingDoorsAll",
+              "soundTrigger": "play:StartStorm",
               "smoothBgReplacement": true,
               "isNarration": true,
               "texts": [
@@ -2049,6 +2049,7 @@
             {
               "id": 88,
               "character": "Alice",
+              "animation": "moving",
               "texts": [
                 "I'll look around the room..."
               ]
@@ -2056,30 +2057,18 @@
             {
               "id": 89,
               "character": "Alice",
-              "background": "OpenDoorsView",
               "blockMovingForward": true,
-              "choices": [
-                {
-                  "text": "Look at the room on the left.",
-                  "buttonID": "LeftDoorButton",
-                  "actions": [
-                    {
-                      "key": "leftBedroom",
-                      "value": true
-
-                    }
-                  ]
-                },
-                {
-                  "text": "Look around the house.",
-                  "buttonID": "RightDoorButton",
-                  "actions": [
-                    {
-                      "key": "rightMainRoom",
-                      "value": true
-                    }
-                  ]
-                }
+              "animation": "moving",
+              "texts": [
+                "I'll look around the room..."
+              ]
+            },
+            {
+              "id": 90,
+              "character": "Alice",
+              "animation": "moving",
+              "texts": [
+                "I'll look around the room..."
               ]
             }
           ]
