@@ -8816,7 +8816,7 @@ GameObject:
   - component: {fileID: 712794669}
   - component: {fileID: 712794668}
   m_Layer: 0
-  m_Name: EyesRight
+  m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8941,6 +8941,7 @@ MonoBehaviour:
   animations: {fileID: 1174317145}
   doorBehaviour: {fileID: 1476082555}
   blinkingManager: {fileID: 1174317146}
+  uiManager: {fileID: 1969080499}
   isChoosing: 0
   isEpisodeScreenActive: 0
   inputUnavailable: 0
@@ -8948,6 +8949,9 @@ MonoBehaviour:
   choiceButtonCostPrefab: {fileID: 6809820272699934589, guid: 9ddc035bdd703a1478a50ce7819ef9cb, type: 3}
   choicesPanel: {fileID: 912907682}
   blockMovingForward: 0
+  speakerPanelLeft: {fileID: 974479999}
+  speakerPanelCenter: {fileID: 2137199945}
+  speakerPanelRight: {fileID: 52351549}
 --- !u!4 &745452198
 Transform:
   m_ObjectHideFlags: 0
@@ -19738,9 +19742,6 @@ MonoBehaviour:
   rightAvatar: {fileID: 405651245}
   leftEyesImage: {fileID: 1544875813}
   rightEyesImage: {fileID: 712794668}
-  speakerPanelLeft: {fileID: 974479999}
-  speakerPanelCenter: {fileID: 2137199945}
-  speakerPanelRight: {fileID: 52351549}
   characterLeft: {fileID: 307886828}
   characterRight: {fileID: 405651243}
   animations: {fileID: 1174317145}
@@ -23161,9 +23162,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 745452197}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: SaveProgress
+      - m_Target: {fileID: 1969080499}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SaveGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24215,7 +24216,7 @@ GameObject:
   - component: {fileID: 1544875812}
   - component: {fileID: 1544875813}
   m_Layer: 0
-  m_Name: EyesLeft
+  m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27538,6 +27539,7 @@ MonoBehaviour:
   episodeText: {fileID: 1315082428}
   wardrobeSceneName: WardrobeScene
   settingsCanvas: {fileID: 1338332315}
+  saveGameButton: {fileID: 1440390893}
 --- !u!225 &1969080500
 CanvasGroup:
   m_ObjectHideFlags: 0

@@ -20,13 +20,24 @@ public class BlinkingManager : MonoBehaviour
 
     public void StartBlinking(string characterName, SpriteRenderer eyesImage)
     {
+       // var (leftCharacter, rightCharacter) = GameStateManager.Instance.LoadCharacterNames();
+
+        //if(leftCharacter == null || rightCharacter == null) { return; }
+        Debug.Log($"StartBlinking called for {characterName} at {Time.time}");
+
         if (string.IsNullOrEmpty(characterName) || eyesImage == null)
         {
             Debug.LogWarning("Character name or eyesImage is null. Blinking will not start.");
             return;
         }
 
-     // Остановить старую корутину, если она есть
+        if (shouldBlink.ContainsKey(characterName) && !shouldBlink[characterName])
+        {
+            Debug.Log($"[StartBlinking] Моргание отключено для {characterName}, запуск отменён.");
+            return;
+        }
+
+        // Остановить старую корутину, если она есть
         if (blinkingCoroutines.ContainsKey(characterName))
         {
             StopBlinking(characterName);
@@ -39,7 +50,7 @@ public class BlinkingManager : MonoBehaviour
             return; // Не запускаем новую корутину
         }
 
-        Debug.Log($"Передали в blinkingManager.StartBlinking() characterName: {characterName} ");
+        //Debug.Log($"Передали в blinkingManager.StartBlinking() characterName: {characterName} ");
 
         // Запуск новой корутины
         Coroutine coroutine = StartCoroutine(BlinkCoroutine(eyesImage, characterName));
@@ -49,15 +60,28 @@ public class BlinkingManager : MonoBehaviour
     }
 
 
-    public void StopBlinking(string characterPosition)
+    public void StopBlinking(string characterName)
     {
-        if (blinkingCoroutines.TryGetValue(characterPosition, out Coroutine coroutine) && coroutine != null)
+        if (blinkingCoroutines.TryGetValue(characterName, out Coroutine coroutine) && coroutine != null)
         {
             StopCoroutine(coroutine);
-            blinkingCoroutines.Remove(characterPosition);
-            Debug.Log($"Coroutine Stopped for : {characterPosition}");
+            blinkingCoroutines.Remove(characterName);
+            Debug.Log($"[StopBlinking] Моргание остановлено для {characterName}");
         }
+
+        // Деактивируем глаза вручную, чтобы они не оставались после остановки моргания
+        foreach (var renderer in FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None))
+        {
+            if (renderer.name.Contains("Eyes") && renderer.gameObject.activeSelf && renderer.name.Contains(characterName))
+            {
+                renderer.sprite = null; // Убираем спрайт моргания
+                renderer.gameObject.SetActive(false); // Отключаем объект глаз
+                Debug.Log($"[StopBlinking] Глаза скрыты для {characterName}");
+            }
+        }
+        globalCoroutineCount--;
     }
+
 
 
 
@@ -70,7 +94,7 @@ public class BlinkingManager : MonoBehaviour
                 StopCoroutine(coroutine);
             }
         }
-
+        globalCoroutineCount = 0;
         blinkingCoroutines.Clear();
     }
 
@@ -81,44 +105,41 @@ public class BlinkingManager : MonoBehaviour
         return globalCoroutineCount;
     }
 
+    private Dictionary<string, bool> shouldBlink = new Dictionary<string, bool>();
+
     private IEnumerator BlinkCoroutine(SpriteRenderer eyesImage, string characterName)
     {
         if (string.IsNullOrEmpty(characterName))
         {
-            Debug.LogWarning("Character name is null or empty. Blink animation will not start.");
+            Debug.LogWarning("[BlinkCoroutine] Character name is null or empty. Exiting coroutine.");
             yield break;
         }
 
-        while (true)
+        shouldBlink[characterName] = true; // Разрешаем моргание
+
+        while (shouldBlink.ContainsKey(characterName) && shouldBlink[characterName])
         {
-            if ((!IsLeftAvatarAnimating && !IsRightAvatarAnimating) &&
-                (IsExternalAnimationPlaying == null || !IsExternalAnimationPlaying()))
+            Sprite closedEyesSprite = Resources.Load<Sprite>($"Characters/{characterName}/{characterName}_ClosedEyes");
+            if (closedEyesSprite == null)
             {
-                Sprite closedEyesSprite = Resources.Load<Sprite>($"Characters/{characterName}/{characterName}_ClosedEyes");
-                if (closedEyesSprite == null)
-                {
-                    Debug.LogWarning($"Closed eyes sprite for {characterName} not found. Retrying...");
-                    yield return new WaitForSeconds(1f);
-                    continue;
-                }
-
-                // Показ закрытых глаз.
-                eyesImage.sprite = closedEyesSprite;
-                eyesImage.gameObject.SetActive(true);
-                yield return new WaitForSeconds(0.2f);
-
-                // Скрытие глаз.
-                eyesImage.gameObject.SetActive(false);
-                yield return new WaitForSeconds(Random.Range(5f, 7f));
+                Debug.LogWarning($"[BlinkCoroutine] Closed eyes sprite for {characterName} not found.");
+                yield return new WaitForSeconds(1f);
+                continue;
             }
-            else
-            {
-                globalCoroutineCount--;
-                Debug.Log($"Корутина завершена. globalCoroutineCount : {globalCoroutineCount}");
-                yield return null;
-            }
+
+            // Показ закрытых глаз
+            eyesImage.sprite = closedEyesSprite;
+            eyesImage.gameObject.SetActive(true);
+            yield return new WaitForSeconds(0.2f);
+
+            // Скрытие глаз
+            eyesImage.gameObject.SetActive(false);
+            yield return new WaitForSeconds(Random.Range(5f, 7f));
         }
+
+        Debug.Log($"[BlinkCoroutine] Моргание завершено для {characterName}");
     }
+
 
 
 }

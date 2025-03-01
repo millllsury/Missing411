@@ -26,11 +26,14 @@ public class UIManager : MonoBehaviour
 
     [SerializeField] private GameObject settingsCanvas;
 
+    [SerializeField] private Button saveGameButton; 
+
     private void Start()
     {
-        
+        UpdateSaveButtonState();
     }
 
+   
 
     public void OpenSettings()
     {
@@ -113,10 +116,20 @@ public class UIManager : MonoBehaviour
     }
 
     public void MainMenuButtonClick()
-    { 
-
-        QuitConfirmationPanel.SetActive(false);
-        SaveConfirmationPanel.SetActive(true);
+    {
+        if (!GameStateManager.Instance.HasSaved())
+        {
+            SaveConfirmationPanel.SetActive(true);
+            QuitConfirmationPanel.SetActive(false);
+        }
+        else
+        {
+            QuitConfirmationPanel.SetActive(false);
+            Time.timeScale = 1;
+            dialogueManager.inputUnavailable = false;
+            SceneManager.LoadScene("MainMenu");
+        }
+        
     }
 
     public void CloseWindow()
@@ -126,6 +139,15 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
         dialogueManager.inputUnavailable = false;
     }
+    public void SaveGame()
+    {
+        dialogueManager.SaveProgress();
+        GameStateManager.Instance.isNewGame = false;
+        GameStateManager.Instance.SaveOriginalState(GameStateManager.Instance.GetSelectedSlotIndex()); 
+        GameStateManager.Instance.SetHasSaved(true); 
+        saveGameButton.interactable = false; 
+    }
+
 
     public void SaveConfirmation()
     {
@@ -137,6 +159,17 @@ public class UIManager : MonoBehaviour
         dialogueManager.inputUnavailable = false;
         SceneManager.LoadScene("MainMenu");
 
+    }
+
+    public void OnGameStateChanged()
+    {
+        GameStateManager.Instance.SetHasSaved(false); 
+        saveGameButton.interactable = true; 
+    }
+
+    private void UpdateSaveButtonState()
+    {
+        saveGameButton.interactable = !GameStateManager.Instance.HasSaved();
     }
 
     public void ExitWithoutSaving()

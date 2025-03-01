@@ -2056,6 +2056,7 @@
             },
             {
               "id": 89,
+              "background": "OpenDoorsView",
               "character": "Alice",
               "blockMovingForward": true,
               "animation": "moving",
@@ -2066,9 +2067,8 @@
             {
               "id": 90,
               "character": "Alice",
-              "animation": "moving",
               "texts": [
-                "I'll look around the room..."
+                "I'll look around the room...3"
               ]
             }
           ]

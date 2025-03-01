@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.TextCore.Text;
 using System.Collections.Generic;
+using System.Collections;
 //using UnityEditor.SearchService;
 
 public class WardrobeManager : MonoBehaviour
@@ -32,11 +33,10 @@ public class WardrobeManager : MonoBehaviour
     public SpriteRenderer eyesImage;
 
 
-    private GameStateManager gameStateManager;
+  
 
     private void Awake()
     {
-        gameStateManager = FindFirstObjectByType<GameStateManager>();
         SoundManager.Instance.PlaySoundByName("WardrobeMusic");
         blinkingManager.StartBlinking("Alice", eyesImage);
         currentCategory = "Hair"; // По умолчанию выбрана категория "Hair"
@@ -77,9 +77,11 @@ public class WardrobeManager : MonoBehaviour
         string mainSceneName = GameStateManager.Instance.LoadSceneID();
         SoundManager.Instance.StopAllSounds();
         GameStateManager.Instance.ClearTracksOnSceneChange();
+      
         SceneManager.LoadScene("Scene"+ mainSceneName);
         Debug.Log($"LoadScene вызван: {"Scene"+ mainSceneName}");
     }
+
 
 
     // Выбрать категорию "Hair"

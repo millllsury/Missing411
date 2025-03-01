@@ -16,11 +16,11 @@ public enum SoundCategory
 [System.Serializable]
 public class Sound
 {
-    public string name;          // Имя звука
-    public AudioClip clip;       // Аудиофайл
-    public bool loop;            // Зацикливать ли звук
-    public SoundCategory category; // Категория звука
-    [HideInInspector] public AudioSource source; // Аудиоисточник
+    public string name;          
+    public AudioClip clip;    
+    public bool loop;            
+    public SoundCategory category; 
+    [HideInInspector] public AudioSource source; 
 }
 public class SoundManager : MonoBehaviour
 {
@@ -30,9 +30,9 @@ public class SoundManager : MonoBehaviour
     public float backgroundVolume = 1f;
     public float characterVolume = 1f;
 
-    public static SoundManager Instance { get; private set; } // Singleton
+    public static SoundManager Instance { get; private set; } 
 
-    public List<Sound> sounds;       // Список звуков
+    public List<Sound> sounds;     
 
     private void Awake()
     {
@@ -87,11 +87,10 @@ public class SoundManager : MonoBehaviour
     {
         if (string.IsNullOrEmpty(soundTrigger))
         {
-            Debug.LogWarning("Sound trigger is null or empty.");
+            
             return;
         }
 
-        // Разделяем команду и имя звука
         string[] parts = soundTrigger.Split(':');
         string command = parts[0].ToLower();
         string soundName = parts.Length > 1 ? parts[1] : null;
@@ -102,37 +101,16 @@ public class SoundManager : MonoBehaviour
             case "play":
                 PlaySoundByName(soundName);
                 break;
-
             case "mute":
                 MuteSoundByName(soundName);
                 break;
-
-            case "effect":
-                if (effectName == "echo")
-                {
-                    StartUnderwaterEchoEffect();
-                }
-                else
-                {
-                    Debug.LogWarning($"Unknown effect: {effectName}");
-                }
-                break;
-
             case "stop":
-                if (effectName == "echo")
-                {
-                    StopUnderwaterEchoEffect();
-                }
-                else
-                {
-                    StopSoundByName(effectName);
-                }
+                 StopSoundByName(effectName);
                 break;
             case "stopall":
                 StopAllSounds();
                 break;
             default:
-                Debug.LogWarning($"Unknown sound command: {command}");
                 break;
         }
     }
@@ -148,7 +126,7 @@ public class SoundManager : MonoBehaviour
 
         if (newSound.source == null)
         {
-            Debug.LogError($"AudioSource for sound '{soundName}' is null!");
+            Debug.LogError($"AudioSource for sound '{soundName}' is null.");
             return;
         }
 
@@ -165,15 +143,13 @@ public class SoundManager : MonoBehaviour
             if (currentlyPlayingBg != null && currentlyPlayingBg != newSound)
             {
                 StartCoroutine(FadeOut(currentlyPlayingBg.source, 1f, currentlyPlayingBg.name));
-                Debug.Log($"currentlyPlayingBg.source : {currentlyPlayingBg.source} and currentlyPlayingBg.name: {currentlyPlayingBg.name}");
             }
         }
 
 
-
         if (newSound.category == SoundCategory.Background || newSound.category == SoundCategory.BackgroundEffects)
         {
-            StartCoroutine(FadeIn(newSound, 4f)); // Плавное начало
+            StartCoroutine(FadeIn(newSound, 4f)); 
         }
         else
         {
@@ -341,32 +317,6 @@ public class SoundManager : MonoBehaviour
                 return gameState.masterVolume;
         }
     }
-
-    private void StartUnderwaterEchoEffect()
-    {
-        Debug.Log("Applying underwater echo effect...");
-
-        foreach (var sound in sounds)
-        {
-            if (sound.source != null && sound.source.isPlaying)
-            {
-                AudioEchoFilter echoFilter = sound.source.GetComponent<AudioEchoFilter>();
-                if (echoFilter == null)
-                {
-                    echoFilter = sound.source.gameObject.AddComponent<AudioEchoFilter>();
-                }
-
-                // Увеличенные параметры для заметного эффекта
-                echoFilter.delay = 700f;  // Длинная задержка эха
-                echoFilter.decayRatio = 0.6f;  // Дольше сохраняет звук
-                echoFilter.wetMix = 1f;  // 100% эха, сильное изменение звука
-                echoFilter.dryMix = 0.2f;  // Оригинальный звук почти приглушен
-
-                Debug.Log($"Echo effect applied to: {sound.name}");
-            }
-        }
-    }
-
 
 
     private void StopUnderwaterEchoEffect()

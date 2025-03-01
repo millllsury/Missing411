@@ -248,14 +248,20 @@ public class Animations : MonoBehaviour
         if (!leaveLastFrame)
         {
             yield return FadeOut(emotionRenderer);
-
         }
 
         // Завершаем анимацию
         if (characterPosition == "left") isLeftAvatarAnimation = false;
         else if (characterPosition == "right") isRightAvatarAnimation = false;
 
-        Debug.Log("Анимация завершена, эмоция скрыта.");
+        Debug.Log($"Анимация завершена, эмоция скрыта. Проверка моргания для {characterName}");
+
+        // Проверяем, есть ли персонаж в сохранении
+        if (!IsCharacterInSave(characterName))
+        {
+            Debug.LogWarning($"[ShowEmotionForDuration] Персонаж {characterName} отсутствует в сохранении. Моргание не запускается.");
+            yield break; // Выходим из корутины, если персонажа нет в сохранении
+        }
 
         // Проверка перед запуском моргания
         if (blinkingManager != null && eyesRenderers.ContainsKey(characterPosition) && eyesRenderers[characterPosition] != null && !leaveLastFrame && !stopBlinkingPermanently)
@@ -268,6 +274,14 @@ public class Animations : MonoBehaviour
             Debug.Log($"Моргание для {characterName} остановлено из-за эмоции 'shadow'.");
         }
     }
+
+    private bool IsCharacterInSave(string characterName)
+    {
+        var (leftCharacter, rightCharacter) = GameStateManager.Instance.LoadCharacterNames();
+
+        return leftCharacter == characterName || rightCharacter == characterName;
+    }
+
 
 
     private IEnumerator FadeIn(SpriteRenderer renderer)
@@ -303,6 +317,9 @@ public class Animations : MonoBehaviour
         color.a = alpha;
         renderer.color = color;
     }
+
+   
+
 }
 
 

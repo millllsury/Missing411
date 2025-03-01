@@ -2,6 +2,7 @@
 using TMPro;
 using System.Collections;
 using Unity.VisualScripting;
+using System.Collections.Generic;
 
 public class CharacterManager : MonoBehaviour
 {
@@ -42,30 +43,43 @@ public class CharacterManager : MonoBehaviour
     public void LoadCharacters()
     {
         var (leftCharacter, rightCharacter) = GameStateManager.Instance.LoadCharacterNames();
+        Dictionary<string, int> savedPositions = GameStateManager.Instance.LoadCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex());
 
         Debug.Log($"Загрузка персонажей: Левый = {leftCharacter}, Правый = {rightCharacter}");
 
+        // Если позиции не найдены в сохранении, устанавливаем по умолчанию
+        if (!savedPositions.ContainsKey(leftCharacter))
+            savedPositions[leftCharacter] = 1; // Левая сторона
+        if (!savedPositions.ContainsKey(rightCharacter))
+            savedPositions[rightCharacter] = 2; // Правая сторона
+
+        leftAvatar.color = new Color(leftAvatar.color.r, leftAvatar.color.g, leftAvatar.color.b, 0f);
+        rightAvatar.color = new Color(rightAvatar.color.r, rightAvatar.color.g, rightAvatar.color.b, 0f);
+
         if (!string.IsNullOrEmpty(leftCharacter))
         {
-            SetCharacter(leftCharacter, 1, false, leftCharacter);
+            SetCharacter(leftCharacter, savedPositions[leftCharacter], false, leftCharacter);
             LoadAppearance();
         }
         else
         {
-            leftAvatar.sprite = null; // Удаляем спрайт, если персонаж удалён
+            leftAvatar.sprite = null; // Убираем персонажа, если его нет
         }
 
         if (!string.IsNullOrEmpty(rightCharacter))
         {
-            SetCharacter(rightCharacter, 2, false, rightCharacter);
+            SetCharacter(rightCharacter, savedPositions[rightCharacter], false, rightCharacter);
         }
         else
         {
-            rightAvatar.sprite = null; // Удаляем спрайт, если персонаж удалён
+            rightAvatar.sprite = null;
         }
-        
 
+        Transform charactersParent = leftAvatar.transform.parent;
+
+        StartCoroutine(FadeInCharacters(charactersParent, 0.3f));
     }
+
 
 
 
@@ -111,18 +125,16 @@ public class CharacterManager : MonoBehaviour
     public void SetCharacter(string speaker, int place, bool isNarration, string character)
     {
         //Debug.Log("SetCharacter вызван для персонажа: " + speaker + " в позиции: " + place);
+        if (isNarration)
+        {
+            return;
+        }
 
-        speakerPanelLeft.SetActive(false);
-        speakerPanelCenter.SetActive(false);
-        speakerPanelRight.SetActive(false);
-
-        GameObject activePanel = null;
 
         if (place == 1)
         {
             // Передаем leftEyesImage и указываем isLeft = true
             UpdateCharacter(ref currentLeftCharacter, leftAvatar, ref leftBlinkCoroutine, leftEyesImage, character, true);
-            activePanel = speakerPanelLeft;
             GetCurrentLeftCharacter();
             LoadAppearance();
 
@@ -131,22 +143,11 @@ public class CharacterManager : MonoBehaviour
         {
 
             UpdateCharacter(ref currentRightCharacter, rightAvatar, ref rightBlinkCoroutine, rightEyesImage, character, false);
-            activePanel = speakerPanelRight;
             GetCurrentRightCharacter();
 
         }
-        else if (isNarration)
-        {
-            activePanel = speakerPanelCenter;
-        }
+       
 
-
-        if (activePanel != null)
-        {
-            activePanel.SetActive(true);
-            TextMeshProUGUI speakerText = activePanel.transform.Find("SpeakerText").GetComponent<TextMeshProUGUI>();
-            speakerText.text = isNarration ? "..." : speaker;
-        }
     }
 
 
@@ -161,7 +162,7 @@ public class CharacterManager : MonoBehaviour
 
             currentCharacter = character;
             UpdateAvatar(avatar, character, isLeft);
-
+            Debug.Log($"[CharacterManager] StartBlinking called for {currentCharacter} at {Time.time}");
             blinkingManager.StartBlinking(currentCharacter, eyesImage);
 
             Debug.Log($"Starting blinking for character: {currentCharacter} ");
@@ -209,7 +210,7 @@ public class CharacterManager : MonoBehaviour
     }
 
     Debug.Log($"Sprite for the character was set: {character}, isNew: {isNewCharacter}");
-}
+    }
 
 
 
@@ -321,6 +322,7 @@ public class CharacterManager : MonoBehaviour
     {
         if (place == 1)
         {
+         
             avatarToBeHidden = leftAvatar;
             currentLeftCharacter = null; // Очищаем данные о левом персонаже
             GameStateManager.Instance.SaveCharacterNames(null, GetCurrentRightCharacter());
@@ -406,9 +408,6 @@ public class CharacterManager : MonoBehaviour
     {
         leftAvatar.gameObject.SetActive(false);
         rightAvatar.gameObject.SetActive(false);
-        speakerPanelLeft.SetActive(false);
-        speakerPanelCenter.SetActive(false);
-        speakerPanelRight.SetActive(false);
 
         if (leftBlinkCoroutine != null)
             StopCoroutine(leftBlinkCoroutine);
@@ -491,11 +490,13 @@ public class CharacterManager : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(currentLeftCharacter) && leftEyesImage != null)
             {
+                Debug.Log($"[FadeInCharacters] StartBlinking called for {currentLeftCharacter} at {Time.time}");
                 blinkingManager.StartBlinking(currentLeftCharacter, leftEyesImage);
             }
 
             if (!string.IsNullOrEmpty(currentRightCharacter) && rightEyesImage != null)
             {
+                Debug.Log($"[FadeInCharacters] StartBlinking called for {currentRightCharacter} at {Time.time}");
                 blinkingManager.StartBlinking(currentRightCharacter, rightEyesImage);
             }
         }

@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using System.Linq;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
@@ -10,6 +11,8 @@ using UnityEngine.EventSystems;
 
 public class DialogueManager : MonoBehaviour
 {
+
+
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField] private GameObject dialogueTextPanel;
 
@@ -24,12 +27,12 @@ public class DialogueManager : MonoBehaviour
     private GameFlagsManager flagsManager;
     [SerializeField] private DoorBehaviour doorBehaviour;
     [SerializeField] private BlinkingManager blinkingManager;
-
+    [SerializeField] private UIManager uiManager;
     private VisualNovelData visualNovelData;
     private Episode currentEpisode;
     private SceneData currentScene;
 
-    private int currentDialogueId=1;
+    private int currentDialogueId = 1;
     private int textCounter = 0;
 
     private bool firstTimeSceneSound;
@@ -55,9 +58,12 @@ public class DialogueManager : MonoBehaviour
 
     public bool blockMovingForward = false;
 
-   
 
-   
+
+    [SerializeField] public GameObject speakerPanelLeft;
+    [SerializeField] public GameObject speakerPanelCenter;
+    [SerializeField] public GameObject speakerPanelRight;
+
 
     void Start()
     {
@@ -87,7 +93,7 @@ public class DialogueManager : MonoBehaviour
             Debug.LogError("GameStateManager.Instance is null!");
         }
     }
-   
+
     private void InitializeComponents()
     {
         dataLoader = FindComponent<DataLoader>("DataLoader");
@@ -137,7 +143,7 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-       
+
         // Блокируем любые действия при активном экране эпизода, выборе или недоступности ввода
         if (isEpisodeScreenActive || isChoosing || backgroundController.IsTransitioning || inputUnavailable || blockMovingForward)
             return;
@@ -156,7 +162,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
- 
+
     private bool IsPointerOverUI()
     {
         return EventSystem.current.IsPointerOverGameObject();
@@ -191,15 +197,15 @@ public class DialogueManager : MonoBehaviour
     {
         EpisodeNameShowed = GameStateManager.Instance.GetGameState().episodeNameShowed;
 
-        if (EpisodeNameShowed) return; 
+        if (EpisodeNameShowed) return;
 
-        if (isEpisodeScreenActive) return; 
+        if (isEpisodeScreenActive) return;
 
         Sprite backgroundImage = Resources.Load<Sprite>(currentEpisode.backgroundImage);
         isEpisodeScreenActive = true;
         UIManager.ShowEpisodeScreen(currentEpisode.episodeName, backgroundImage);
 
-        EpisodeNameShowed = true; 
+        EpisodeNameShowed = true;
     }
 
 
@@ -231,7 +237,6 @@ public class DialogueManager : MonoBehaviour
                 textCounter = 0;
             }
             HideChoices();
-            // Обрабатываем звуки и анимации, если они указаны
             firstTimeSceneSound = true;
             HandleDialogueSound(dialogue);
             HandleDialogueAnimation(dialogue);
@@ -250,6 +255,7 @@ public class DialogueManager : MonoBehaviour
         if (dialogue == null) return;
         Debug.Log($"Dialogue: {currentDialogueId} and textCounter: {textCounter}");
         DisplayDialogueText(dialogue);
+        uiManager.OnGameStateChanged();
     }
 
     private void HandleDialogueAnimation(Dialogue dialogue)
@@ -263,9 +269,10 @@ public class DialogueManager : MonoBehaviour
         {
             StartBackgroundAnimation(dialogue);
         }
-        
+
         if (!string.IsNullOrEmpty(dialogue.background))
         {
+      
             backgroundController.SetBackgroundSmooth(dialogue.background, dialogue.smoothBgReplacement);
         }
 
@@ -305,33 +312,36 @@ public class DialogueManager : MonoBehaviour
         backgroundController.StartBackgroundAnimation(dialogue.backgroundAnimation, frameDelay, repeatCount, keepLastFrame, soundName, animationType);
     }
 
-    
+
     private Dialogue GetCurrentDialogue()
     {
-        var dialogue = currentScene.dialogues.FirstOrDefault(Dialogue => Dialogue.id == currentDialogueId);
+        var dialogue = currentScene.dialogues.FirstOrDefault(d => d.id == currentDialogueId);
 
         if (dialogue != null)
         {
-            // Если это нарративный текст, place не нужен
             if (dialogue.isNarration)
             {
                 dialogue.isNarration = true;
             }
             else if (!string.IsNullOrEmpty(dialogue.character))
             {
-                // Если персонаж уже был в сцене, берем последнее запомненное место
-                if (characterPositions.TryGetValue(dialogue.character, out int lastPlace))
+                // Загружаем сохраненные позиции из GameStateManager
+                Dictionary<string, int> savedPositions = GameStateManager.Instance.LoadCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex());
+
+                // Если персонаж есть в сохраненных позициях, используем их
+                if (savedPositions.ContainsKey(dialogue.character))
                 {
-                    dialogue.place = lastPlace;
+                    dialogue.place = savedPositions[dialogue.character];
                 }
+                // Если персонажа нет в сохраненных позициях, ставим по умолчанию
                 else
                 {
-                    // Если персонаж новый, ставим слева (1) по умолчанию и сохраняем
+ 
                     dialogue.place = characterPositions.Count == 0 ? 1 : 2;
                     characterPositions[dialogue.character] = dialogue.place;
-                    
-                    GameStateManager.Instance.SaveCharacterPositions(selectedSlotIndex, characterPositions);
-                   Debug.Log($"SaveCharacterPositions/ Character: {dialogue.character}, Place: {dialogue.place}");
+
+                    GameStateManager.Instance.SaveCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex(), characterPositions);
+                    Debug.Log($"SaveCharacterPositions/ Character: {dialogue.character}, Place: {dialogue.place}");
                 }
             }
             else
@@ -339,15 +349,16 @@ public class DialogueManager : MonoBehaviour
                 Debug.LogWarning($"Dialogue {dialogue.id} has no character and is not narration.");
             }
 
-            // **Гарантируем, что speaker устанавливается всегда**
+            // Гарантируем, что speaker устанавливается всегда
             if (string.IsNullOrEmpty(dialogue.speaker) && !string.IsNullOrEmpty(dialogue.character))
             {
-                dialogue.speaker = dialogue.character; // Устанавливаем speaker как имя персонажа
+                dialogue.speaker = dialogue.character;
             }
         }
 
         return dialogue;
     }
+
 
     private string GetCharacterPosition(string character, int place)
     {
@@ -367,6 +378,7 @@ public class DialogueManager : MonoBehaviour
     private void DisplayDialogueText(Dialogue dialogue)
     {
         characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
+        UpdateSpeakerPanel(dialogue);
 
         if (dialogue.texts != null && dialogue.texts.Count > 0)
         {
@@ -394,13 +406,13 @@ public class DialogueManager : MonoBehaviour
                 }
                 else
                 {
-                   // Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
+                    // Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
                     dialogueHistory.Push((currentDialogueId, textCounter - 1));
                     //Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter - 1}");
                     dialogueText.text = dialogue.texts[textCounter];
                     textCounter++;
                     UpdateBackButtonState(true);
-                   // Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
+                    // Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
                 }
             }
             else
@@ -420,7 +432,7 @@ public class DialogueManager : MonoBehaviour
                     GameStateManager.Instance.UnlockNextItem();
 
                     FeedbackManager.Instance.ShowMessage("Ты открыл новый наряд и прическу!");
-                    
+
                 }
 
                 if (dialogue.reward > 0)
@@ -432,18 +444,18 @@ public class DialogueManager : MonoBehaviour
 
                 if (dialogue.smoothDisappear)
                 {
-                    characterManager.SmoothDisappearCharacter(dialogue.smoothDisappear, dialogue.place);
-
+                   
                     if (blinkingManager != null && !string.IsNullOrEmpty(dialogue.character))
                     {
                         blinkingManager.StopBlinking(dialogue.character);
                     }
+                    characterManager.SmoothDisappearCharacter(dialogue.smoothDisappear, dialogue.place);
                 }
 
 
                 if (dialogue.miniGame)
                 {
-                    
+
                 }
 
                 HandleDialogueEnd(dialogue);
@@ -458,23 +470,46 @@ public class DialogueManager : MonoBehaviour
         goBackButtonActivated = false;
     }
 
-    private void HandleScreenRippleEffect(Dialogue dialogue)
+    public void UpdateSpeakerPanel(Dialogue dialogue)
     {
-        if (dialogue.screenRipple)
+        // Деактивируем все панели перед установкой
+        speakerPanelLeft.SetActive(false);
+        speakerPanelCenter.SetActive(false);
+        speakerPanelRight.SetActive(false);
+
+        GameObject activePanel = null;
+        string speakerText = "...";
+
+        // Загружаем сохраненные позиции персонажей
+        Dictionary<string, int> savedPositions = GameStateManager.Instance.LoadCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex());
+
+        if (!string.IsNullOrEmpty(dialogue.character)) // Если есть персонаж
         {
-            ScreenRipple screenRipple = FindFirstObjectByType<ScreenRipple>();
-            if (screenRipple != null)
+            int characterPlace = savedPositions.ContainsKey(dialogue.character) ? savedPositions[dialogue.character] : dialogue.place;
+
+            if (characterPlace == 1) // Если персонаж слева
             {
-                screenRipple.ApplyEffect();
-                screenRipple.StartEffect();
-                Debug.Log("Эффект ряби активирован через JSON.");
+                activePanel = speakerPanelLeft;
             }
-            else
+            else if (characterPlace == 2) // Если персонаж справа
             {
-                Debug.LogError("ScreenRipple не найден в сцене!");
+                activePanel = speakerPanelRight;
             }
+            speakerText = dialogue.character; // Имя персонажа
+        }
+        else if (dialogue.isNarration) // Если это нарративный текст
+        {
+            activePanel = speakerPanelCenter;
+        }
+
+        if (activePanel != null)
+        {
+            activePanel.SetActive(true);
+            TextMeshProUGUI speakerTextComponent = activePanel.transform.Find("SpeakerText").GetComponent<TextMeshProUGUI>();
+            speakerTextComponent.text = speakerText;
         }
     }
+
 
     private void HandleDialogueEnd(Dialogue dialogue)
     {
@@ -494,6 +529,7 @@ public class DialogueManager : MonoBehaviour
 
     private void AdvanceToNextDialogue()
     {
+        GameStateManager.Instance.SetHasTransited(false);
         var nextDialogue = FindNextDialogue();
         if (nextDialogue != null)
         {
@@ -546,6 +582,8 @@ public class DialogueManager : MonoBehaviour
         return true;
     }
 
+
+
     // Сохранение прогресса перед переходом к следующей сцене
     private void SaveGameStateForSceneChange(SceneData nextScene)
     {
@@ -565,7 +603,7 @@ public class DialogueManager : MonoBehaviour
         GameStateManager.Instance.GetGameState().currentBackgroundAnimation = null;
         GameStateManager.Instance.GetGameState().currentForegroundAnimation = null;
 
-        
+
         GameStateManager.Instance.SaveBackground(GameStateManager.Instance.LoadBackground()); //  Вместо обнуления сохраняем последний фон
         GameStateManager.Instance.SavePlayingTracks();//////
         GameStateManager.Instance.ClearBackgroundAnimation();
@@ -591,7 +629,7 @@ public class DialogueManager : MonoBehaviour
         {
             firstTimeSceneSound = false;
         }
-      
+
         if (!string.IsNullOrEmpty(dialogue.soundTrigger))
         {
             if (SoundManager.Instance != null)
@@ -607,13 +645,13 @@ public class DialogueManager : MonoBehaviour
 
     private void HadleDialogueBlockForward(Dialogue dialogue)
     {
-        if(dialogue.blockMovingForward== true)
+        if (dialogue.blockMovingForward == true)
         {
             blockMovingForward = true;
             doorBehaviour.HideObjects();
         }
 
-       
+
     }
 
 
@@ -674,7 +712,7 @@ public class DialogueManager : MonoBehaviour
             characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
             HandleDialogueAnimation(dialogue);
         }
-        
+
     }
 
     public void UpdateBackButtonState(bool state)
@@ -774,11 +812,11 @@ public class DialogueManager : MonoBehaviour
         isChoosing = false;
     }
 
-    
+
 
     public void OnChoiceSelected(Choice choice)
     {
-       
+          
 
         if (choice.cost > 0)
         {
@@ -789,7 +827,7 @@ public class DialogueManager : MonoBehaviour
                 return;
 
             }
-           
+
         }
 
         if (choice.reward > 0)
@@ -806,20 +844,22 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
-        if(choice.feedback != null)
+        if (choice.feedback != null)
         {
             FeedbackManager.Instance.ShowMessage(choice.feedback);
         }
-       
+
 
         // Clearing the dialogue history stack
         dialogueHistory.Clear();
 
         Debug.Log("Stack contents after selection: " + string.Join(" -> ", dialogueHistory.Select(d => $"[ID={d.currentDialogueId}, TextCounter={d.textCounter}]")));
 
+        
 
         HideChoices();
         AdvanceToNextDialogue();
+        uiManager.OnGameStateChanged();
     }
 
 
@@ -831,11 +871,13 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        int safeTextCounter = textCounter < 0 ? 0 : textCounter - 1;
+
         GameStateManager.Instance.SaveCurrentState(
             currentEpisode.episodeId,
             currentScene.sceneId,
             currentDialogueId,
-            textCounter - 1,
+            safeTextCounter, // Используем исправленный textCounter
             EpisodeNameShowed,
             flagsManager.GetAllFlags(),
             characterManager.GetCurrentLeftCharacter(),
@@ -868,7 +910,7 @@ public class DialogueManager : MonoBehaviour
 
     public void LoadProgress()
     {
-        
+
         if (GameStateManager.Instance == null)
         {
             Debug.LogError("GameStateManager.Instance not initialized.");
@@ -901,7 +943,7 @@ public class DialogueManager : MonoBehaviour
                 Debug.Log($"Stack element was added: ID={item.dialogueId}, TextCounter={item.textCounter}");
             }
         }
-       
+
         // scene and dialogue
         EpisodeNameShowed = loadedState.episodeNameShowed;
         Debug.Log($"Scene {loadedState.currentScene} and dialogue {loadedState.currentDialogue} are loading.");
@@ -912,25 +954,14 @@ public class DialogueManager : MonoBehaviour
 
         characterPositions = GameStateManager.Instance.LoadCharacterPositions(selectedSlotIndex);
 
-        
-        if(GameStateManager.Instance.isNewGame == false)
-        {
-            RestoreGameState(loadedState);
-        }
 
-        if (GameStateManager.Instance.rewritingGame == false)
-        {
-            RestoreGameState(loadedState);
-        }
-
-        GameStateManager.Instance.rewritingGame = false;
-
-
+         RestoreGameState(loadedState);
+       
     }
 
     private void RestoreGameState(GameState loadedState)
     {
-        Debug.Log($"starts with GameStateManager.Instance.isNewGame: {GameStateManager.Instance.isNewGame} и GameStateManager.Instance.rewritingGame: {GameStateManager.Instance.rewritingGame}");
+        Debug.Log($"starts with GameStateManager.Instance.isNewGame: {GameStateManager.Instance.isNewGame}");
         // Restoring flags
         flagsManager.SetAllFlags(loadedState.flags);
 
@@ -942,18 +973,18 @@ public class DialogueManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(foregroundAnimation))
         {
-            backgroundController.StartBackgroundAnimation(foregroundAnimation, foregroundFrameDelay, foregroundRepeatCount, foregroundKeepLastFrame, null ,"foreground");
+            backgroundController.StartBackgroundAnimation(foregroundAnimation, foregroundFrameDelay, foregroundRepeatCount, foregroundKeepLastFrame, null, "foreground");
         }
 
         var (backgroundAnimation, frameDelay, repeatCount, keepLastFrame) = GameStateManager.Instance.LoadBackgroundAnimation();
         if (!string.IsNullOrEmpty(backgroundAnimation))
         {
-            backgroundController.StartBackgroundAnimation(backgroundAnimation, frameDelay, repeatCount, keepLastFrame, null,  "background");
+            backgroundController.StartBackgroundAnimation(backgroundAnimation, frameDelay, repeatCount, keepLastFrame, null, "background");
         }
 
         // characters
         characterManager.LoadCharacters();
-        
+       
 
         GameStateManager.Instance.LoadPlayingTracks();
 
@@ -991,13 +1022,10 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.LogError("Error in GotKeyReward!");
         }
+        uiManager.OnGameStateChanged();
     }
 
-    private void OnDisable()
-    {
-        SaveProgress();
-    }
-
+  
 
 }
 

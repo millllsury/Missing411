@@ -9,9 +9,9 @@ using UnityEngine.UI;
 public class MainMenuController : MonoBehaviour
 {
     [Header("UI Elements")]
-    public GameObject loadingScreen;         
-    public Image progressFill;               
-    public RectTransform thumb;              
+    public GameObject loadingScreen;
+    public Image progressFill;
+    public RectTransform thumb;
     public float loadTime = 1.5f;
     private float progress = 0f;             // Прогресс загрузки (0-1)
     private float maxWidth;                  // Ширина прогресс-бара
@@ -28,7 +28,7 @@ public class MainMenuController : MonoBehaviour
 
     private FeedbackManager feedbackManager;
 
-    
+    [SerializeField] private GameObject rewriteSlotPanel;
 
     private void Start()
     {
@@ -85,9 +85,10 @@ public class MainMenuController : MonoBehaviour
     }
 
 
+    private int emptySlotIndex = -1; // Для хранения индекса слота перед подтверждением
+
     public void NewGame()
     {
- 
         Debug.Log("New Game is started.");
 
         if (GameStateManager.Instance == null)
@@ -95,24 +96,45 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        // checks if there is any empty slot
-        var emptySlotIndex = GameStateManager.Instance.GetSaveSlots()
+        // Проверяем, есть ли пустой слот
+        emptySlotIndex = GameStateManager.Instance.GetSaveSlots()
             .FindIndex(slot => slot.gameState == null);
 
         if (emptySlotIndex == -1)
         {
-            Debug.LogWarning("All slots are full. Overwriting Slot 1.");
-            emptySlotIndex = 0; 
-            GameStateManager.Instance.rewritingGame = true;
-        }
-        else
-        {
-            GameStateManager.Instance.isNewGame = true;
-            
+            // Если слотов нет, показываем панель подтверждения
+            rewriteSlotPanel.SetActive(true);
+            Debug.LogWarning("All slots are full. Waiting for confirmation to overwrite Slot 1.");
+            return; // Ждем подтверждения, дальше код не выполняем!
         }
 
+        // Если есть свободный слот, новая игра создается сразу
+        GameStateManager.Instance.isNewGame = true;
+        StartNewGame(emptySlotIndex);
+    }
+
+    // Метод, который вызывается при нажатии "Да" в окне подтверждения
+    public void ConfirmOverwriteSlot()
+    {
+        emptySlotIndex = 0; // Перезаписываем первый слот
+        GameStateManager.Instance.isNewGame = true; // Добавляем флаг новой игры
+        rewriteSlotPanel.SetActive(false);
+        StartNewGame(emptySlotIndex);
+    }
+
+    // Метод, который вызывается при нажатии "Нет"
+    public void CancelOverwriteSlot()
+    {
+        rewriteSlotPanel.SetActive(false); // Просто закрываем окно
+        Debug.Log("Slot overwrite canceled.");
+    }
+
+    // Метод, который фактически создает новую игру
+    private void StartNewGame(int slotIndex)
+    {
         var saveSlots = GameStateManager.Instance.GetSaveSlots();
-        var emptySlot = saveSlots[emptySlotIndex];
+        var emptySlot = saveSlots[slotIndex];
+
         emptySlot.gameState = new GameState
         {
             currentEpisode = "1",
@@ -126,19 +148,19 @@ public class MainMenuController : MonoBehaviour
             keys = 5,
             unlockedHairstyles = new List<int> { 0, 1 },
             unlockedClothes = new List<int> { 0, 1 }
-
         };
+
         emptySlot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-        GameStateManager.Instance.SelectSlot(emptySlotIndex);
-
+        GameStateManager.Instance.SelectSlot(slotIndex);
         GameStateManager.Instance.SaveSlotsToFile();
 
-        progress = 0f; //for loading screen
-        loadingScreen.SetActive(true); 
+        progress = 0f; // Для загрузочного экрана
+        loadingScreen.SetActive(true);
         StartCoroutine(LoadSceneAsync("Scene1"));
         menuCanvasGroup.alpha = 0f;
     }
+
 
 
     private IEnumerator LoadSceneAsync(string sceneName)
@@ -222,45 +244,49 @@ public class MainMenuController : MonoBehaviour
         Application.Quit(); // Работает только в собранной версии игры, не в редакторе Unity
     }
 
-    
 
-    public void PopulateSaveSlots()
+
+    private void PopulateSaveSlots()
     {
-        // Очищаем старые кнопки, если они есть
         foreach (Transform child in slotsParent)
         {
             Destroy(child.gameObject);
         }
 
-        // Получаем список слотов из GameStateManager
         var slots = GameStateManager.Instance.GetSaveSlots();
 
         for (int i = 0; i < slots.Count; i++)
         {
             var slot = slots[i];
-            var slotButtonInstance = Instantiate(slotButtonPrefab, slotsParent); // Создаём кнопку из префаба
 
-            // Устанавливаем текст кнопки
-            var slotText = slotButtonInstance.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            slotText.text = $"Slot {i + 1}";
-
-            // Добавляем обработчик нажатия
-            int slotIndex = i; // Локальная переменная для замыкания
-            slotButtonInstance.GetComponent<Button>().onClick.AddListener(() =>
+            
+            if (slot.gameState == null)
             {
-                HandleSlotSelection(slotIndex); // Вызываем метод обработки выбора слота
-            });
-
-            // Отображаем информацию о сохранении
-            if (slot.gameState != null)
-            {
-                slotText.text += $"\nDate: {slot.saveDate}";
+                continue;
             }
-            else
+
+            var slotButtonInstance = Instantiate(slotButtonPrefab, slotsParent);
+            var slotText = slotButtonInstance.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+            slotText.text = $"Slot {i + 1}\nDate: {slot.saveDate}";
+
+            int slotIndex = i; 
+            slotButtonInstance.GetComponent<Button>().onClick.AddListener(() => HandleSlotSelection(slotIndex));
+
+           
+            Button deleteButton = slotButtonInstance.transform.Find("DeleteButton")?.GetComponent<Button>();
+            if (deleteButton != null)
             {
-                slotText.text += "\nEmpty slot";
+                deleteButton.onClick.AddListener(() => DeleteSlot(slotIndex, slotButtonInstance));
             }
         }
+    }
+
+
+    private void DeleteSlot(int slotIndex, GameObject slotUIElement)
+    {
+        GameStateManager.Instance.ClearSlot(slotIndex);
+        Destroy(slotUIElement); // Удаляем UI элемент слота
+        Debug.Log($"Слот {slotIndex + 1} очищен.");
     }
 
     private void HandleSlotSelection(int slotIndex)
@@ -271,7 +297,7 @@ public class MainMenuController : MonoBehaviour
         {
             return;
         }
-        //getting all slots
+        
         var slots = GameStateManager.Instance.GetSaveSlots();
 
         if (slotIndex < 0 || slotIndex >= slots.Count)

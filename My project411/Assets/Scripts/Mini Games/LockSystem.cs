@@ -136,6 +136,7 @@ public class LockSystem : MonoBehaviour
         GameStateManager.Instance.UnlockNextItem();
         FeedbackManager.Instance.ShowMessage("You've got a new outfit!");
         clothes.SetActive(false);
+
     }
 
 

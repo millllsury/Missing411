@@ -93,8 +93,9 @@ public class GameStateManager : MonoBehaviour
 
     public GameState originalState; // To store the original state
     public bool isNewGame = false;
-    public bool rewritingGame = false;
     public static GameStateManager Instance { get; private set; }
+
+    public bool hasBeenTransited = false;
 
     private void Awake()
     {
@@ -243,20 +244,19 @@ public class GameStateManager : MonoBehaviour
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-            //Debug.LogError($"Индекс слота {slotIndex} вне диапазона.");
             return;
         }
 
         var selectedSlot = saveSlots.slots[slotIndex];
         if (selectedSlot.gameState == null)
         {
-            Debug.LogWarning($"Слот {slotIndex + 1} пуст.");
+            Debug.LogWarning($"Slot {slotIndex + 1} is empty.");
             return;
         }
         SaveOriginalState(slotIndex);
         selectedSlotIndex = slotIndex;
-        currentState = selectedSlot.gameState; // Устанавливаем текущее состояние
-       // Debug.Log($"Слот {slotIndex + 1} выбран. Состояние игры загружено.");
+        currentState = selectedSlot.gameState; 
+       
     }
 
 
@@ -309,6 +309,29 @@ public class GameStateManager : MonoBehaviour
         SaveSlotsToFile();
     }
 
+
+    private bool hasSaved = false; //Flag indicating whether a save was made
+
+    public void SetHasSaved(bool value)
+    {
+        hasSaved = value;
+    }
+
+    public bool HasSaved()
+    {
+        return hasSaved;
+    }
+
+    public void SetHasTransited(bool value)
+    {
+        hasBeenTransited = value;
+    }
+
+    public bool HasBeenTransited()
+    {
+        return hasBeenTransited;
+    }
+
     public void SaveSlotsToFile()
     {
         string json = JsonConvert.SerializeObject(saveSlots, Formatting.Indented);
@@ -339,22 +362,23 @@ public class GameStateManager : MonoBehaviour
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-            //Debug.LogError("Индекс слота недействителен для сохранения исходного состояния.");
+          
             return;
         }
 
         var slot = saveSlots.slots[slotIndex];
         if (slot.gameState != null)
         {
-            // Клонируем текущее состояние для сохранения
+            
             originalState = JsonConvert.DeserializeObject<GameState>(
                 JsonConvert.SerializeObject(slot.gameState));
-            //Debug.Log($"Исходное состояние слота {slotIndex + 1} сохранено.");
+
+           
         }
         else
         {
-            originalState = null; // Слот был пуст
-            //Debug.Log($"Слот {slotIndex + 1} изначально пуст.");
+            originalState = null;
+            
         }
     }
 
@@ -474,7 +498,7 @@ public class GameStateManager : MonoBehaviour
         }
         savedCharacterPositions[slotIndex] = new Dictionary<string, int>(positions);
 
-        Debug.Log($"[SaveCharacterPositions] Слот {slotIndex}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
+        Debug.Log($"[SaveCharacterPositions] Слот {slotIndex+1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
     }
 
     // Загрузка позиций для текущего слота
@@ -486,7 +510,7 @@ public class GameStateManager : MonoBehaviour
             return new Dictionary<string, int>(positions);
         }
 
-        Debug.Log($"[LoadCharacterPositions] Нет сохраненных позиций для слота {slotIndex}, создаю пустой словарь.");
+        Debug.Log($"[LoadCharacterPositions] Нет сохраненных позиций для слота {slotIndex+1}, создаю пустой словарь.");
         return new Dictionary<string, int>(); // Если нет данных, возвращаем пустой словарь
     }
 
@@ -700,6 +724,7 @@ public class GameStateManager : MonoBehaviour
     public void AddKeys(int amount)
     {
         currentState.keys += amount;
+        
     }
 
     public bool SpendKeys(int amount)
@@ -724,6 +749,7 @@ public class GameStateManager : MonoBehaviour
 
         collectedKeys[slotIndex].Add(keyID);
         Debug.Log($"[SaveKeyCollected] Ключ {keyID} сохранен в слот {slotIndex}");
+        
     }
 
     // Проверка, был ли ключ уже собран
@@ -762,6 +788,7 @@ public class GameStateManager : MonoBehaviour
             Debug.Log($"Открыта новая одежда: {nextClothesIndex}");
         }
 
+        
         //SaveGameToSlot(GetSelectedSlotIndex()); // Сохраняем прогресс только в выбранный слот
 
     }

@@ -12043,9 +12043,6 @@ MonoBehaviour:
   rightAvatar: {fileID: 6446857026675819968}
   leftEyesImage: {fileID: 3567048394910164570}
   rightEyesImage: {fileID: 4791174413652486490}
-  speakerPanelLeft: {fileID: 7165695916363801309}
-  speakerPanelCenter: {fileID: 1680035720944587315}
-  speakerPanelRight: {fileID: 5958107800118718391}
   characterLeft: {fileID: 4764571467620508325}
   characterRight: {fileID: 2744195039554067354}
   animations: {fileID: 2530418757318969264}
@@ -12983,9 +12980,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8687644989554207655}
-        m_TargetAssemblyTypeName: DialogueManager, Assembly-CSharp
-        m_MethodName: SaveProgress
+      - m_Target: {fileID: 7830324738891455520}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: SaveGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14367,7 +14364,7 @@ GameObject:
   - component: {fileID: 1338834127871154989}
   - component: {fileID: 4791174413652486490}
   m_Layer: 0
-  m_Name: EyesRight
+  m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15333,7 +15330,7 @@ GameObject:
   - component: {fileID: 3802687756099604265}
   - component: {fileID: 3567048394910164570}
   m_Layer: 0
-  m_Name: EyesLeft
+  m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16711,6 +16708,7 @@ MonoBehaviour:
   episodeText: {fileID: 3460156573421866832}
   wardrobeSceneName: WardrobeScene
   settingsCanvas: {fileID: 354387003}
+  saveGameButton: {fileID: 2694800515983734122}
 --- !u!224 &7835457623562512869
 RectTransform:
   m_ObjectHideFlags: 0
@@ -17241,6 +17239,7 @@ MonoBehaviour:
   animations: {fileID: 2530418757318969264}
   doorBehaviour: {fileID: 0}
   blinkingManager: {fileID: 6683295833931337226}
+  uiManager: {fileID: 7830324738891455520}
   isChoosing: 0
   isEpisodeScreenActive: 0
   inputUnavailable: 0
@@ -17248,6 +17247,9 @@ MonoBehaviour:
   choiceButtonCostPrefab: {fileID: 6809820272699934589, guid: 9ddc035bdd703a1478a50ce7819ef9cb, type: 3}
   choicesPanel: {fileID: 5852680283606098137}
   blockMovingForward: 0
+  speakerPanelLeft: {fileID: 7165695916363801309}
+  speakerPanelCenter: {fileID: 1680035720944587315}
+  speakerPanelRight: {fileID: 5958107800118718391}
 --- !u!224 &8731990437806093717
 RectTransform:
   m_ObjectHideFlags: 0

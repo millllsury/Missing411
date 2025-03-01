@@ -68,7 +68,17 @@ public class BackgroundController : MonoBehaviour
             {
                 StopCoroutine(currentTransitionCoroutine);
             }
-            currentTransitionCoroutine = StartCoroutine(SmoothBackgroundTransitionWithElements(backgroundName));
+            if (GameStateManager.Instance.HasBeenTransited())
+            {
+                return;
+            }
+            else
+            {
+                currentTransitionCoroutine = StartCoroutine(SmoothBackgroundTransitionWithElements(backgroundName));
+                GameStateManager.Instance.SetHasTransited(true);
+            }
+            
+            
         }
         else
         {
@@ -81,10 +91,10 @@ public class BackgroundController : MonoBehaviour
     private IEnumerator SmoothBackgroundTransitionWithElements(string backgroundName)
     {
         IsTransitioning = true;
-
+       
         // 1. Отключаем UI и персонажей
         ToggleElements(false);
-
+        
         // 2. Плавное затемнение экрана (до 50%)
         float fadeDuration = 1.5f;
         float elapsedTime = 0f;
@@ -189,7 +199,9 @@ public class BackgroundController : MonoBehaviour
 
         if (charactersParent != null)
         {
+            Debug.Log($"[FadeInElements] StartBlinking called for .... at {Time.time}");
             yield return characterManager.StartCoroutine(characterManager.FadeInCharacters(charactersParent.transform));
+           
         }
     }
 
