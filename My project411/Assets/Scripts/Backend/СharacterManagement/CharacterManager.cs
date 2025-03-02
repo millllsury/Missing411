@@ -126,6 +126,8 @@ public class CharacterManager : MonoBehaviour
             return;
         }
 
+        var (leftCharacter, rightCharacter) = GameStateManager.Instance.LoadCharacterNames();
+        
 
         if (place == 1)
         {
@@ -133,16 +135,16 @@ public class CharacterManager : MonoBehaviour
             UpdateCharacter(ref currentLeftCharacter, leftAvatar, ref leftBlinkCoroutine, leftEyesImage, character, true);
             GetCurrentLeftCharacter();
             LoadAppearance();
-
+            GameStateManager.Instance.SaveCharacterNames(character, rightCharacter);
         }
         else if (place == 2)
         {
 
             UpdateCharacter(ref currentRightCharacter, rightAvatar, ref rightBlinkCoroutine, rightEyesImage, character, false);
             GetCurrentRightCharacter();
-
+            GameStateManager.Instance.SaveCharacterNames(leftCharacter, character);
         }
-
+        
 
     }
 

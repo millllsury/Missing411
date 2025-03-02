@@ -860,11 +860,29 @@ public class DialogueManager : MonoBehaviour
 
         int safeTextCounter = textCounter < 0 ? 0 : textCounter - 1;
 
+        int episodeId = currentEpisode.episodeId;
+        int sceneId = currentScene.sceneId;
+        int dialogueId = currentDialogueId;
+        int textCounterToSave = safeTextCounter;
+        string backgroundToSave = GameStateManager.Instance.LoadBackground();
+
+        // Если blockMovingForward = true, сохраняем заданный прогресс
+        if (blockMovingForward)
+        {
+            episodeId = 1;
+            sceneId = 2;
+            dialogueId = 88;
+            textCounterToSave = 0;
+            backgroundToSave = "ChoosingDoorsAll";
+            GameStateManager.Instance.SaveBackground(backgroundToSave);
+            Debug.Log("Сохранение принудительного прогресса: 1-й эпизод, 2-я сцена, 88-й диалог, 0-й текст.");
+        }
+
         GameStateManager.Instance.SaveCurrentState(
-            currentEpisode.episodeId,
-            currentScene.sceneId,
-            currentDialogueId,
-            safeTextCounter, // Используем исправленный textCounter
+            episodeId,
+            sceneId,
+            dialogueId,
+            textCounterToSave,
             EpisodeNameShowed,
             flagsManager.GetAllFlags(),
             characterManager.GetCurrentLeftCharacter(),
@@ -881,11 +899,11 @@ public class DialogueManager : MonoBehaviour
 
         // Сохраняем историю диалогов до выбора
         var dialogueHistoryList = dialogueHistory.Reverse()
-       .Select(item => new DialogueState(item.currentDialogueId ?? -1, item.textCounter))
-       .ToList();
+            .Select(item => new DialogueState(item.currentDialogueId ?? -1, item.textCounter))
+            .ToList();
 
         Debug.Log("Saved dialog path: " +
-            string.Join(" -> ", dialogueHistoryList.Select(d => $"(ID={d.dialogueId}, TextCounter=	{d.textCounter})")));
+            string.Join(" -> ", dialogueHistoryList.Select(d => $"(ID={d.dialogueId}, TextCounter={d.textCounter})")));
 
         GameStateManager.Instance.GetGameState().dialogueHistory = dialogueHistoryList;
 
@@ -893,6 +911,7 @@ public class DialogueManager : MonoBehaviour
 
         Debug.Log($"Game progress saved in slot {selectedSlotIndex + 1}.");
     }
+
 
 
     public void LoadProgress()

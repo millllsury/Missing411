@@ -2042,24 +2042,22 @@
               "smoothBgReplacement": true,
               "isNarration": true,
               "texts": [
-                "...",
-                "Alice went into the house."
+                "..."
               ]
             },
             {
               "id": 88,
               "character": "Alice",
-              "animation": "moving",
               "texts": [
-                "I'll look around the room..."
+                "Alice went into the house."
               ]
             },
             {
               "id": 89,
               "background": "OpenDoorsView",
               "character": "Alice",
-              "blockMovingForward": true,
               "animation": "moving",
+              "blockMovingForward": true,
               "texts": [
                 "I'll look around the room..."
               ]
@@ -2067,6 +2065,7 @@
             {
               "id": 90,
               "character": "Alice",
+              "background": "OpenDoors",
               "texts": [
                 "I'll look around the room...3"
               ]
@@ -2087,30 +2086,8 @@
             {
               "id": 2,
               "character": "Alice",
-              "background": "OpenDoorsView",
-              "blockMovingForward": true,
-              "choices": [
-                {
-                  "text": "Look at the room on the left.",
-                  "buttonID": "LeftDoorButton",
-                  "actions": [
-                    {
-                      "key": "leftBedroom",
-                      "value": true
-
-                    }
-                  ]
-                },
-                {
-                  "text": "Look around the house.",
-                  "buttonID": "RightDoorButton",
-                  "actions": [
-                    {
-                      "key": "rightMainRoom",
-                      "value": true
-                    }
-                  ]
-                }
+              "texts": [
+                "I'm so tired..."
               ]
             }
           ]

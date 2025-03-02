@@ -16,22 +16,15 @@ public class DoorBehaviour : MonoBehaviour
 
     private GameFlagsManager flagsManager;
     private DialogueManager dialogueManager;
-    
-
-
-    public void HideObjects()
-    {
-        doors.gameObject.SetActive(true);
-        backButton.gameObject.SetActive(false);
-        wardrobeBtn.interactable = false;
-    }
-
+    [SerializeField] private Image leftDoorImage;  
+    [SerializeField] private Image rightDoorImage;
+    [SerializeField] private Sprite leftDoorOpenSprite;  
+    [SerializeField] private Sprite rightDoorOpenSprite;
     private void Awake()
     {
         flagsManager = FindAnyObjectByType<GameFlagsManager>();
         dialogueManager = FindAnyObjectByType<DialogueManager>();
         doorAnimator = GetComponent<Animator>();
-
 
         if (doorAnimator == null)
         {
@@ -43,12 +36,47 @@ public class DoorBehaviour : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        LoadDoorState();
+    }
+
     private void Update()
     {
-        if (flagsManager.GetFlag("leftBedroom") && flagsManager.GetFlag("rightMainRoom"))
+        if (GameStateManager.Instance.GetLeftDoorOpened() && GameStateManager.Instance.GetRightDoorOpened())
         {
             nextButton.gameObject.SetActive(true);
         }
+    }
+
+    private void LoadDoorState()
+    {
+        if (GameStateManager.Instance.GetLeftDoorOpened())
+        {
+            // Используем спрайт из инспектора или загружаем из Resources
+            leftDoorImage.sprite = leftDoorOpenSprite != null
+                ? leftDoorOpenSprite
+                : Resources.Load<Sprite>("Backgrounds/Doors/OpenDoor1");
+
+            Debug.Log("Левая дверь уже была открыта, устанавливаем спрайт.");
+        }
+
+        if (GameStateManager.Instance.GetRightDoorOpened())
+        {
+            // Используем спрайт из инспектора или загружаем из Resources
+            rightDoorImage.sprite = rightDoorOpenSprite != null
+                ? rightDoorOpenSprite
+                : Resources.Load<Sprite>("Backgrounds/Doors/OpenDoor2");
+
+            Debug.Log("Правая дверь уже была открыта, устанавливаем спрайт.");
+        }
+    }
+
+    public void HideObjects()
+    {
+        doors.gameObject.SetActive(true);
+        backButton.gameObject.SetActive(false);
+        wardrobeBtn.interactable = false;
     }
 
     public void nextButtonClick()
@@ -60,72 +88,88 @@ public class DoorBehaviour : MonoBehaviour
     // 🔹 Метод для открытия левой двери
     public void OpenLeftDoor()
     {
+        if (GameStateManager.Instance.GetLeftDoorOpened())
+        {
+            Debug.Log("Левая дверь уже открыта. Сразу переключаем сцену.");
+
+            // Переключаем сцену сразу, так как анимация уже была проиграна ранее
+            bedroom.SetActive(true);
+            mainScene.SetActive(false);
+            mainRoom.SetActive(false);
+
+            return;
+        }
+
         if (!AnimatorHasParameter("LeftDoorOpen"))
         {
             Debug.LogError($"В `Animator` отсутствует параметр LeftDoorOpen");
             return;
         }
 
-        Debug.Log($"Триггер `LeftDoorOpen` вызван.");
-        doorAnimator.SetTrigger("LeftDoorOpen");
-
         StartCoroutine(PlayLeftDoorAnimation());
-
-        SoundManager.Instance.PlaySoundByName("door");
-        flagsManager.SetFlag("leftBedroom", true);
     }
 
 
     public void OpenRightDoor()
     {
+        if (GameStateManager.Instance.GetRightDoorOpened())
+        {
+            Debug.Log("Правая дверь уже открыта. Сразу переключаем сцену.");
+
+            // Переключаем сцену сразу, так как анимация уже была проиграна ранее
+            bedroom.SetActive(false);
+            mainScene.SetActive(false);
+            mainRoom.SetActive(true);
+
+            return;
+        }
+
         if (!AnimatorHasParameter("RightDoorOpen"))
         {
             Debug.LogError($"В `Animator` отсутствует параметр RightDoorOpen");
             return;
         }
 
-        Debug.Log($"Триггер `RightDoorOpen` вызван.");
-        doorAnimator.SetTrigger("RightDoorOpen");
-
         StartCoroutine(PlayRightDoorAnimation());
-
-        SoundManager.Instance.PlaySoundByName("door");
-        flagsManager.SetFlag("rightBedroom", true);
     }
 
-  
+
     private IEnumerator PlayLeftDoorAnimation()
     {
-
+        doorAnimator.SetTrigger("LeftDoorOpen");
+        GameStateManager.Instance.SetLeftDoorOpened(true);
+        SoundManager.Instance.PlaySoundByName("door");
 
         yield return new WaitForEndOfFrame();
 
         AnimatorStateInfo stateInfo = doorAnimator.GetCurrentAnimatorStateInfo(0);
         if (stateInfo.IsName("LeftDoorOpen"))
         {
-            Debug.Log($" Анимация LeftDoorOpen запущена.");
+            Debug.Log($"Анимация LeftDoorOpen запущена.");
         }
 
-        yield return new WaitForSeconds(stateInfo.length);
-        
+        yield return new WaitForSeconds(stateInfo.length); // Ждём завершения анимации
+
         // Переключаем сцену
         bedroom.SetActive(true);
         mainScene.SetActive(false);
         mainRoom.SetActive(false);
 
-        if (doorButton != null)
-        {
-            yield return new WaitForSeconds(0.3f);
-            doorButton.interactable = true;
-        }
+        yield return RestoreButtonState();
 
         doorAnimator.ResetTrigger("LeftDoorOpen");
-      
+
+        GameStateManager.Instance.SetLeftDoorOpened(true); // Фиксируем состояние двери
+        flagsManager.SetFlag("leftBedroom", true);
     }
 
 
     private IEnumerator PlayRightDoorAnimation()
     {
+        doorAnimator.SetTrigger("RightDoorOpen");
+        GameStateManager.Instance.SetRightDoorOpened(true);
+        SoundManager.Instance.PlaySoundByName("door");
+
         yield return new WaitForEndOfFrame();
 
         AnimatorStateInfo stateInfo = doorAnimator.GetCurrentAnimatorStateInfo(0);
@@ -133,24 +177,22 @@ public class DoorBehaviour : MonoBehaviour
         {
             Debug.Log($"Анимация RightDoorOpen запущена.");
         }
-        
 
-        yield return new WaitForSeconds(stateInfo.length);
-       
+        yield return new WaitForSeconds(stateInfo.length); // Ждём завершения анимации
+
         // Переключаем сцену
         bedroom.SetActive(false);
         mainScene.SetActive(false);
         mainRoom.SetActive(true);
 
-        if (doorButton != null)
-        {
-            yield return new WaitForSeconds(0.3f);
-            doorButton.interactable = true;
-        }
+        yield return RestoreButtonState();
 
         doorAnimator.ResetTrigger("RightDoorOpen");
-       //doorAnimator.SetTrigger("ResetDoor");
+
+        GameStateManager.Instance.SetRightDoorOpened(true); // Фиксируем состояние двери
+        flagsManager.SetFlag("rightMainroom", true);
     }
+
 
     private bool AnimatorHasParameter(string paramName)
     {
@@ -173,7 +215,7 @@ public class DoorBehaviour : MonoBehaviour
 
         if (backButton != null)
         {
-            backButton.gameObject.SetActive(true); 
+            backButton.gameObject.SetActive(true);
         }
 
         if (wardrobeBtn != null)

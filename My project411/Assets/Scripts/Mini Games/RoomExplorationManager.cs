@@ -1,5 +1,6 @@
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class RoomExplorationManager : MonoBehaviour
@@ -62,7 +63,7 @@ public class RoomExplorationManager : MonoBehaviour
 
     private string boxOpenPath = "UI/boxOpen"; 
     private string boxClosedPath = "UI/boxClosed";
-
+    int slotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
     public void OnBoxClick()
     {
         isOpen = !isOpen;
@@ -82,14 +83,18 @@ public class RoomExplorationManager : MonoBehaviour
             }
         }
 
-        if (isOpen)
+        if (!GameStateManager.Instance.IsKeyCollected(slotIndex, "GoldenKey5"))
         {
-            keyObject2.gameObject.SetActive(true);
+            if (isOpen)
+            {
+                keyObject2.gameObject.SetActive(true);
+            }
+            else
+            {
+                keyObject2.gameObject.SetActive(false);
+            }
         }
-        else
-        {
-            keyObject2.gameObject.SetActive(false);
-        }
+       
     }
    
 

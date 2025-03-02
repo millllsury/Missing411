@@ -41,7 +41,8 @@ public class GameState
     public int keys;
     public List<int> unlockedHairstyles = new List<int>();
     public List<int> unlockedClothes = new List<int>();
-
+    public bool isLeftDoorOpened = false;
+    public bool isRightDoorOpened = false;
 }
 
 public class DialogueState
@@ -497,7 +498,7 @@ public class GameStateManager : MonoBehaviour
     }
 
 
-    // Фиксированные позиции персонажей
+ 
     private static readonly Dictionary<string, int> characterPositions = new Dictionary<string, int>
     {
         { "Alice", 1 },
@@ -795,6 +796,30 @@ public class GameStateManager : MonoBehaviour
 
     #endregion
 
+
+    public void SetLeftDoorOpened(bool state)
+    {
+        currentState.isLeftDoorOpened = state;
+        SaveGameToSlot(GetSelectedSlotIndex());
+        SaveSlotsToFile();
+    }
+
+    public void SetRightDoorOpened(bool state)
+    {
+        currentState.isRightDoorOpened = state;
+        SaveGameToSlot(GetSelectedSlotIndex());
+        SaveSlotsToFile();
+    }
+
+    public bool GetLeftDoorOpened()
+    {
+        return currentState.isLeftDoorOpened;
+    }
+
+    public bool GetRightDoorOpened()
+    {
+        return currentState.isRightDoorOpened;
+    }
 
 
 

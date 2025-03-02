@@ -1,26 +1,34 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine.UI;
+
+[System.Serializable]
+public class MoveData
+{
+    public Transform button; // Ссылка на кнопку
+    public float moveDistance = 50f; // Дистанция движения (по умолчанию 50)
+}
 
 public class ButtonMover : MonoBehaviour
 {
-    [SerializeField] private List<Transform> buttonsToMove; // Список кнопок
+    [SerializeField] private List<MoveData> buttonDataList; // Список кнопок с их дистанцией движения
 
-    private Dictionary<Transform, Vector3> initialPositions = new Dictionary<Transform, Vector3>(); 
-    private Dictionary<Transform, bool> buttonStates = new Dictionary<Transform, bool>(); 
-    [SerializeField] private float moveDistance = 50f;
-    [SerializeField] private float moveSpeed = 0.2f;
+    private Dictionary<Transform, Vector3> initialPositions = new Dictionary<Transform, Vector3>();
+    private Dictionary<Transform, bool> buttonStates = new Dictionary<Transform, bool>();
+    private Dictionary<Transform, float> buttonMoveDistances = new Dictionary<Transform, float>();
+
+    [SerializeField] private float moveSpeed = 0.2f; // Скорость движения
 
     private void Start()
     {
-        foreach (Transform button in buttonsToMove)
+        foreach (MoveData data in buttonDataList)
         {
-            if (button != null)
+            if (data.button != null)
             {
-                initialPositions[button] = button.localPosition; 
-                buttonStates[button] = false; 
+                initialPositions[data.button] = data.button.localPosition;
+                buttonStates[data.button] = false;
+                buttonMoveDistances[data.button] = data.moveDistance;
             }
         }
     }
@@ -29,23 +37,24 @@ public class ButtonMover : MonoBehaviour
     {
         if (!buttonStates.ContainsKey(button)) return;
 
-        bool isMoved = buttonStates[button]; 
+        bool isMoved = buttonStates[button];
+        float moveDistance = buttonMoveDistances.ContainsKey(button) ? buttonMoveDistances[button] : 50f;
 
         StopAllCoroutines();
         if (isMoved)
         {
-            StartCoroutine(MoveButton(button, initialPositions[button])); 
+            StartCoroutine(MoveButton(button, initialPositions[button]));
         }
         else
         {
-            StartCoroutine(MoveButton(button, initialPositions[button] + new Vector3(-moveDistance, 0, 0))); 
+            StartCoroutine(MoveButton(button, initialPositions[button] + new Vector3(-moveDistance, 0, 0)));
         }
 
-        buttonStates[button] = !isMoved; 
+        buttonStates[button] = !isMoved;
     }
 
     private bool moved = false;
-   private IEnumerator MoveButton(Transform button, Vector3 targetPosition)
+    private IEnumerator MoveButton(Transform button, Vector3 targetPosition)
     {
         if (button.name == "Books")
         {
@@ -59,8 +68,9 @@ public class ButtonMover : MonoBehaviour
             else
             {
                 button.transform.SetAsLastSibling();
-            }      
+            }
         }
+
 
         Vector3 startPosition = button.localPosition;
         float t = 0;
@@ -73,7 +83,7 @@ public class ButtonMover : MonoBehaviour
         }
 
         button.localPosition = targetPosition;
-
     }
 }
+
 

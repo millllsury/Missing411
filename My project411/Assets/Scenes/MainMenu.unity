@@ -2296,6 +2296,8 @@ MonoBehaviour:
     keys: 0
     unlockedHairstyles: 0000000001000000
     unlockedClothes: 0000000001000000
+    isLeftDoorOpened: 0
+    isRightDoorOpened: 0
   isNewGame: 0
   hasBeenTransited: 0
 --- !u!4 &544834166
@@ -8897,6 +8899,21 @@ MonoBehaviour:
     source: {fileID: 0}
   - name: door
     clip: {fileID: 8300000, guid: 508b8b7d353a5d1428751f2b2ba146ed, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: pullLaggage
+    clip: {fileID: 8300000, guid: 4ecc050f6e0cb264b93d6e9eec6f4fe1, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: pullLaggage
+    clip: {fileID: 8300000, guid: 4ecc050f6e0cb264b93d6e9eec6f4fe1, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: laggageOpen
+    clip: {fileID: 8300000, guid: d6cfcf1dc0592e94ba2af2b6f10b6327, type: 3}
     loop: 0
     category: 0
     source: {fileID: 0}

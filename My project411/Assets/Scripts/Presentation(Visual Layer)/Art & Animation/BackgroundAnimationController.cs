@@ -218,6 +218,7 @@ public class BackgroundController : MonoBehaviour
 
         if (bgSprite != null)
         {
+            GameStateManager.Instance.ClearBackgroundAnimation();
             backgroundImage.sprite = bgSprite; // Устанавливаем спрайт
             GameStateManager.Instance.SaveBackground(backgroundName);
         }
