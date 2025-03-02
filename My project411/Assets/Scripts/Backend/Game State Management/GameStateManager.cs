@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 [System.Serializable]
 public class GameState
 {
-    public string currentEpisode= "1";
+    public string currentEpisode = "1";
     public string currentScene = "1";             // Текущая сцена
     public string currentDialogue = "1";          // Текущий диалог
     public int textCounter = 0;                 // Счетчик текста
@@ -20,14 +20,14 @@ public class GameState
     public string leftCharacterName;
     public string rightCharacterName;
 
-    public string currentBackgroundName; 
+    public string currentBackgroundName;
 
     public string currentBackgroundAnimation;
     public string currentForegroundAnimation;
 
     public float animationFrameDelay;
     public float foregroundFrameDelay;
-    
+
     public int animationRepeatCount;
     public int foregroundRepeatCount;
 
@@ -80,7 +80,7 @@ public class GameStateManager : MonoBehaviour
         public float masterVolume;
         public float characterVolume;
         public float backgroundEffectsVolume;
-        public float backgroundVolume; 
+        public float backgroundVolume;
         public float uiVolume;
     }
 
@@ -223,7 +223,7 @@ public class GameStateManager : MonoBehaviour
 
     #endregion
 
-    private HashSet<string> playingTracks = new(); 
+    private HashSet<string> playingTracks = new();
 
     private SaveSlots saveSlots = new();
 
@@ -255,8 +255,8 @@ public class GameStateManager : MonoBehaviour
         }
         SaveOriginalState(slotIndex);
         selectedSlotIndex = slotIndex;
-        currentState = selectedSlot.gameState; 
-       
+        currentState = selectedSlot.gameState;
+
     }
 
 
@@ -297,7 +297,7 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-   
+
 
     public void SaveGameToSlot(int slotIndex)
     {
@@ -362,23 +362,23 @@ public class GameStateManager : MonoBehaviour
     {
         if (slotIndex < 0 || slotIndex >= saveSlots.slots.Count)
         {
-          
+
             return;
         }
 
         var slot = saveSlots.slots[slotIndex];
         if (slot.gameState != null)
         {
-            
+
             originalState = JsonConvert.DeserializeObject<GameState>(
                 JsonConvert.SerializeObject(slot.gameState));
 
-           
+
         }
         else
         {
             originalState = null;
-            
+
         }
     }
 
@@ -411,9 +411,9 @@ public class GameStateManager : MonoBehaviour
         UpdateSceneState(episodeId.ToString(), sceneId.ToString(), dialogueId.ToString(), textCounter, episodeNameShowed);
         UpdateFlags(flags);
         SaveCharacterNames(leftCharacter, rightCharacter);
-        
+
     }
-   
+
 
 
     #region Управление состоянием
@@ -456,14 +456,14 @@ public class GameStateManager : MonoBehaviour
         return (currentState.leftCharacterName ?? "", currentState.rightCharacterName ?? "");
     }
 
-    
+
 
     public void UpdateFlags(Dictionary<string, bool> flags)
     {
         currentState.flags = new Dictionary<string, bool>(flags);
     }
 
-   
+
 
     public void SaveAppearance(int hairIndex, int clothesIndex)
     {
@@ -498,7 +498,7 @@ public class GameStateManager : MonoBehaviour
         }
         savedCharacterPositions[slotIndex] = new Dictionary<string, int>(positions);
 
-        Debug.Log($"[SaveCharacterPositions] Слот {slotIndex+1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
+        Debug.Log($"[SaveCharacterPositions] Слот {slotIndex + 1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
     }
 
     // Загрузка позиций для текущего слота
@@ -506,11 +506,11 @@ public class GameStateManager : MonoBehaviour
     {
         if (savedCharacterPositions.TryGetValue(slotIndex, out Dictionary<string, int> positions))
         {
-            Debug.Log($"[LoadCharacterPositions] Загружены позиции для слота {slotIndex+1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
+            Debug.Log($"[LoadCharacterPositions] Загружены позиции для слота {slotIndex + 1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
             return new Dictionary<string, int>(positions);
         }
 
-        Debug.Log($"[LoadCharacterPositions] Нет сохраненных позиций для слота {slotIndex+1}, создаю пустой словарь.");
+        Debug.Log($"[LoadCharacterPositions] Нет сохраненных позиций для слота {slotIndex + 1}, создаю пустой словарь.");
         return new Dictionary<string, int>(); // Если нет данных, возвращаем пустой словарь
     }
 
@@ -524,7 +524,7 @@ public class GameStateManager : MonoBehaviour
         if (selectedSlotIndex != -1)
         {
             SaveGameToSlot(selectedSlotIndex);
-           
+
         }
     }
 
@@ -545,7 +545,7 @@ public class GameStateManager : MonoBehaviour
         currentState.animationFrameDelay = frameDelay;
         currentState.animationRepeatCount = repeatCount;
         currentState.animationKeepLastFrame = keepLastFrame;
-        
+
 
         Debug.Log($"Background Animation Saved: {animationName}");
     }
@@ -556,7 +556,7 @@ public class GameStateManager : MonoBehaviour
         currentState.foregroundFrameDelay = frameDelay;
         currentState.foregroundRepeatCount = repeatCount;
         currentState.foregroundKeepLastFrame = keepLastFrame;
-        
+
 
         Debug.Log($"Foreground Animation Saved: {animationName}");
     }
@@ -571,7 +571,7 @@ public class GameStateManager : MonoBehaviour
         currentState.animationFrameDelay = 0f;
         currentState.animationRepeatCount = 0;
         currentState.animationKeepLastFrame = false;
-        
+
 
         Debug.Log("Background animation data cleared from save.");
 
@@ -622,7 +622,7 @@ public class GameStateManager : MonoBehaviour
             currentState.foregroundFrameDelay,
             currentState.foregroundRepeatCount,
             currentState.foregroundKeepLastFrame
-            
+
         );
     }
 
@@ -724,7 +724,7 @@ public class GameStateManager : MonoBehaviour
     public void AddKeys(int amount)
     {
         currentState.keys += amount;
-        
+
     }
 
     public bool SpendKeys(int amount)
@@ -749,7 +749,7 @@ public class GameStateManager : MonoBehaviour
 
         collectedKeys[slotIndex].Add(keyID);
         Debug.Log($"[SaveKeyCollected] Ключ {keyID} сохранен в слот {slotIndex}");
-        
+
     }
 
     // Проверка, был ли ключ уже собран
@@ -788,7 +788,7 @@ public class GameStateManager : MonoBehaviour
             Debug.Log($"Открыта новая одежда: {nextClothesIndex}");
         }
 
-        
+
         //SaveGameToSlot(GetSelectedSlotIndex()); // Сохраняем прогресс только в выбранный слот
 
     }

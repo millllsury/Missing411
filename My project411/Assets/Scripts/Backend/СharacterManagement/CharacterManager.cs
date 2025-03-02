@@ -37,7 +37,7 @@ public class CharacterManager : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     public void LoadCharacters()
@@ -146,7 +146,7 @@ public class CharacterManager : MonoBehaviour
             GetCurrentRightCharacter();
 
         }
-       
+
 
     }
 
@@ -171,45 +171,45 @@ public class CharacterManager : MonoBehaviour
 
 
 
-   private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)
-{
-    if (avatar == null)
+    private void UpdateAvatar(SpriteRenderer avatar, string character, bool isLeft)
     {
-        Debug.LogError("Avatar is null!");
-        return;
-    }
+        if (avatar == null)
+        {
+            Debug.LogError("Avatar is null!");
+            return;
+        }
 
-    if (string.IsNullOrEmpty(character))
-    {
-        Debug.LogWarning("Name of character is not initialised.");
-        StartCoroutine(SmoothDisappear(avatar, false));
-        return;
-    }
+        if (string.IsNullOrEmpty(character))
+        {
+            Debug.LogWarning("Name of character is not initialised.");
+            StartCoroutine(SmoothDisappear(avatar, false));
+            return;
+        }
 
-    Sprite loadedSprite = Resources.Load<Sprite>("Characters/" + character + "/" + character);
-    if (loadedSprite == null)
-    {
-        Debug.LogError($"Sprite for {character} hasn't been found in Resources/Characters!");
-        return;
-    }
+        Sprite loadedSprite = Resources.Load<Sprite>("Characters/" + character + "/" + character);
+        if (loadedSprite == null)
+        {
+            Debug.LogError($"Sprite for {character} hasn't been found in Resources/Characters!");
+            return;
+        }
 
-    // Проверяем, был ли персонаж уже установлен
-    bool isNewCharacter = avatar.sprite == null || avatar.sprite.name != character;
-    
-    avatar.sprite = loadedSprite;
+        // Проверяем, был ли персонаж уже установлен
+        bool isNewCharacter = avatar.sprite == null || avatar.sprite.name != character;
 
-    if (isNewCharacter)
-    {
-        float targetX = isLeft ? -3f : 3f;
-        StartCoroutine(SmoothAppear(avatar, targetX, character));
-    }
-    else
-    {
-        StartCoroutine(SmoothDisappear(avatar, false));
-        StartCoroutine(WaitAndShowNewAvatar(avatar, character, isLeft));
-    }
+        avatar.sprite = loadedSprite;
 
-    Debug.Log($"Sprite for the character was set: {character}, isNew: {isNewCharacter}");
+        if (isNewCharacter)
+        {
+            float targetX = isLeft ? -3f : 3f;
+            StartCoroutine(SmoothAppear(avatar, targetX, character));
+        }
+        else
+        {
+            StartCoroutine(SmoothDisappear(avatar, false));
+            StartCoroutine(WaitAndShowNewAvatar(avatar, character, isLeft));
+        }
+
+        Debug.Log($"Sprite for the character was set: {character}, isNew: {isNewCharacter}");
     }
 
 
@@ -280,7 +280,7 @@ public class CharacterManager : MonoBehaviour
 
     private IEnumerator SmoothAppear(SpriteRenderer avatar, float endPositionX, string character = null)
     {
-        
+
         while (isLeftAvatarAnimating || isRightAvatarAnimating)
         {
             yield return null;
@@ -322,7 +322,7 @@ public class CharacterManager : MonoBehaviour
     {
         if (place == 1)
         {
-         
+
             avatarToBeHidden = leftAvatar;
             currentLeftCharacter = null; // Очищаем данные о левом персонаже
             GameStateManager.Instance.SaveCharacterNames(null, GetCurrentRightCharacter());
@@ -386,7 +386,7 @@ public class CharacterManager : MonoBehaviour
 
 
         Debug.Log($"GetCurrentLeftCharacter(): {GetCurrentLeftCharacter()},GetCurrentRightCharacter(): {GetCurrentRightCharacter()}");
-       
+
     }
 
 
@@ -506,6 +506,10 @@ public class CharacterManager : MonoBehaviour
 
 
 }
+
+
+
+
 
 
 

@@ -272,7 +272,7 @@ public class DialogueManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(dialogue.background))
         {
-      
+
             backgroundController.SetBackgroundSmooth(dialogue.background, dialogue.smoothBgReplacement);
         }
 
@@ -328,20 +328,38 @@ public class DialogueManager : MonoBehaviour
                 // Загружаем сохраненные позиции из GameStateManager
                 Dictionary<string, int> savedPositions = GameStateManager.Instance.LoadCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex());
 
-                // Если персонаж есть в сохраненных позициях, используем их
+                // Если персонаж уже есть в сохраненных позициях, используем их
                 if (savedPositions.ContainsKey(dialogue.character))
                 {
                     dialogue.place = savedPositions[dialogue.character];
                 }
-                // Если персонажа нет в сохраненных позициях, ставим по умолчанию
                 else
                 {
- 
-                    dialogue.place = characterPositions.Count == 0 ? 1 : 2;
-                    characterPositions[dialogue.character] = dialogue.place;
+                    // Проверяем, занята ли позиция 1
+                    bool isLeftPositionOccupied = savedPositions.ContainsValue(1);
+                    // Проверяем, занята ли позиция 2
+                    bool isRightPositionOccupied = savedPositions.ContainsValue(2);
 
-                    GameStateManager.Instance.SaveCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex(), characterPositions);
-                    Debug.Log($"SaveCharacterPositions/ Character: {dialogue.character}, Place: {dialogue.place}");
+                    if (!isLeftPositionOccupied)
+                    {
+                        dialogue.place = 1; // Если позиция 1 свободна, ставим туда
+                    }
+                    else if (!isRightPositionOccupied)
+                    {
+                        dialogue.place = 2; // Если позиция 1 занята, но 2 свободна — ставим в 2
+                    }
+                    else
+                    {
+                        dialogue.place = 2; // Если обе позиции заняты, нового персонажа ставим в 2
+                    }
+
+                    // Добавляем персонажа в список позиций
+                    savedPositions[dialogue.character] = dialogue.place;
+
+                    // Сохраняем обновленные позиции персонажей
+                    GameStateManager.Instance.SaveCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex(), savedPositions);
+
+                    Debug.Log($"[GetCurrentDialogue] Assigned position to character: {dialogue.character}, Place: {dialogue.place}");
                 }
             }
             else
@@ -444,7 +462,7 @@ public class DialogueManager : MonoBehaviour
 
                 if (dialogue.smoothDisappear)
                 {
-                   
+
                     if (blinkingManager != null && !string.IsNullOrEmpty(dialogue.character))
                     {
                         blinkingManager.StopBlinking(dialogue.character);
@@ -816,7 +834,7 @@ public class DialogueManager : MonoBehaviour
 
     public void OnChoiceSelected(Choice choice)
     {
-          
+
 
         if (choice.cost > 0)
         {
@@ -855,7 +873,7 @@ public class DialogueManager : MonoBehaviour
 
         Debug.Log("Stack contents after selection: " + string.Join(" -> ", dialogueHistory.Select(d => $"[ID={d.currentDialogueId}, TextCounter={d.textCounter}]")));
 
-        
+
 
         HideChoices();
         AdvanceToNextDialogue();
@@ -952,15 +970,14 @@ public class DialogueManager : MonoBehaviour
         InitializeDialogue(int.Parse(loadedState.currentDialogue), loadedState.textCounter);
         Debug.Log($"Диалог: {loadedState.currentDialogue}");
 
-        characterPositions = GameStateManager.Instance.LoadCharacterPositions(selectedSlotIndex);
-
-
-         RestoreGameState(loadedState);
        
+        RestoreGameState(loadedState);
+
     }
 
     private void RestoreGameState(GameState loadedState)
     {
+
         Debug.Log($"starts with GameStateManager.Instance.isNewGame: {GameStateManager.Instance.isNewGame}");
         // Restoring flags
         flagsManager.SetAllFlags(loadedState.flags);
@@ -981,10 +998,10 @@ public class DialogueManager : MonoBehaviour
         {
             backgroundController.StartBackgroundAnimation(backgroundAnimation, frameDelay, repeatCount, keepLastFrame, null, "background");
         }
-
+        //characterPositions = GameStateManager.Instance.LoadCharacterPositions(selectedSlotIndex);
         // characters
         characterManager.LoadCharacters();
-       
+
 
         GameStateManager.Instance.LoadPlayingTracks();
 
@@ -1025,7 +1042,7 @@ public class DialogueManager : MonoBehaviour
         uiManager.OnGameStateChanged();
     }
 
-  
+
 
 }
 
