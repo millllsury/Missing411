@@ -47,23 +47,14 @@ public class Animations : MonoBehaviour
 
     public void PlayAnimation(string characterPosition, string animationName, string character)
     {
-
-        if (string.IsNullOrEmpty(characterPosition) || string.IsNullOrEmpty(animationName) || string.IsNullOrEmpty(character))
+        if (string.IsNullOrEmpty(character) || string.IsNullOrEmpty(animationName))
         {
             Debug.LogWarning("Not enough data to play the animation.");
             return;
         }
 
-
-        int slotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
-        Dictionary<string, int> characterPositions = GameStateManager.Instance.LoadCharacterPositions(slotIndex);
-
-        if (!characterPositions.TryGetValue(character, out int place))
-        {
-            place = 1; // If the character is new, put it to the left
-        }
-
-        characterPosition = place == 1 ? "left" : "right";
+        // Получаем позицию персонажа через GameStateManager
+        characterPosition = GameStateManager.GetCharacterPosition(character) == 1 ? "left" : "right";
 
         if (!emotionRenderers.TryGetValue(characterPosition, out var emotionRenderer) ||
             !eyesRenderers.TryGetValue(characterPosition, out var eyesRenderer))
@@ -71,8 +62,7 @@ public class Animations : MonoBehaviour
             return;
         }
 
-        Transform characterTransform = emotionRenderer.transform.parent; // emotions are inside the parent (the main object)
-
+        Transform characterTransform = emotionRenderer.transform.parent; // emotions are inside the parent
 
         SpriteNull(emotionRenderer);
         SpriteNull(eyesRenderer);
@@ -84,10 +74,10 @@ public class Animations : MonoBehaviour
         string eyes = null;
         string sound = null;
         bool leaveLastFrame = false;
-        bool stopBlinkingPermanently = false; // new
+        bool stopBlinkingPermanently = false;
+
         Debug.Log($"Получено animationName: {animationName}");
 
-       
         switch (animationName.ToLower())
         {
             case "laugh":
@@ -102,22 +92,10 @@ public class Animations : MonoBehaviour
                 eyes = "eyesToTheSideBase";
                 sound = emotion;
                 break;
-            case "eyestothesidebase":
-                eyes = "eyestothesidebase";
-                break;
-            case "emotionсlosedeyes":
-                emotion = "ClosedEyes";
-                leaveLastFrame = true;
-                break;
-            case "shadow":
-                stopBlinkingPermanently = true;
-                emotion = "shadow";
-                leaveLastFrame= true;
-                break;
             case "fall":
                 emotion = "ClosedEyes";
                 leaveLastFrame = true;
-                StartCoroutine(ShakeCharacter(characterTransform, 0.1f, 1f)); // Теперь трясется весь объект
+                StartCoroutine(ShakeCharacter(characterTransform, 0.1f, 1f));
                 sound = "body-fall";
                 break;
             case "moving":
@@ -156,7 +134,6 @@ public class Animations : MonoBehaviour
         }
 
         SetEmotionImage(emotionRenderer, eyesRenderer, character, emotion, eyes);
-
         PlaySoundForEmotion(character, sound);
 
         if (characterPosition == "left") isLeftAvatarAnimation = true;
@@ -164,6 +141,7 @@ public class Animations : MonoBehaviour
 
         StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f, character, leaveLastFrame, stopBlinkingPermanently));
     }
+
 
     private IEnumerator ShakeCharacter(Transform characterTransform, float shakeAmount, float duration)
     {

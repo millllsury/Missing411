@@ -112,6 +112,16 @@ public class GameStateManager : MonoBehaviour
             Destroy(gameObject); // Удаляем дубликат
         }
 
+        if (!hasSaved)
+        {
+            SetHasSaved(true);
+        }
+
+        if (!hasBeenTransited)
+        {
+            SetHasTransited(true);
+        }
+
         backgroundController = FindFirstObjectByType<BackgroundController>();
     }
 
@@ -486,34 +496,20 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    //cохранение позиций 
-    private Dictionary<int, Dictionary<string, int>> savedCharacterPositions = new Dictionary<int, Dictionary<string, int>>();
 
-    // Сохранение позиций для текущего слота
-    public void SaveCharacterPositions(int slotIndex, Dictionary<string, int> positions)
+    // Фиксированные позиции персонажей
+    private static readonly Dictionary<string, int> characterPositions = new Dictionary<string, int>
     {
-        if (!savedCharacterPositions.ContainsKey(slotIndex))
-        {
-            savedCharacterPositions[slotIndex] = new Dictionary<string, int>();
-        }
-        savedCharacterPositions[slotIndex] = new Dictionary<string, int>(positions);
+        { "Alice", 1 },
+        { "Meruem", 2 },
+        { "Chris", 2 }
+    };
 
-        Debug.Log($"[SaveCharacterPositions] Слот {slotIndex + 1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
-    }
-
-    // Загрузка позиций для текущего слота
-    public Dictionary<string, int> LoadCharacterPositions(int slotIndex)
+    // Метод для получения позиции персонажа
+    public static int GetCharacterPosition(string character)
     {
-        if (savedCharacterPositions.TryGetValue(slotIndex, out Dictionary<string, int> positions))
-        {
-            Debug.Log($"[LoadCharacterPositions] Загружены позиции для слота {slotIndex + 1}: {string.Join(", ", positions.Select(p => p.Key + " -> " + p.Value))}");
-            return new Dictionary<string, int>(positions);
-        }
-
-        Debug.Log($"[LoadCharacterPositions] Нет сохраненных позиций для слота {slotIndex + 1}, создаю пустой словарь.");
-        return new Dictionary<string, int>(); // Если нет данных, возвращаем пустой словарь
+        return characterPositions.TryGetValue(character, out int place) ? place : 2; // По умолчанию ставим справа
     }
-
 
     public void SaveBackground(string backgroundName)
     {

@@ -43,22 +43,16 @@ public class CharacterManager : MonoBehaviour
     public void LoadCharacters()
     {
         var (leftCharacter, rightCharacter) = GameStateManager.Instance.LoadCharacterNames();
-        Dictionary<string, int> savedPositions = GameStateManager.Instance.LoadCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex());
 
         Debug.Log($"Загрузка персонажей: Левый = {leftCharacter}, Правый = {rightCharacter}");
-
-        // Если позиции не найдены в сохранении, устанавливаем по умолчанию
-        if (!savedPositions.ContainsKey(leftCharacter))
-            savedPositions[leftCharacter] = 1; // Левая сторона
-        if (!savedPositions.ContainsKey(rightCharacter))
-            savedPositions[rightCharacter] = 2; // Правая сторона
 
         leftAvatar.color = new Color(leftAvatar.color.r, leftAvatar.color.g, leftAvatar.color.b, 0f);
         rightAvatar.color = new Color(rightAvatar.color.r, rightAvatar.color.g, rightAvatar.color.b, 0f);
 
         if (!string.IsNullOrEmpty(leftCharacter))
         {
-            SetCharacter(leftCharacter, savedPositions[leftCharacter], false, leftCharacter);
+            int place = GameStateManager.GetCharacterPosition(leftCharacter); // Получаем позицию из GameStateManager
+            SetCharacter(leftCharacter, place, false, leftCharacter);
             LoadAppearance();
         }
         else
@@ -68,7 +62,8 @@ public class CharacterManager : MonoBehaviour
 
         if (!string.IsNullOrEmpty(rightCharacter))
         {
-            SetCharacter(rightCharacter, savedPositions[rightCharacter], false, rightCharacter);
+            int place = GameStateManager.GetCharacterPosition(rightCharacter); // Получаем позицию из GameStateManager
+            SetCharacter(rightCharacter, place, false, rightCharacter);
         }
         else
         {
@@ -76,9 +71,10 @@ public class CharacterManager : MonoBehaviour
         }
 
         Transform charactersParent = leftAvatar.transform.parent;
-
         StartCoroutine(FadeInCharacters(charactersParent, 0.3f));
     }
+
+
 
 
 

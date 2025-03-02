@@ -12043,6 +12043,9 @@ MonoBehaviour:
   rightAvatar: {fileID: 6446857026675819968}
   leftEyesImage: {fileID: 3567048394910164570}
   rightEyesImage: {fileID: 4791174413652486490}
+  speakerPanelLeft: {fileID: 0}
+  speakerPanelCenter: {fileID: 0}
+  speakerPanelRight: {fileID: 0}
   characterLeft: {fileID: 4764571467620508325}
   characterRight: {fileID: 2744195039554067354}
   animations: {fileID: 2530418757318969264}

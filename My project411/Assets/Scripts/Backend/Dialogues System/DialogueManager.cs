@@ -92,6 +92,7 @@ public class DialogueManager : MonoBehaviour
         {
             Debug.LogError("GameStateManager.Instance is null!");
         }
+        
     }
 
     private void InitializeComponents()
@@ -325,42 +326,10 @@ public class DialogueManager : MonoBehaviour
             }
             else if (!string.IsNullOrEmpty(dialogue.character))
             {
-                // Загружаем сохраненные позиции из GameStateManager
-                Dictionary<string, int> savedPositions = GameStateManager.Instance.LoadCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex());
+                // Получаем позицию персонажа из GameStateManager
+                dialogue.place = GameStateManager.GetCharacterPosition(dialogue.character);
 
-                // Если персонаж уже есть в сохраненных позициях, используем их
-                if (savedPositions.ContainsKey(dialogue.character))
-                {
-                    dialogue.place = savedPositions[dialogue.character];
-                }
-                else
-                {
-                    // Проверяем, занята ли позиция 1
-                    bool isLeftPositionOccupied = savedPositions.ContainsValue(1);
-                    // Проверяем, занята ли позиция 2
-                    bool isRightPositionOccupied = savedPositions.ContainsValue(2);
-
-                    if (!isLeftPositionOccupied)
-                    {
-                        dialogue.place = 1; // Если позиция 1 свободна, ставим туда
-                    }
-                    else if (!isRightPositionOccupied)
-                    {
-                        dialogue.place = 2; // Если позиция 1 занята, но 2 свободна — ставим в 2
-                    }
-                    else
-                    {
-                        dialogue.place = 2; // Если обе позиции заняты, нового персонажа ставим в 2
-                    }
-
-                    // Добавляем персонажа в список позиций
-                    savedPositions[dialogue.character] = dialogue.place;
-
-                    // Сохраняем обновленные позиции персонажей
-                    GameStateManager.Instance.SaveCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex(), savedPositions);
-
-                    Debug.Log($"[GetCurrentDialogue] Assigned position to character: {dialogue.character}, Place: {dialogue.place}");
-                }
+                Debug.Log($"[GetCurrentDialogue] Character: {dialogue.character}, Assigned Place: {dialogue.place}");
             }
             else
             {
@@ -376,6 +345,7 @@ public class DialogueManager : MonoBehaviour
 
         return dialogue;
     }
+
 
 
     private string GetCharacterPosition(string character, int place)
@@ -498,12 +468,10 @@ public class DialogueManager : MonoBehaviour
         GameObject activePanel = null;
         string speakerText = "...";
 
-        // Загружаем сохраненные позиции персонажей
-        Dictionary<string, int> savedPositions = GameStateManager.Instance.LoadCharacterPositions(GameStateManager.Instance.GetSelectedSlotIndex());
-
         if (!string.IsNullOrEmpty(dialogue.character)) // Если есть персонаж
         {
-            int characterPlace = savedPositions.ContainsKey(dialogue.character) ? savedPositions[dialogue.character] : dialogue.place;
+            // Получаем позицию персонажа через GameStateManager
+            int characterPlace = GameStateManager.GetCharacterPosition(dialogue.character);
 
             if (characterPlace == 1) // Если персонаж слева
             {
@@ -527,6 +495,7 @@ public class DialogueManager : MonoBehaviour
             speakerTextComponent.text = speakerText;
         }
     }
+
 
 
     private void HandleDialogueEnd(Dialogue dialogue)
@@ -962,6 +931,7 @@ public class DialogueManager : MonoBehaviour
             }
         }
 
+        
         // scene and dialogue
         EpisodeNameShowed = loadedState.episodeNameShowed;
         Debug.Log($"Scene {loadedState.currentScene} and dialogue {loadedState.currentDialogue} are loading.");
@@ -969,6 +939,7 @@ public class DialogueManager : MonoBehaviour
         LoadScene(int.Parse(loadedState.currentScene));
         InitializeDialogue(int.Parse(loadedState.currentDialogue), loadedState.textCounter);
         Debug.Log($"Диалог: {loadedState.currentDialogue}");
+
 
        
         RestoreGameState(loadedState);
