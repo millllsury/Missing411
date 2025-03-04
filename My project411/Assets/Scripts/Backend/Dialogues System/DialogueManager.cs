@@ -52,6 +52,7 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private GameObject choiceButtonCostPrefab;   // Префаб кнопки с ценой
     [SerializeField] private Transform choicesPanel; // Панель, куда добавляются кнопки
 
+    [SerializeField] private GameObject endEpisodeCanvas;
 
     private Dictionary<string, int> characterPositions = new Dictionary<string, int>(); // для позиций персонажей
     private int selectedSlotIndex;
@@ -409,7 +410,7 @@ public class DialogueManager : MonoBehaviour
                 if (dialogue.unlockNewItem)
                 {
                     GameStateManager.Instance.UnlockNextItem();
-                    FeedbackManager.Instance.ShowMessage("Ты открыл новый наряд и прическу!");
+                    FeedbackManager.Instance.ShowMessage("New outfit available in wardrobe.");
                 }
 
                 if (dialogue.reward > 0)
@@ -420,10 +421,8 @@ public class DialogueManager : MonoBehaviour
 
                 if (dialogue.smoothDisappear)
                 {
-                    if (blinkingManager != null && !string.IsNullOrEmpty(dialogue.character))
-                    {
-                        blinkingManager.StopBlinking(dialogue.character);
-                    }
+                    blinkingManager.StopBlinking(dialogue.character);
+                    
                     characterManager.SmoothDisappearCharacter(dialogue.smoothDisappear, dialogue.place);
                 }
 
@@ -439,6 +438,8 @@ public class DialogueManager : MonoBehaviour
         canGoBack = true; // Разрешаем возврат после обработки текста
         goBackButtonActivated = false;
     }
+
+
 
 
     public void UpdateSpeakerPanel(Dialogue dialogue)
@@ -510,18 +511,64 @@ public class DialogueManager : MonoBehaviour
     {
         GameStateManager.Instance.SetHasTransited(false);
         var nextDialogue = FindNextDialogue();
+
         if (nextDialogue != null)
         {
             StartNextDialogue(nextDialogue);
             return;
         }
 
-        Debug.LogWarning("Не найден следующий диалог. Переход к следующей сцене.");
+        Debug.LogWarning("[AdvanceToNextDialogue] Не найден следующий диалог. Переход к следующей сцене.");
+
         if (TryLoadNextScene()) return;
 
-        Debug.LogWarning("Это последняя сцена эпизода. Завершение эпизода.");
+        Debug.LogWarning("[AdvanceToNextDialogue] Это последняя сцена эпизода. Завершаем эпизод.");
         EndEpisode();
     }
+
+
+
+
+    private void EndEpisode()
+    {
+        Debug.Log("Эпизод завершён. Проверяем наличие следующего эпизода...");
+
+        int currentEpisodeId = int.Parse(GameStateManager.Instance.GetGameState().currentEpisode);
+        int nextEpisodeId = currentEpisodeId + 1;
+
+        // ✅ Проверяем, какие эпизоды загружены
+        Debug.Log($"[EndEpisode] Доступные эпизоды: {string.Join(", ", visualNovelData.episodes.Select(e => e.episodeId))}");
+
+        var nextEpisode = visualNovelData.episodes.FirstOrDefault(e => e.episodeId == nextEpisodeId);
+
+        if (nextEpisode != null)
+        {
+            Debug.Log($"[EndEpisode] Загружаем следующий эпизод: {nextEpisode.episodeName}");
+
+            string firstSceneId = nextEpisode.scenes[0].sceneId.ToString();
+
+            GameStateManager.Instance.UpdateSceneState(
+                nextEpisodeId.ToString(),
+                firstSceneId,
+                "1",
+                0,
+                false
+            );
+
+            LoadEpisode(nextEpisodeId);
+
+            UIManager.ShowEpisodeScreen(nextEpisode.episodeName, Resources.Load<Sprite>(nextEpisode.backgroundImage));
+
+            Debug.Log($"[EndEpisode] Эпизод {nextEpisodeId} загружен, первая сцена: {firstSceneId}");
+        }
+        else
+        {
+            Debug.Log($"[EndEpisode] Эпизод {nextEpisodeId} не найден! Показываем экран завершения игры.");
+            endEpisodeCanvas.SetActive(true);
+        }
+    }
+
+
 
     // Старт нового диалога
     private void StartNextDialogue(Dialogue nextDialogue)
@@ -543,23 +590,57 @@ public class DialogueManager : MonoBehaviour
 
     }
 
-    // Переход к следующей сцене, если есть
     private bool TryLoadNextScene()
     {
         int currentSceneIndex = currentEpisode.scenes.IndexOf(currentScene);
-        if (currentSceneIndex < 0 || currentSceneIndex >= currentEpisode.scenes.Count - 1)
+        if (currentSceneIndex < 0)
+        {
+            Debug.Log($"[TryLoadNextScene] Ошибка: Текущая сцена {currentScene.sceneId} не найдена в эпизоде {currentEpisode.episodeId}.");
             return false;
+        }
+
+        if (currentSceneIndex >= currentEpisode.scenes.Count - 1)
+        {
+            Debug.Log("[TryLoadNextScene] Все сцены эпизода пройдены. Завершаем эпизод...");
+            EndEpisode();
+            return false;
+        }
 
         var nextScene = currentEpisode.scenes[currentSceneIndex + 1];
 
         SaveGameStateForSceneChange(nextScene);
-
         characterManager.HideAvatars();
-        SceneManager.LoadScene("Scene" + nextScene.sceneId);
+
+        string sceneName = "Scene" + nextScene.sceneId;
+
+        if (!SceneExists(sceneName))
+        {
+            Debug.Log($"[TryLoadNextScene] Сцена {sceneName} не найдена в Build Settings!");
+            return false;
+        }
+
+        Debug.Log($"[TryLoadNextScene] Загружаем следующую сцену: {sceneName}");
+        SceneManager.LoadScene(sceneName);
         LoadScene(nextScene.sceneId);
 
         return true;
     }
+
+
+    // ✅ Проверяем, есть ли сцена в Build Settings перед загрузкой
+    private bool SceneExists(string sceneName)
+    {
+        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
+        {
+            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
+            if (scenePath.Contains(sceneName))
+                return true;
+        }
+        return false;
+    }
+
+
+
 
 
 
@@ -568,6 +649,9 @@ public class DialogueManager : MonoBehaviour
     {
         GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
         var (currentHairIndex, currentClothesIndex) = GameStateManager.Instance.LoadAppearance();
+
+
+
 
         GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
         GameStateManager.Instance.SaveCharacterNames(null, null);
@@ -592,14 +676,8 @@ public class DialogueManager : MonoBehaviour
         Debug.Log($"Сохранено состояние для перехода. Scene={nextScene.sceneId}, Dialogue=1, TextCounter=0");
     }
 
-    private void EndEpisode()
-    {
-        Debug.Log("Эпизод завершён. Переход к экрану завершения эпизода или следующему эпизоду.");
+   
 
-        // Здесь можно показать экран завершения эпизода или выполнить переход
-        // Например, перейти в главное меню:
-        SceneManager.LoadScene("MainMenu"); // Убедитесь, что сцена "MainMenu" добавлена в Build Settings
-    }
 
 
     private void HandleDialogueSound(Dialogue dialogue)
@@ -634,18 +712,11 @@ public class DialogueManager : MonoBehaviour
     }
 
     public bool returnedBack;
-    //public bool firstTimeBackClick = false;
 
     public void GoBackOneStep(GameObject clickedObject)
     {
 
         if (!canGoBack) return; // Если возврат невозможен, ничего не делаем.
-
-       /* if (!firstTimeBackClick)
-        {
-            firstTimeBackClick = true;
-            SaveProgress();
-        }*/
 
         if (clickedObject == backButton.gameObject)
         {
@@ -683,9 +754,7 @@ public class DialogueManager : MonoBehaviour
 
             returnedBack = true;
             goBackButtonActivated = true;
-            // Синхронизируем текст и персонажей
             UpdateDialogueText();
-            // Обновляем состояние кнопки
             UpdateBackButtonState(dialogueHistory.Count > 0);
         }
     }
@@ -697,7 +766,6 @@ public class DialogueManager : MonoBehaviour
         {
             dialogueText.text = dialogue.texts[textCounter];
             Debug.Log($"Восстановлено: Dialogue: {currentDialogueId} and textCounter: {textCounter}");
-            //characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
             UpdateSpeakerPanel(dialogue);
         }
 
@@ -787,7 +855,7 @@ public class DialogueManager : MonoBehaviour
     {
         foreach (Transform child in choicesPanel)
         {
-            Destroy(child.gameObject); // Removing all buttons from the selection panel
+            Destroy(child.gameObject); 
         }
 
         foreach (var button in sceneButtons)
@@ -810,7 +878,7 @@ public class DialogueManager : MonoBehaviour
         {
             if (!CurrencyManager.Instance.SpendKeys(choice.cost))
             {
-                //Debug.Log("Not enough keys to select!");
+               
                 FeedbackManager.Instance.ShowMessage("There are not enough keys to select!");
                 return;
 
@@ -837,8 +905,12 @@ public class DialogueManager : MonoBehaviour
             FeedbackManager.Instance.ShowMessage(choice.feedback);
         }
 
+        if (choice.unlockNewItem)
+        {
+            GameStateManager.Instance.UnlockNextItem();
+            FeedbackManager.Instance.ShowMessage("New outfit available in wardrobe.");
+        }
 
-        // Clearing the dialogue history stack
         dialogueHistory.Clear();
 
         Debug.Log("Stack contents after selection: " + string.Join(" -> ", dialogueHistory.Select(d => $"[ID={d.currentDialogueId}, TextCounter={d.textCounter}]")));
@@ -864,23 +936,39 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        int safeTextCounter = textCounter < 0 ? 0 : textCounter - 1;
+
+        int safeTextCounter;
+        if (textCounter < 0)
+        {
+            safeTextCounter = 0; 
+        }
+        else
+        {
+            var dialogue = currentScene.dialogues.FirstOrDefault(d => d.id == currentDialogueId);
+            if (dialogue != null && textCounter >= dialogue.texts.Count)
+            {
+                safeTextCounter = dialogue.texts.Count - 1; 
+            }
+            else
+            {
+                safeTextCounter = textCounter; 
+            }
+        }
+
+       
 
         int episodeId = currentEpisode.episodeId;
         int sceneId = currentScene.sceneId;
         int dialogueId = currentDialogueId;
         int textCounterToSave = safeTextCounter;
-        //string backgroundToSave = GameStateManager.Instance.LoadBackground();
 
-        // Если blockMovingForward = true, сохраняем заданный прогресс
         if (blockMovingForward)
         {
             episodeId = 1;
             sceneId = 2;
             dialogueId = 88;
             textCounterToSave = 0;
-           //backgroundToSave = "ChoosingDoorsAll";
-            //GameStateManager.Instance.SaveBackground(backgroundToSave);
+
             Debug.Log("Сохранение принудительного прогресса: 1-й эпизод, 2-я сцена, 88-й диалог, 0-й текст.");
         }
 
@@ -989,19 +1077,19 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        // ✅ Загружаем ключи только из текущего активного слота
         HashSet<string> collectedKeys = GameStateManager.Instance.LoadCollectedKeys();
 
         Debug.Log($"[HideCollectedKeys] Загруженные ключи для слота {selectedSlot}: {(collectedKeys.Count > 0 ? string.Join(", ", collectedKeys) : "ПУСТО")}");
 
-        // ✅ Проверяем, скрываем ли ключи
-        foreach (GameObject keyObject in FindObjectsOfType<GameObject>())
+
+        foreach (GameObject keyObject in FindObjectsByType<GameObject>(FindObjectsSortMode.None))
         {
-            if (keyObject.name.StartsWith("GoldenKey")) // Проверяем, является ли объект ключом
+
+            if (keyObject.name.StartsWith("GoldenKey")) 
             {
                 Debug.Log($"[HideCollectedKeys] Проверяем {keyObject.name}...");
 
-                if (collectedKeys.Contains(keyObject.name)) // ✅ Проверяем по имени объекта
+                if (collectedKeys.Contains(keyObject.name)) 
                 {
                     keyObject.SetActive(false);
                     Debug.Log($"[HideCollectedKeys] {keyObject.name} уже собран, скрываем объект.");
@@ -1009,10 +1097,6 @@ public class DialogueManager : MonoBehaviour
             }
         }
     }
-
-
-
-
 
 
 

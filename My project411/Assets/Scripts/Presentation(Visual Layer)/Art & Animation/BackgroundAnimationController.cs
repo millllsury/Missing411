@@ -38,6 +38,7 @@ public class BackgroundController : MonoBehaviour
     private string lastStoredFrame = null; // Храним название последнего кадра
     private bool hasAnimationPlayed = false;
     private DialogueManager dialogueManager;
+    private Animations animations;
     public bool IsTransitioning { get; private set; }
     public bool IsAnimatingBackground => isAnimatingBackground;
     public bool IsAnimatingForeground => isAnimatingForeground;
@@ -61,6 +62,17 @@ public class BackgroundController : MonoBehaviour
     {
 
         dialogueManager = FindFirstObjectByType<DialogueManager>();
+
+    }
+
+    private void Awake()
+    {
+        animations = FindFirstObjectByType<Animations>();
+
+        if (animations == null)
+        {
+            Debug.LogError("Ошибка: Animations не найден в сцене!");
+        }
     }
 
     #region Background Management
@@ -78,13 +90,15 @@ public class BackgroundController : MonoBehaviour
             }
             if (GameStateManager.Instance.HasBeenTransited())
             {
+                Debug.Log("Has been transited. Return.");
                 return;
             }
             else
             {
+
                 currentTransitionCoroutine = StartCoroutine(SmoothBackgroundTransitionWithElements(backgroundName));
                 GameStateManager.Instance.SetHasTransited(true);
-
+                Debug.Log("Has been transited.");
             }
             
             
@@ -105,7 +119,9 @@ public class BackgroundController : MonoBehaviour
     private IEnumerator SmoothBackgroundTransitionWithElements(string backgroundName)
     {
         IsTransitioning = true;
-       
+        
+        animations.CleanAllEmotionRenderers();
+        
         // 1. Отключаем UI и персонажей
         ToggleElements(false);
         

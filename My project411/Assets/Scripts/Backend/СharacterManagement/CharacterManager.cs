@@ -13,9 +13,6 @@ public class CharacterManager : MonoBehaviour
     [SerializeField] private SpriteRenderer leftEyesImage;
     [SerializeField] private SpriteRenderer rightEyesImage;
 
-    [SerializeField] private GameObject speakerPanelLeft;
-    [SerializeField] private GameObject speakerPanelCenter;
-    [SerializeField] private GameObject speakerPanelRight;
 
     [SerializeField] private GameObject characterLeft;
     [SerializeField] private GameObject characterRight;
@@ -53,7 +50,11 @@ public class CharacterManager : MonoBehaviour
         {
             int place = GameStateManager.GetCharacterPosition(leftCharacter); // Получаем позицию из GameStateManager
             SetCharacter(leftCharacter, place, false, leftCharacter);
-            LoadAppearance();
+            if(leftCharacter == "Alice")
+            {
+                LoadAppearance();
+            }
+            
         }
         else
         {
@@ -83,8 +84,6 @@ public class CharacterManager : MonoBehaviour
     public void LoadAppearance()
     {
         var (hairIndex, clothesIndex) = GameStateManager.Instance.LoadAppearance();
-
-
 
         // Загружаем спрайты по пути
         string hairPath = $"Characters/Alice/Hair/hair{hairIndex}";
@@ -134,7 +133,16 @@ public class CharacterManager : MonoBehaviour
             // Передаем leftEyesImage и указываем isLeft = true
             UpdateCharacter(ref currentLeftCharacter, leftAvatar, ref leftBlinkCoroutine, leftEyesImage, character, true);
             GetCurrentLeftCharacter();
-            LoadAppearance();
+            if(character == "Alice")
+            {
+                LoadAppearance();
+            }
+            else
+            {
+                hairRenderer.sprite = null;
+                clothesRenderer.sprite = null;
+            }
+            
             GameStateManager.Instance.SaveCharacterNames(character, rightCharacter);
         }
         else if (place == 2)
@@ -225,6 +233,9 @@ public class CharacterManager : MonoBehaviour
                 scaleFactor = 1.2f;
                 break;
             case "Scene2":
+                brightness = 0.8f; // Добавим холодных тонов
+                break;
+            case "Scene3":
                 brightness = 0.8f; // Добавим холодных тонов
                 break;
             default:
@@ -320,7 +331,6 @@ public class CharacterManager : MonoBehaviour
     {
         if (place == 1)
         {
-
             avatarToBeHidden = leftAvatar;
             currentLeftCharacter = null; // Очищаем данные о левом персонаже
             GameStateManager.Instance.SaveCharacterNames(null, GetCurrentRightCharacter());
@@ -332,59 +342,77 @@ public class CharacterManager : MonoBehaviour
             GameStateManager.Instance.SaveCharacterNames(GetCurrentLeftCharacter(), null);
         }
 
-        StartCoroutine(SmoothDisappear(avatarToBeHidden, smoothDisappear));
+        StartCoroutine(SmoothDisappear(avatarToBeHidden, smoothDisappear, place));
 
         Debug.Log($"После удаления: GetCurrentLeftCharacter(): {GetCurrentLeftCharacter()}, GetCurrentRightCharacter(): {GetCurrentRightCharacter()}");
     }
 
 
 
-    private IEnumerator SmoothDisappear(SpriteRenderer avatar, bool smoothDisappear)
+    private IEnumerator SmoothDisappear(SpriteRenderer avatar, bool smoothDisappear, int place = 0)
     {
-        if (avatar == null) yield break;
 
-        while (isLeftAvatarAnimating || isRightAvatarAnimating)
+        
+        if (place == 1)
         {
-            yield return null;
+            hairRenderer.sprite = null;
+            clothesRenderer.sprite = null;
+            animations.CleanAllEmotionRenderers();
         }
 
-        float duration = 0.1f; // Время анимации исчезновения
-        float elapsedTime = 0f;
-        Vector3 startPosition = avatar.transform.position;
-        Vector3 endPosition = startPosition; // По умолчанию остается на месте
+        if (avatar == null) yield break;
 
-        // Если нужно смещение, задаем новую позицию
+        // Получаем все рендеры персонажа и его частей
+        List<SpriteRenderer> renderers = new List<SpriteRenderer>(avatar.GetComponentsInChildren<SpriteRenderer>());
+        renderers.Add(avatar);
+
+        float duration = 0.1f;
+        float elapsedTime = 0f;
+
+        Vector3 startPosition = avatar.transform.position;
+        Vector3 endPosition = startPosition;
+
         if (smoothDisappear)
         {
-            float targetX = startPosition.x > 0 ? 7f : -7f; // Уход вправо или влево
+            float targetX = startPosition.x > 0 ? 7f : -7f;
             endPosition = new Vector3(targetX, startPosition.y, startPosition.z);
         }
 
         while (elapsedTime < duration)
         {
-            elapsedTime += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration);
+
+            foreach (var renderer in renderers)
+            {
+                if (renderer != null)
+                {
+                    Color color = renderer.color;
+                    color.a = alpha;
+                    renderer.color = color;
+                }
+            }
+
             avatar.transform.position = Vector3.Lerp(startPosition, endPosition, elapsedTime / duration);
-            avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, Mathf.Lerp(1f, 0f, elapsedTime / duration));
+
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        avatar.color = new Color(avatar.color.r, avatar.color.g, avatar.color.b, 0f);
-        avatar.sprite = null;
-        foreach (SpriteRenderer childSprite in avatar.GetComponentsInChildren<SpriteRenderer>())
+        foreach (var renderer in renderers)
         {
-            childSprite.sprite = null;
-
+            if (renderer != null)
+            {
+                renderer.color = new Color(renderer.color.r, renderer.color.g, renderer.color.b, 0f);
+                renderer.sprite = null;
+            }
         }
 
-        // Если было смещение, возвращаем персонажа в исходную позицию
         if (smoothDisappear)
         {
             avatar.transform.position = startPosition;
         }
 
-
-        Debug.Log($"GetCurrentLeftCharacter(): {GetCurrentLeftCharacter()},GetCurrentRightCharacter(): {GetCurrentRightCharacter()}");
-
+        Debug.Log($"GetCurrentLeftCharacter(): {GetCurrentLeftCharacter()}, GetCurrentRightCharacter(): {GetCurrentRightCharacter()}");
     }
 
 
@@ -440,50 +468,104 @@ public class CharacterManager : MonoBehaviour
             blinkingManager.StopAllBlinking();
         }
 
-        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
+        // Получаем все SpriteRenderer, включая персонажа и его дочерние объекты
+        List<SpriteRenderer> renderers = new List<SpriteRenderer>(charactersParent.GetComponentsInChildren<SpriteRenderer>());
+
         float elapsedTime = 0f;
 
+        // Принудительно устанавливаем полную видимость перед началом анимации
+        foreach (var renderer in renderers)
+        {
+            if (renderer != null)
+            {
+                Color color = renderer.color;
+                color.a = 1f;
+                renderer.color = color;
+            }
+        }
 
         while (elapsedTime < duration)
         {
-            foreach (var character in characters)
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / duration); // Вычисляем новый alpha
+
+            foreach (var renderer in renderers)
             {
-                if (character != null)
+                if (renderer != null)
                 {
-                    Color color = character.color;
-                    color.a = Mathf.Lerp(1f, 0f, elapsedTime / duration);
-                    character.color = color;
+                    Color color = renderer.color;
+                    color.a = alpha;
+                    renderer.color = color;
                 }
             }
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        // Убеждаемся, что в конце все объекты полностью прозрачные
+        foreach (var renderer in renderers)
+        {
+            if (renderer != null)
+            {
+                Color color = renderer.color;
+                color.a = 0f;
+                renderer.color = color;
+            }
+        }
     }
+
+
+
     public IEnumerator FadeInCharacters(Transform charactersParent, float duration = 0.2f)
     {
-        SpriteRenderer[] characters = charactersParent.GetComponentsInChildren<SpriteRenderer>();
+        // Получаем все SpriteRenderer персонажа и его дочерних объектов
+        List<SpriteRenderer> renderers = new List<SpriteRenderer>(charactersParent.GetComponentsInChildren<SpriteRenderer>());
+
         float elapsedTime = 0f;
+
+        // Устанавливаем начальную прозрачность 0 для всех частей
+        foreach (var renderer in renderers)
+        {
+            if (renderer != null && renderer.sprite != null)
+            {
+                Color color = renderer.color;
+                color.a = 0f;
+                renderer.color = color;
+            }
+        }
 
         while (elapsedTime < duration)
         {
-            foreach (var character in characters)
+            float alpha = Mathf.Lerp(0f, 1f, elapsedTime / duration); // Плавно увеличиваем прозрачность
+
+            foreach (var renderer in renderers)
             {
-                if (character != null && character.sprite != null) // Проверяем, есть ли спрайт
+                if (renderer != null && renderer.sprite != null)
                 {
-                    Color color = character.color;
-                    color.a = Mathf.Lerp(0f, 1f, elapsedTime / duration);
-                    character.color = color;
+                    Color color = renderer.color;
+                    color.a = alpha;
+                    renderer.color = color;
                 }
             }
 
             elapsedTime += Time.deltaTime;
             yield return null;
+        }
+
+        // Убеждаемся, что в конце все объекты полностью видимые
+        foreach (var renderer in renderers)
+        {
+            if (renderer != null && renderer.sprite != null)
+            {
+                Color color = renderer.color;
+                color.a = 1f;
+                renderer.color = color;
+            }
         }
 
         Debug.Log($"После FadeInCharacters: Left = {currentLeftCharacter}, Right = {currentRightCharacter}");
 
-        // Проверяем перед морганием
+        // Включаем моргание после появления
         if (blinkingManager != null)
         {
             if (!string.IsNullOrEmpty(currentLeftCharacter) && leftEyesImage != null)
@@ -499,6 +581,7 @@ public class CharacterManager : MonoBehaviour
             }
         }
     }
+
 
 
 

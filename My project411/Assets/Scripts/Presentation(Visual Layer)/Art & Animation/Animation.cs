@@ -45,6 +45,9 @@ public class Animations : MonoBehaviour
         }
 
         backgroundController = GetComponent<BackgroundController>();
+
+        isLeftAvatarAnimation = false;
+        isRightAvatarAnimation = false;
     }
 
 
@@ -138,12 +141,19 @@ public class Animations : MonoBehaviour
                 return;
         }
 
+        if (!string.IsNullOrEmpty(eyes) && eyesRenderer == null)
+        {
+            eyesRenderer.gameObject.SetActive(true);
+            Debug.Log("Включаем глаза");
+        }
+
         SetEmotionImage(emotionRenderer, eyesRenderer, character, emotion, eyes);
         PlaySoundForEmotion(character, sound);
 
         if (characterPosition == "left") isLeftAvatarAnimation = true;
         else if (characterPosition == "right") isRightAvatarAnimation = true;
 
+       
         StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f, character, leaveLastFrame, stopBlinkingPermanently));
     }
 
@@ -187,6 +197,15 @@ public class Animations : MonoBehaviour
         renderer.sprite = null;
     }
 
+
+    public void CleanAllEmotionRenderers() {
+
+        emotionImageLeft.sprite = null;
+        emotionImageRight.sprite = null;
+
+    }
+
+
     private void SetEmotionImage(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string character, string emotion, string eyes)
     {
         SetSprite(emotionRenderer, !string.IsNullOrEmpty(emotion) ? $"Characters/{character}/{character}_{emotion}" : null);
@@ -219,6 +238,7 @@ public class Animations : MonoBehaviour
 
     private IEnumerator ShowEmotionForDuration(SpriteRenderer emotionRenderer, SpriteRenderer eyesRenderer, string characterPosition, float duration, string characterName, bool leaveLastFrame, bool stopBlinkingPermanently)
     {
+
         blinkingManager.StopBlinking(characterName);
 
         // Ожидание завершения анимации

@@ -44,6 +44,7 @@ public class GameState
     public bool isLeftDoorOpened = false;
     public bool isRightDoorOpened = false;
     public List<string> collectedKeys = new List<string>();
+    public bool clothesReceived = false;
 }
 
 public class DialogueState
@@ -503,8 +504,7 @@ public class GameStateManager : MonoBehaviour
     private static readonly Dictionary<string, int> characterPositions = new Dictionary<string, int>
     {
         { "Alice", 1 },
-        { "Meruem", 2 },
-        { "Chris", 2 }
+        { "Father", 1 }
     };
 
     // Метод для получения позиции персонажа
@@ -757,7 +757,6 @@ public class GameStateManager : MonoBehaviour
             slot.gameState.collectedKeys.Add(keyID);
             Debug.Log($"[SaveKeyCollected] Ключ {keyID} сохранен в слот {selectedSlotIndex}");
 
-            // ✅ Сохраняем обновленный слот
             SaveGameToSlot(selectedSlotIndex);
             SaveSlotsToFile();
         }
@@ -788,6 +787,8 @@ public class GameStateManager : MonoBehaviour
     #endregion
 
     #region Unlock clothes
+
+
     public void UnlockNextItem()
     {
         int nextHairIndex = currentState.unlockedHairstyles.Max() + 1;
@@ -806,7 +807,7 @@ public class GameStateManager : MonoBehaviour
         }
 
 
-        //SaveGameToSlot(GetSelectedSlotIndex()); // Сохраняем прогресс только в выбранный слот
+        SaveGameToSlot(GetSelectedSlotIndex()); // Сохраняем прогресс только в выбранный слот
 
     }
 
@@ -841,8 +842,17 @@ public class GameStateManager : MonoBehaviour
         return currentState.isRightDoorOpened;
     }
 
+    public void SetClothesReceived(bool state)
+    {
+        currentState.clothesReceived = state;
+        SaveGameToSlot(GetSelectedSlotIndex());
+        SaveSlotsToFile();
+    }
 
-
+    public bool GetClothesReceived()
+    {
+        return currentState.clothesReceived;
+    }
 
     #endregion
 }

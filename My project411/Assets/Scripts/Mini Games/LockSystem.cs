@@ -39,6 +39,11 @@ public class LockSystem : MonoBehaviour
         }
 
         unlockButton.onClick.AddListener(CheckCode);
+
+        if (GameStateManager.Instance.GetClothesReceived())
+        {
+            clothes.gameObject.SetActive(false);
+        }
     }
 
     private void ChangeDigit(int index, int change)
@@ -49,9 +54,11 @@ public class LockSystem : MonoBehaviour
 
     public void OnCaseClick()
     {
+        
         isPulledOut = !isPulledOut;
         if (isPulledOut == true)
         {
+            
             OpenCanvas();
             return;
         }
@@ -128,15 +135,15 @@ public class LockSystem : MonoBehaviour
         openLaggage.SetActive(true);
         unlockButton.gameObject.SetActive(false);
         closeCanvas.gameObject.SetActive(true);
-
     }
 
     public void OnClothesClick()
     {
+        
         GameStateManager.Instance.UnlockNextItem();
         FeedbackManager.Instance.ShowMessage("You've got a new outfit!");
         clothes.SetActive(false);
-
+        GameStateManager.Instance.SetClothesReceived(true);
     }
 
 

@@ -8,8 +8,9 @@ public class DataLoader : MonoBehaviour
         TextAsset jsonFile = Resources.Load<TextAsset>(fileName);
         if (jsonFile != null)
         {
+            Debug.Log($"[JSON Debug] Загруженные данные: {jsonFile.text}"); 
             VisualNovelData data = JsonUtility.FromJson<VisualNovelData>(jsonFile.text);
-            Debug.Log("JSON was loaded successfully.");
+            Debug.Log($"[JSON Load] Загружено эпизодов: {data.episodes.Count}");
             return data;
         }
         else
@@ -18,6 +19,7 @@ public class DataLoader : MonoBehaviour
             return null;
         }
     }
+
 
 
 }

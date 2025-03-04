@@ -82,7 +82,7 @@ public class RoomExplorationManager : MonoBehaviour
                 Debug.LogError($"Sprite not found in Resources/{spritePath}");
             }
         }
-
+        
         if (!GameStateManager.Instance.IsKeyCollected("GoldenKey5"))
         {
             if (isOpen)
@@ -100,6 +100,7 @@ public class RoomExplorationManager : MonoBehaviour
     public void OnGlassClick()
     {
         isMoved = !isMoved;
+        Debug.Log($"GameStateManager.Instance.IsKeyCollected( \"GoldenKey6\"): {GameStateManager.Instance.IsKeyCollected("GoldenKey6")}");
         if (!GameStateManager.Instance.IsKeyCollected( "GoldenKey6"))
         {
             if (isMoved)

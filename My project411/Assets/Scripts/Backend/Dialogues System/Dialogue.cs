@@ -10,7 +10,7 @@ public class Choice
     public int reward;
     public string buttonID;  // Если кнопка есть в сцене
     public string feedback;
-    
+    public bool unlockNewItem;
 }
 
 [System.Serializable]

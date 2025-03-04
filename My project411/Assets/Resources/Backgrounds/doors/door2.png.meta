@@ -142,12 +142,12 @@ TextureImporter:
       name: "\u0434\u0432\u0435\u0440\u044C2Hover_0"
       rect:
         serializedVersion: 2
-        x: 31
-        y: 29
-        width: 770
-        height: 1147
+        x: 0
+        y: 0
+        width: 549
+        height: 954
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -165,7 +165,7 @@ TextureImporter:
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
-    internalID: 0
+    internalID: 1537655665
     vertices: []
     indices: 
     edges: []
