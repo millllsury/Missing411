@@ -2164,7 +2164,6 @@
                 }
               ],
               "isNarration": true,
-              "smoothDisappear": true,
               "texts": [
                 "Alice carefully lowered her head on the table and finally fell asleep."
               ]
@@ -3202,42 +3201,6 @@
                 "The icy wind blew briskly, cutting to the bone and heartily burning open areas of skin, and the heavy rain gradually gave way to snowfall.",
                 "The sun was occasionally shining in the grey of the dead sky, giving Alice a break, but not a warm one.",
                 "Nature seemed to behave like a living organism, behaving like a place in which it had not been lucky to serve, and at the same time showing its protest everything that is in its power."
-              ]
-            }
-          ]
-        },
-        {
-          "episodeId": 2,
-          "episodeName": "Episode 2: \"Lost in the Unknown\"",
-          "backgroundImage": "Backgrounds/meadow",
-          "scenes": [
-            {
-              "sceneId": 4,
-              "dialogues": [
-                {
-                  "id": 1,
-                  "character": "Alice",
-                  "animation": "emotionсlosedeyes",
-                  "texts": [
-                    "..."
-                  ]
-                },
-                {
-                  "id": 2,
-                  "character": "Alice",
-                  "animation": "emotionсlosedeyes",
-                  "texts": [
-                    "..."
-                  ]
-                },
-                {
-                  "id": 3,
-                  "character": "Alice",
-                  "animation": "emotionсlosedeyes",
-                  "texts": [
-                    "..."
-                  ]
-                }
               ]
             }
           ]

@@ -47,9 +47,16 @@ public class DoorBehaviour : MonoBehaviour
     {
         if (GameStateManager.Instance.GetLeftDoorOpened() && GameStateManager.Instance.GetRightDoorOpened())
         {
-            nextButton.gameObject.SetActive(true);
+            StartCoroutine(ShowNextButtonWithDelay(1.5f));
         }
     }
+
+    private IEnumerator ShowNextButtonWithDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        nextButton.gameObject.SetActive(true);
+    }
+
 
     private void LoadDoorState()
     {

@@ -444,7 +444,7 @@ public class GameStateManager : MonoBehaviour
         currentState.textCounter = textIndex;
         currentState.episodeNameShowed = episodeNameShowed;
 
-        Debug.Log($"Сохранено состояние: Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe=");
+        Debug.Log($"Сохранено состояние: Episode ={episode} Scene={scene}, Dialogue={dialogue}, TextCounter={textIndex}, EpisodeNameShowe=");
     }
 
     private GameState currentState;

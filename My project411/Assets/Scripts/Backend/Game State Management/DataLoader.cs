@@ -1,21 +1,32 @@
-using System.Collections.Generic;
+using System;
+using System.IO;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class DataLoader : MonoBehaviour
 {
-    public VisualNovelData LoadData(string fileName)
+    public VisualNovelData LoadData(int episodeId)
     {
+        string fileName = $"Episode_{episodeId}";
         TextAsset jsonFile = Resources.Load<TextAsset>(fileName);
-        if (jsonFile != null)
+
+        if (jsonFile == null)
         {
-            Debug.Log($"[JSON Debug] Загруженные данные: {jsonFile.text}"); 
-            VisualNovelData data = JsonUtility.FromJson<VisualNovelData>(jsonFile.text);
-            Debug.Log($"[JSON Load] Загружено эпизодов: {data.episodes.Count}");
+            Debug.LogError($"[LoadData] Ошибка: Файл {fileName}.json не найден в Resources!");
+            return null;
+        }
+
+        Debug.Log($"[JSON Debug] Загруженные данные из {fileName}: {jsonFile.text}");
+
+        try
+        {
+            var data = JsonConvert.DeserializeObject<VisualNovelData>(jsonFile.text);
+            Debug.Log($"[JSON Load] Загружен эпизод {episodeId}, сцен: {data.episodes[0].scenes.Count}");
             return data;
         }
-        else
+        catch (Exception e)
         {
-            Debug.LogError("File JSON hasn't been found.");
+            Debug.LogError($"[LoadData] Ошибка парсинга JSON: {e.Message}");
             return null;
         }
     }
@@ -23,5 +34,6 @@ public class DataLoader : MonoBehaviour
 
 
 }
+
 
 

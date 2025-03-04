@@ -99,25 +99,26 @@ public class DialogueManager : MonoBehaviour
 
     private void LoadInitialData()
     {
-        visualNovelData = dataLoader.LoadData("Episode 1");
+        int currentEpisodeId = int.Parse(GameStateManager.Instance.GetGameState().currentEpisode);
+
+        visualNovelData = dataLoader.LoadData(currentEpisodeId);
+
         if (visualNovelData == null || visualNovelData.episodes == null)
         {
-            Debug.LogError("Ошибка загрузки JSON! Убедитесь, что файл правильный.");
+            Debug.LogError("Ошибка загрузки JSON! Проверь файл.");
             return;
         }
 
-        Debug.Log($"Num of episodes: {visualNovelData.episodes.Count}");
+        Debug.Log($"[LoadInitialData] Загружен эпизод {currentEpisodeId} с {visualNovelData.episodes.Count} сценами.");
+
         foreach (var episode in visualNovelData.episodes)
         {
-            Debug.Log($"Episode {episode.episodeId} contains {episode.scenes.Count} scene(s).");
-            foreach (var scene in episode.scenes)
-            {
-                Debug.Log($"Scene {scene.sceneId}, Dialogues: {scene.dialogues?.Count ?? 0}");
-            }
+            Debug.Log($"[LoadInitialData] Episode {episode.episodeId} содержит {episode.scenes.Count} сцен.");
         }
 
         LoadProgress();
     }
+
 
     private T FindComponent<T>(string componentName) where T : Component
     {
@@ -160,18 +161,27 @@ public class DialogueManager : MonoBehaviour
 
     public void LoadEpisode(int episodeId)
     {
-        currentEpisode = visualNovelData.episodes.Find(e => e.episodeId == episodeId);
-        if (currentEpisode == null)
+
+        if (visualNovelData.episodes.Count > 0)
         {
-            Debug.LogError($"Эпизод с ID {episodeId} не найден!");
+            currentEpisode = visualNovelData.episodes[0]; 
+        }
+        else
+        {
+            Debug.LogError($"Эпизод с ID {episodeId} не найден! Возможно, JSON загружен некорректно.");
             return;
         }
+
         ShowEpisodeName();
     }
+
 
     public void LoadScene(int sceneId)
     {
         firstTimeSceneSound = true;
+        Debug.Log($"[LoadScene] Ищем сцену с ID {sceneId}. Доступные сцены: {string.Join(", ", currentEpisode.scenes.Select(s => s.sceneId))}");
+
+
         currentScene = currentEpisode.scenes.Find(scene => scene.sceneId == sceneId);
         if (currentScene == null)
         {
@@ -181,6 +191,8 @@ public class DialogueManager : MonoBehaviour
         characterManager.AdjustCharacterAppearance($"{SceneManager.GetActiveScene().name}");
 
     }
+
+
 
 
     private void ShowEpisodeName()
@@ -531,42 +543,54 @@ public class DialogueManager : MonoBehaviour
 
     private void EndEpisode()
     {
-        Debug.Log("Эпизод завершён. Проверяем наличие следующего эпизода...");
+        Debug.Log("Эпизод завершён. Проверяем следующий эпизод...");
 
         int currentEpisodeId = int.Parse(GameStateManager.Instance.GetGameState().currentEpisode);
         int nextEpisodeId = currentEpisodeId + 1;
 
-        // ✅ Проверяем, какие эпизоды загружены
-        Debug.Log($"[EndEpisode] Доступные эпизоды: {string.Join(", ", visualNovelData.episodes.Select(e => e.episodeId))}");
+        Debug.Log($"[EndEpisode] Попытка загрузить эпизод {nextEpisodeId}...");
 
-        var nextEpisode = visualNovelData.episodes.FirstOrDefault(e => e.episodeId == nextEpisodeId);
+        // Загружаем JSON нового эпизода
+        visualNovelData = dataLoader.LoadData(nextEpisodeId);
 
-        if (nextEpisode != null)
+        if (visualNovelData == null || visualNovelData.episodes == null || visualNovelData.episodes.Count == 0)
         {
-            Debug.Log($"[EndEpisode] Загружаем следующий эпизод: {nextEpisode.episodeName}");
-
-            string firstSceneId = nextEpisode.scenes[0].sceneId.ToString();
-
-            GameStateManager.Instance.UpdateSceneState(
-                nextEpisodeId.ToString(),
-                firstSceneId,
-                "1",
-                0,
-                false
-            );
-
-            LoadEpisode(nextEpisodeId);
-
-            UIManager.ShowEpisodeScreen(nextEpisode.episodeName, Resources.Load<Sprite>(nextEpisode.backgroundImage));
-
-            Debug.Log($"[EndEpisode] Эпизод {nextEpisodeId} загружен, первая сцена: {firstSceneId}");
-        }
-        else
-        {
-            Debug.Log($"[EndEpisode] Эпизод {nextEpisodeId} не найден! Показываем экран завершения игры.");
+            Debug.LogError($"[EndEpisode] Ошибка: Эпизод {nextEpisodeId} не найден или пуст!");
             endEpisodeCanvas.SetActive(true);
+            return;
         }
+
+        currentEpisode = visualNovelData.episodes.Find(e => e.episodeId == nextEpisodeId);
+        if (currentEpisode == null)
+        {
+            Debug.LogError($"[EndEpisode] Ошибка: Эпизод {nextEpisodeId} найден в JSON, но не загружен в память!");
+            endEpisodeCanvas.SetActive(true);
+            return;
+        }
+
+        Debug.Log($"[EndEpisode] Эпизод {nextEpisodeId} загружен, сцен: {currentEpisode.scenes.Count}");
+
+        if (currentEpisode.scenes.Count == 0)
+        {
+            Debug.LogError($"[EndEpisode] Ошибка: В эпизоде {nextEpisodeId} нет сцен!");
+            endEpisodeCanvas.SetActive(true);
+            return;
+        }
+
+        // Обновляем сохранённое состояние игры перед загрузкой нового эпизода
+        string firstSceneId = currentEpisode.scenes[0].sceneId.ToString();
+        GameStateManager.Instance.UpdateSceneState(nextEpisodeId.ToString(), firstSceneId, "1", 0, false);
+
+        Debug.Log($"[EndEpisode] Загружаем эпизод {nextEpisodeId}, первая сцена: {firstSceneId}");
+
+        LoadEpisode(nextEpisodeId);
+        LoadProgress();
     }
+
+
+
+
+
 
 
 
@@ -592,55 +616,36 @@ public class DialogueManager : MonoBehaviour
 
     private bool TryLoadNextScene()
     {
+        Debug.Log($"[TryLoadNextScene] Текущая сцена: {currentScene.sceneId}, сцен в эпизоде: {currentEpisode.scenes.Count}");
+
         int currentSceneIndex = currentEpisode.scenes.IndexOf(currentScene);
-        if (currentSceneIndex < 0)
+
+        Debug.Log($"[TryLoadNextScene] Индекс текущей сцены: {currentSceneIndex}");
+
+        if (currentSceneIndex == -1)
         {
-            Debug.Log($"[TryLoadNextScene] Ошибка: Текущая сцена {currentScene.sceneId} не найдена в эпизоде {currentEpisode.episodeId}.");
+            Debug.LogError($"[TryLoadNextScene] Ошибка! Текущая сцена {currentScene.sceneId} не найдена в списке сцен эпизода!");
             return false;
         }
 
         if (currentSceneIndex >= currentEpisode.scenes.Count - 1)
         {
             Debug.Log("[TryLoadNextScene] Все сцены эпизода пройдены. Завершаем эпизод...");
-            EndEpisode();
             return false;
         }
 
         var nextScene = currentEpisode.scenes[currentSceneIndex + 1];
 
+        Debug.Log($"[TryLoadNextScene] Загружаем следующую сцену: {nextScene.sceneId}");
+
         SaveGameStateForSceneChange(nextScene);
+
         characterManager.HideAvatars();
 
-        string sceneName = "Scene" + nextScene.sceneId;
-
-        if (!SceneExists(sceneName))
-        {
-            Debug.Log($"[TryLoadNextScene] Сцена {sceneName} не найдена в Build Settings!");
-            return false;
-        }
-
-        Debug.Log($"[TryLoadNextScene] Загружаем следующую сцену: {sceneName}");
-        SceneManager.LoadScene(sceneName);
-        LoadScene(nextScene.sceneId);
+        SceneManager.LoadScene("Scene" + nextScene.sceneId);
 
         return true;
     }
-
-
-    // ✅ Проверяем, есть ли сцена в Build Settings перед загрузкой
-    private bool SceneExists(string sceneName)
-    {
-        for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
-        {
-            string scenePath = SceneUtility.GetScenePathByBuildIndex(i);
-            if (scenePath.Contains(sceneName))
-                return true;
-        }
-        return false;
-    }
-
-
-
 
 
 
@@ -649,10 +654,6 @@ public class DialogueManager : MonoBehaviour
     {
         GameStateManager.Instance.UpdateFlags(flagsManager.GetAllFlags());
         var (currentHairIndex, currentClothesIndex) = GameStateManager.Instance.LoadAppearance();
-
-
-
-
         GameStateManager.Instance.SaveAppearance(currentHairIndex, currentClothesIndex);
         GameStateManager.Instance.SaveCharacterNames(null, null);
         GameStateManager.Instance.UpdateSceneState(
@@ -667,7 +668,7 @@ public class DialogueManager : MonoBehaviour
         GameStateManager.Instance.GetGameState().currentForegroundAnimation = null;
 
 
-        GameStateManager.Instance.SaveBackground(GameStateManager.Instance.LoadBackground()); //  Вместо обнуления сохраняем последний фон
+        GameStateManager.Instance.SaveBackground(GameStateManager.Instance.LoadBackground()); 
         GameStateManager.Instance.SavePlayingTracks();//////
         GameStateManager.Instance.ClearBackgroundAnimation();
         GameStateManager.Instance.ClearForegroundAnimation();
@@ -716,7 +717,7 @@ public class DialogueManager : MonoBehaviour
     public void GoBackOneStep(GameObject clickedObject)
     {
 
-        if (!canGoBack) return; // Если возврат невозможен, ничего не делаем.
+        if (!canGoBack) return; 
 
         if (clickedObject == backButton.gameObject)
         {
@@ -961,14 +962,16 @@ public class DialogueManager : MonoBehaviour
         int sceneId = currentScene.sceneId;
         int dialogueId = currentDialogueId;
         int textCounterToSave = safeTextCounter;
+        string bgToSave = currentEpisode.backgroundImage;
 
         if (blockMovingForward)
         {
             episodeId = 1;
             sceneId = 2;
-            dialogueId = 88;
+            dialogueId = 90;
             textCounterToSave = 0;
-
+            bgToSave = "ChoosingDoorsAll";
+            GameStateManager.Instance.SaveBackground(bgToSave);
             Debug.Log("Сохранение принудительного прогресса: 1-й эпизод, 2-я сцена, 88-й диалог, 0-й текст.");
         }
 
