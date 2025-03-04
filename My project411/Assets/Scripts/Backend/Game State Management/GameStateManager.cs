@@ -43,6 +43,7 @@ public class GameState
     public List<int> unlockedClothes = new List<int>();
     public bool isLeftDoorOpened = false;
     public bool isRightDoorOpened = false;
+    public List<string> collectedKeys = new List<string>();
 }
 
 public class DialogueState
@@ -737,33 +738,52 @@ public class GameStateManager : MonoBehaviour
     private Dictionary<int, HashSet<string>> collectedKeys = new Dictionary<int, HashSet<string>>();
 
     // Сохранение информации о собранном ключе
-    public void SaveKeyCollected(int slotIndex, string keyID)
+    public void SaveKeyCollected(string keyID)
     {
-        if (!collectedKeys.ContainsKey(slotIndex))
+        if (selectedSlotIndex < 0 || selectedSlotIndex >= saveSlots.slots.Count)
         {
-            collectedKeys[slotIndex] = new HashSet<string>();
+            Debug.LogError($"[SaveKeyCollected] Некорректный слот: {selectedSlotIndex}");
+            return;
         }
 
-        collectedKeys[slotIndex].Add(keyID);
-        Debug.Log($"[SaveKeyCollected] Ключ {keyID} сохранен в слот {slotIndex}");
+        var slot = saveSlots.slots[selectedSlotIndex];
+        if (slot.gameState == null)
+        {
+            slot.gameState = new GameState();
+        }
 
+        if (!slot.gameState.collectedKeys.Contains(keyID))
+        {
+            slot.gameState.collectedKeys.Add(keyID);
+            Debug.Log($"[SaveKeyCollected] Ключ {keyID} сохранен в слот {selectedSlotIndex}");
+
+            // ✅ Сохраняем обновленный слот
+            SaveGameToSlot(selectedSlotIndex);
+            SaveSlotsToFile();
+        }
     }
+
 
     // Проверка, был ли ключ уже собран
-    public bool IsKeyCollected(int slotIndex, string keyID)
+    public bool IsKeyCollected(string keyID)
     {
-        return collectedKeys.ContainsKey(slotIndex) && collectedKeys[slotIndex].Contains(keyID);
+        if (selectedSlotIndex < 0 || selectedSlotIndex >= saveSlots.slots.Count)
+            return false;
+
+        var slot = saveSlots.slots[selectedSlotIndex];
+        return slot.gameState != null && slot.gameState.collectedKeys.Contains(keyID);
     }
 
-    // Получаем все собранные ключи (для загрузки)
-    public HashSet<string> LoadCollectedKeys(int slotIndex)
+
+    public HashSet<string> LoadCollectedKeys()
     {
-        if (collectedKeys.TryGetValue(slotIndex, out HashSet<string> keys))
-        {
-            return new HashSet<string>(keys);
-        }
-        return new HashSet<string>();
+        if (selectedSlotIndex < 0 || selectedSlotIndex >= saveSlots.slots.Count)
+            return new HashSet<string>();
+
+        var slot = saveSlots.slots[selectedSlotIndex];
+        return slot.gameState != null ? new HashSet<string>(slot.gameState.collectedKeys) : new HashSet<string>();
     }
+
 
     #endregion
 

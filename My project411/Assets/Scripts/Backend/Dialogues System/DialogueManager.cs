@@ -71,18 +71,6 @@ public class DialogueManager : MonoBehaviour
         InitializeComponents();
         LoadInitialData();
 
-        HashSet<string> collectedKeys = GameStateManager.Instance.LoadCollectedKeys(selectedSlotIndex);
-
-        foreach (Button keyButton in FindObjectsByType<Button>(FindObjectsSortMode.None))
-        {
-            string keyID = keyButton.gameObject.name; // Используем имя объекта как уникальный ID ключа
-
-            if (collectedKeys.Contains(keyID))
-            {
-                keyButton.gameObject.SetActive(false);
-                Debug.Log($"[Start] Ключ {keyID} уже собран в слоте {selectedSlotIndex}, скрываем объект.");
-            }
-        }
 
         if (GameStateManager.Instance != null)
         {
@@ -234,9 +222,11 @@ public class DialogueManager : MonoBehaviour
         {
             if (textCounter >= dialogue.texts.Count)
             {
-                Debug.LogWarning($"TextCounter ({textCounter}) выходит за пределы текста диалога. Сбрасываем на 0.");
+                Debug.Log($"TextCounter ({textCounter}) выходит за пределы текста диалога. Сбрасываем на 0.");
                 textCounter = 0;
             }
+
+            
             HideChoices();
             firstTimeSceneSound = true;
             HandleDialogueSound(dialogue);
@@ -252,6 +242,7 @@ public class DialogueManager : MonoBehaviour
 
     public void ShowNextDialogueText()
     {
+
         var dialogue = GetCurrentDialogue();
         if (dialogue == null) return;
         Debug.Log($"Dialogue: {currentDialogueId} and textCounter: {textCounter}");
@@ -336,15 +327,20 @@ public class DialogueManager : MonoBehaviour
                 Debug.LogWarning($"Dialogue {dialogue.id} has no character and is not narration.");
             }
 
-            // Гарантируем, что speaker устанавливается всегда
-            if (string.IsNullOrEmpty(dialogue.speaker) && !string.IsNullOrEmpty(dialogue.character))
+            // Устанавливаем спикера
+            if (!string.IsNullOrEmpty(dialogue.speaker))
             {
-                dialogue.speaker = dialogue.character;
+                Debug.Log($"[GetCurrentDialogue] Speaker assigned: {dialogue.speaker}");
+            }
+            else if (!string.IsNullOrEmpty(dialogue.character))
+            {
+                dialogue.speaker = dialogue.character; // Если speaker не указан, используем character
             }
         }
 
         return dialogue;
     }
+
 
 
 
@@ -365,50 +361,45 @@ public class DialogueManager : MonoBehaviour
 
     private void DisplayDialogueText(Dialogue dialogue)
     {
+        //firstTimeBackClick = false;
+        if (returnedBack)
+        {
+            textCounter++;
+            returnedBack= false;
+        }
+
         characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
         UpdateSpeakerPanel(dialogue);
 
+
         if (dialogue.texts != null && dialogue.texts.Count > 0)
         {
-            if (textCounter < dialogue.texts.Count)
+            if (textCounter == 0)
             {
-
-                if (goBackButtonActivated == true)
+                dialogueText.text = dialogue.texts[textCounter];
+                textCounter++; // Переходим к следующему тексту
+            }
+            else if (textCounter < dialogue.texts.Count)
+            {
+                // Если мы возвращаемся назад
+                if (goBackButtonActivated)
                 {
-                    if (textCounter >= 0 && textCounter < dialogue.texts.Count)
-                    {
-                        dialogueText.text = dialogue.texts[textCounter++];
-                    }
-                    else
-                    {
-                        HandleDialogueEnd(dialogue);
-                        return;
-                    }
-                }
-                else if (textCounter == 0)
-                {
-
-                    dialogueText.text = dialogue.texts[textCounter];
-                    textCounter++;
-
+                    dialogueText.text = dialogue.texts[textCounter++];
                 }
                 else
                 {
-                    // Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
+                    // Сохраняем состояние перед переходом к следующему тексту
                     dialogueHistory.Push((currentDialogueId, textCounter - 1));
-                    //Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter - 1}");
                     dialogueText.text = dialogue.texts[textCounter];
                     textCounter++;
                     UpdateBackButtonState(true);
-                    // Debug.Log($"ПУТЬ 1.2 textCounter: {textCounter}");
                 }
             }
             else
             {
-                //Debug.Log($"ПУТЬ2 - dialogue.texts.Count: {dialogue.texts.Count} and textCounter: {textCounter}");
-                // Сохраняем состояние перед переходом к следующему диалогу
+                // Если достигнут конец диалога
                 dialogueHistory.Push((currentDialogueId, textCounter - 1));
-                //Debug.Log($"Сохранилось в стек: previousDialogueId={currentDialogueId}, textCounter={textCounter - 1}");
+
                 // Показываем Feedback перед завершением диалога
                 if (!string.IsNullOrEmpty(dialogue.feedback))
                 {
@@ -418,9 +409,7 @@ public class DialogueManager : MonoBehaviour
                 if (dialogue.unlockNewItem)
                 {
                     GameStateManager.Instance.UnlockNextItem();
-
                     FeedbackManager.Instance.ShowMessage("Ты открыл новый наряд и прическу!");
-
                 }
 
                 if (dialogue.reward > 0)
@@ -429,10 +418,8 @@ public class DialogueManager : MonoBehaviour
                     FeedbackManager.Instance.ShowMessage($"You've received {dialogue.reward} keys!");
                 }
 
-
                 if (dialogue.smoothDisappear)
                 {
-
                     if (blinkingManager != null && !string.IsNullOrEmpty(dialogue.character))
                     {
                         blinkingManager.StopBlinking(dialogue.character);
@@ -440,12 +427,7 @@ public class DialogueManager : MonoBehaviour
                     characterManager.SmoothDisappearCharacter(dialogue.smoothDisappear, dialogue.place);
                 }
 
-
-                if (dialogue.miniGame)
-                {
-
-                }
-
+                
                 HandleDialogueEnd(dialogue);
             }
         }
@@ -457,6 +439,7 @@ public class DialogueManager : MonoBehaviour
         canGoBack = true; // Разрешаем возврат после обработки текста
         goBackButtonActivated = false;
     }
+
 
     public void UpdateSpeakerPanel(Dialogue dialogue)
     {
@@ -481,7 +464,16 @@ public class DialogueManager : MonoBehaviour
             {
                 activePanel = speakerPanelRight;
             }
-            speakerText = dialogue.character; // Имя персонажа
+
+            if (!string.IsNullOrEmpty(dialogue.speaker))
+            {
+                speakerText = dialogue.speaker;
+            }
+            else
+            {
+                speakerText = dialogue.character; // Имя персонажа
+            }
+            
         }
         else if (dialogue.isNarration) // Если это нарративный текст
         {
@@ -641,10 +633,19 @@ public class DialogueManager : MonoBehaviour
 
     }
 
+    public bool returnedBack;
+    //public bool firstTimeBackClick = false;
 
     public void GoBackOneStep(GameObject clickedObject)
     {
+
         if (!canGoBack) return; // Если возврат невозможен, ничего не делаем.
+
+       /* if (!firstTimeBackClick)
+        {
+            firstTimeBackClick = true;
+            SaveProgress();
+        }*/
 
         if (clickedObject == backButton.gameObject)
         {
@@ -653,7 +654,7 @@ public class DialogueManager : MonoBehaviour
             if (isChoosing)
             {
                 HideChoices();
-                return;
+
             }
 
             if (dialogueHistory.Count == 0)
@@ -680,10 +681,10 @@ public class DialogueManager : MonoBehaviour
 
             Debug.Log($"Восстановлено состояние: previousDialogueId={currentDialogueId}, textCounter={textCounter}");
 
+            returnedBack = true;
+            goBackButtonActivated = true;
             // Синхронизируем текст и персонажей
             UpdateDialogueText();
-
-            goBackButtonActivated = true;
             // Обновляем состояние кнопки
             UpdateBackButtonState(dialogueHistory.Count > 0);
         }
@@ -696,8 +697,8 @@ public class DialogueManager : MonoBehaviour
         {
             dialogueText.text = dialogue.texts[textCounter];
             Debug.Log($"Восстановлено: Dialogue: {currentDialogueId} and textCounter: {textCounter}");
-            characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
-            HandleDialogueAnimation(dialogue);
+            //characterManager.SetCharacter(dialogue.speaker, dialogue.place, dialogue.isNarration, dialogue.character);
+            UpdateSpeakerPanel(dialogue);
         }
 
     }
@@ -849,6 +850,11 @@ public class DialogueManager : MonoBehaviour
         uiManager.OnGameStateChanged();
     }
 
+    public void ClearDialogueHistory()
+    {
+        dialogueHistory.Clear();
+        Debug.Log("Диалоговая история очищена.");
+    }
 
     public void SaveProgress()
     {
@@ -864,7 +870,7 @@ public class DialogueManager : MonoBehaviour
         int sceneId = currentScene.sceneId;
         int dialogueId = currentDialogueId;
         int textCounterToSave = safeTextCounter;
-        string backgroundToSave = GameStateManager.Instance.LoadBackground();
+        //string backgroundToSave = GameStateManager.Instance.LoadBackground();
 
         // Если blockMovingForward = true, сохраняем заданный прогресс
         if (blockMovingForward)
@@ -873,8 +879,8 @@ public class DialogueManager : MonoBehaviour
             sceneId = 2;
             dialogueId = 88;
             textCounterToSave = 0;
-            backgroundToSave = "ChoosingDoorsAll";
-            GameStateManager.Instance.SaveBackground(backgroundToSave);
+           //backgroundToSave = "ChoosingDoorsAll";
+            //GameStateManager.Instance.SaveBackground(backgroundToSave);
             Debug.Log("Сохранение принудительного прогресса: 1-й эпизод, 2-я сцена, 88-й диалог, 0-й текст.");
         }
 
@@ -956,14 +962,59 @@ public class DialogueManager : MonoBehaviour
         Debug.Log($"Scene {loadedState.currentScene} and dialogue {loadedState.currentDialogue} are loading.");
         LoadEpisode(int.Parse(loadedState.currentEpisode));
         LoadScene(int.Parse(loadedState.currentScene));
+
+        loadedState.textCounter = loadedState.textCounter < 0 ? 0 : loadedState.textCounter; ////////////////////////////////////////////
         InitializeDialogue(int.Parse(loadedState.currentDialogue), loadedState.textCounter);
         Debug.Log($"Диалог: {loadedState.currentDialogue}");
 
+        HideCollectedKeys();
 
-       
+
         RestoreGameState(loadedState);
 
     }
+
+    private void HideCollectedKeys()
+    {
+        if (GameStateManager.Instance == null)
+        {
+            Debug.LogError("GameStateManager.Instance is null! Cannot check collected keys.");
+            return;
+        }
+
+        int selectedSlot = GameStateManager.Instance.GetSelectedSlotIndex();
+        if (selectedSlot == -1)
+        {
+            Debug.LogError("No slot selected! Keys cannot be checked.");
+            return;
+        }
+
+        // ✅ Загружаем ключи только из текущего активного слота
+        HashSet<string> collectedKeys = GameStateManager.Instance.LoadCollectedKeys();
+
+        Debug.Log($"[HideCollectedKeys] Загруженные ключи для слота {selectedSlot}: {(collectedKeys.Count > 0 ? string.Join(", ", collectedKeys) : "ПУСТО")}");
+
+        // ✅ Проверяем, скрываем ли ключи
+        foreach (GameObject keyObject in FindObjectsOfType<GameObject>())
+        {
+            if (keyObject.name.StartsWith("GoldenKey")) // Проверяем, является ли объект ключом
+            {
+                Debug.Log($"[HideCollectedKeys] Проверяем {keyObject.name}...");
+
+                if (collectedKeys.Contains(keyObject.name)) // ✅ Проверяем по имени объекта
+                {
+                    keyObject.SetActive(false);
+                    Debug.Log($"[HideCollectedKeys] {keyObject.name} уже собран, скрываем объект.");
+                }
+            }
+        }
+    }
+
+
+
+
+
+
 
     private void RestoreGameState(GameState loadedState)
     {
@@ -988,8 +1039,7 @@ public class DialogueManager : MonoBehaviour
         {
             backgroundController.StartBackgroundAnimation(backgroundAnimation, frameDelay, repeatCount, keepLastFrame, null, "background");
         }
-        //characterPositions = GameStateManager.Instance.LoadCharacterPositions(selectedSlotIndex);
-        // characters
+
         characterManager.LoadCharacters();
 
 
@@ -997,13 +1047,16 @@ public class DialogueManager : MonoBehaviour
 
     }
 
+
+
+
     public void GotKeyReward(Button button)
     {
 
         string keyID = button.gameObject.name;
 
         // Checking if the key has already been got
-        if (GameStateManager.Instance.IsKeyCollected(selectedSlotIndex, keyID))
+        if (GameStateManager.Instance.IsKeyCollected(keyID))
         {
             Debug.Log($"[GotKeyReward] Ключ {keyID} уже собран, пропускаем.");
             if (button != null)
@@ -1014,7 +1067,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         // Add the key to the saved ones
-        GameStateManager.Instance.SaveKeyCollected(selectedSlotIndex, keyID);
+        GameStateManager.Instance.SaveKeyCollected(keyID);
 
         // We are giving out a reward
         CurrencyManager.Instance.AddKeys(1);

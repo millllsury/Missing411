@@ -250,10 +250,14 @@ public class UIManager : MonoBehaviour
     public void OpenWardrobe(GameObject clickedObject)
     { 
         int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
+       /* if (!dialogueManager.firstTimeBackClick)
+        {
+            dialogueManager.SaveProgress();
+        }*/
         dialogueManager.SaveProgress();
         SoundManager.Instance.StopAllSounds();
         GameStateManager.Instance.ClearTracksOnSceneChange();
         SceneManager.LoadScene(wardrobeSceneName);
-
+       
     }
 }

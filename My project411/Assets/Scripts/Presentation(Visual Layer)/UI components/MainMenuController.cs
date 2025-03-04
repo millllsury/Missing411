@@ -147,7 +147,8 @@ public class MainMenuController : MonoBehaviour
             episodeNameShowed = false,
             keys = 5,
             unlockedHairstyles = new List<int> { 0, 1 },
-            unlockedClothes = new List<int> { 0, 1 }
+            unlockedClothes = new List<int> { 0, 1 },
+            collectedKeys = new List<string>()
         };
 
         emptySlot.saveDate = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");

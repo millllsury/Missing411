@@ -17,6 +17,7 @@ public class Animations : MonoBehaviour
     private bool isRightAvatarAnimation = false;
 
     private BlinkingManager blinkingManager;
+    private BackgroundController backgroundController;
     public bool IsLeftAvatarAnimating => isLeftAvatarAnimation;
     public bool IsRightAvatarAnimating => isRightAvatarAnimation;
 
@@ -43,7 +44,11 @@ public class Animations : MonoBehaviour
             Debug.LogError("BlinkingManager не найден в сцене!");
         }
 
+        backgroundController = GetComponent<BackgroundController>();
     }
+
+
+
 
     public void PlayAnimation(string characterPosition, string animationName, string character)
     {

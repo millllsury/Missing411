@@ -18,23 +18,25 @@ public class DoorBehaviour : MonoBehaviour
     private DialogueManager dialogueManager;
     [SerializeField] private Image leftDoorImage;  
     [SerializeField] private Image rightDoorImage;
-    [SerializeField] private Sprite leftDoorOpenSprite;  
-    [SerializeField] private Sprite rightDoorOpenSprite;
+
     private void Awake()
     {
         flagsManager = FindAnyObjectByType<GameFlagsManager>();
         dialogueManager = FindAnyObjectByType<DialogueManager>();
-        doorAnimator = GetComponent<Animator>();
+
+        // Ищем Animator на дочерних объектах
+        doorAnimator = GetComponentInChildren<Animator>();
 
         if (doorAnimator == null)
         {
-            Debug.LogError($"Animator отсутствует на {gameObject.name}!");
+            Debug.LogError($"Animator отсутствует на объекте {gameObject.name} или его дочерних объектах!");
         }
         else
         {
             Debug.Log($"Найден Animator на объекте: {doorAnimator.gameObject.name}");
         }
     }
+
 
     private void Start()
     {
@@ -53,24 +55,47 @@ public class DoorBehaviour : MonoBehaviour
     {
         if (GameStateManager.Instance.GetLeftDoorOpened())
         {
-            // Используем спрайт из инспектора или загружаем из Resources
-            leftDoorImage.sprite = leftDoorOpenSprite != null
-                ? leftDoorOpenSprite
-                : Resources.Load<Sprite>("Backgrounds/Doors/OpenDoor1");
+            Animator leftAnimator = leftDoorImage.GetComponent<Animator>();
+            if (leftAnimator != null)
+            {
+                leftAnimator.enabled = false; // Отключаем анимацию
+            }
 
-            Debug.Log("Левая дверь уже была открыта, устанавливаем спрайт.");
+            // Устанавливаем спрайт OpenDoor1
+            Sprite leftSprite = Resources.Load<Sprite>("Backgrounds/doors/OpenDoor1");
+            if (leftSprite != null)
+            {
+                leftDoorImage.sprite = leftSprite;
+                Debug.Log("✅ Левая дверь уже была открыта, устанавливаем спрайт OpenDoor1.");
+            }
+            else
+            {
+                Debug.LogError("❌ Ошибка: Спрайт OpenDoor1 не найден в Resources!");
+            }
         }
 
         if (GameStateManager.Instance.GetRightDoorOpened())
         {
-            // Используем спрайт из инспектора или загружаем из Resources
-            rightDoorImage.sprite = rightDoorOpenSprite != null
-                ? rightDoorOpenSprite
-                : Resources.Load<Sprite>("Backgrounds/Doors/OpenDoor2");
+            Animator rightAnimator = rightDoorImage.GetComponent<Animator>();
+            if (rightAnimator != null)
+            {
+                rightAnimator.enabled = false; // Отключаем анимацию
+            }
 
-            Debug.Log("Правая дверь уже была открыта, устанавливаем спрайт.");
+            // Устанавливаем спрайт OpenDoor2
+            Sprite rightSprite = Resources.Load<Sprite>("Backgrounds/doors/OpenDoor2");
+            if (rightSprite != null)
+            {
+                rightDoorImage.sprite = rightSprite;
+                Debug.Log("✅ Правая дверь уже была открыта, устанавливаем спрайт OpenDoor2.");
+            }
+            else
+            {
+                Debug.LogError("❌ Ошибка: Спрайт OpenDoor2 не найден в Resources!");
+            }
         }
     }
+
 
     public void HideObjects()
     {
@@ -82,7 +107,8 @@ public class DoorBehaviour : MonoBehaviour
     public void nextButtonClick()
     {
         dialogueManager.ShowNextDialogueText();
-        dialogueManager.blockMovingForward = true;
+        dialogueManager.blockMovingForward = false;
+
     }
 
     // 🔹 Метод для открытия левой двери

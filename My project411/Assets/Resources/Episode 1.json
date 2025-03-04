@@ -869,7 +869,6 @@
             {
               "id": 6,
               "character": "Alice",
-              "animation": "eyestothesidebase",
               "choices": [
                 {
                   "text": "Remember what happened to her before.",
@@ -2048,6 +2047,7 @@
             {
               "id": 88,
               "character": "Alice",
+              "background": "ChoosingDoorsAll",
               "texts": [
                 "Alice went into the house."
               ]
@@ -2078,50 +2078,1078 @@
           "dialogues": [
             {
               "id": 1,
-              "character": "Alice",
+              "character": "Father",
               "texts": [
-                "I'll look around the room..."
+                "Mary, will you take Alice to school? I got called up to work."
               ]
             },
             {
               "id": 2,
+              "isNarration": true,
+              "texts": [
+                "Father shouted it, hastily packing his things and drinking his coffee in the process.",
+                "His voice was tense as if there were more to it than that."
+              ]
+            },
+            {
+              "id": 3,
+              "character": "Mother",
+              "texts": [
+                "Of course, dear."
+              ]
+            },
+            {
+              "id": 4,
+              "isNarration": true,
+              "texts": [
+                "My mother went into the kitchen, put a plate of freshly-cooked breakfast on the table, and looked at her husband.",
+                "She covered her excitement, but her hands were nervously squeezing the edge of the towel."
+              ]
+            },
+            {
+              "id": 5,
+              "character": "Mother",
+              "texts": [
+                "Something happened?"
+              ]
+            },
+            {
+              "id": 6,
+              "isNarration": true,
+              "texts": [
+                "Father stopped for a moment."
+              ]
+            },
+            {
+              "id": 7,
+              "character": "Father",
+              "texts": [
+                "It’s started again."
+              ]
+            },
+            {
+              "id": 8,
+              "isNarration": true,
+              "texts": [
+                "His voice was deaf, as if he didn’t want to say it himself.",
+                "Mother didn’t answer.",
+                "Her gaze, turning to him, was both worrisome and studying, as if she were looking for confirmation of her thoughts in his face.",
+                "This short dialogue, complete with inexpressiveness, made the room airier.",
+                "Even Alice, sitting at her breakfast table, felt this strange heaviness.",
+                "She laid down the spoon, trying not to make a noise, and looked silently at her father or mother, not knowing what was going on, but feeling that it was important.",
+                "The father, as if he had felt the daughter’s gaze, looked at her a little bit, and in his eyes, there was a strange mixture of fatigue and anxiety.",
+                "He opened his mouth to say something, but instead just looked down."
+              ]
+            },
+            {
+              "id": 9,
+              "character": "Father",
+              "texts": [
+                "I'll go."
+              ]
+            },
+            {
+              "id": 10,
+              "isNarration": true,
+              "texts": [
+                "The sound of the door closing echoed in the kitchen.",
+                "Alice turned away from the window, trying to distract herself from the strange feeling that had settled inside her.",
+                "But instead of a kitchen, she was surrounded by an immense dark space.",
+                "The only thing she could now see was the flickering light ahead.",
+                "And then somewhere in the depths, there was a whisper, sounded like mother’s voice:"
+              ]
+            },
+            {
+              "id": 11,
+              "character": "Father",
+              "texts": [
+                "Alice, don’t stop..."
+              ]
+            },
+            {
+              "id": 12,
               "character": "Alice",
               "texts": [
-                "I'm so tired..."
+                ""
+              ]
+            },
+            {
+              "id": 13,
+              "isNarration": true,
+              "texts": [
+                "Alice had a hard time flapping her eyelids, slowly coming to.",
+                "The first sensations were unpleasant: the head was ringing, the whiskey was beating with dull pain, and the body was whining from fatigue."
+              ]
+            },
+            {
+              "id": 13,
+              "isNarration": true,
+              "texts": [
+                "The room was empty, the thick air that filled the room yesterday during the inspection had dissipated a little.",
+                "Alice slowly rose from her bed, carefully unfurled the dusty curtain on the window, and looked out.",
+                "It was already light, but the rays of the sun were hard to penetrate through the thick wall of the forest as if nature itself wanted to hide this house from the world."
+              ]
+            },
+            {
+              "id": 14,
+              "isNarration": true,
+              "texts": [
+                "Alice shrugged.",
+                "Her eyes glided across the room, but she didn’t notice anything suspicious.",
+                "Nevertheless, it was as if she was being watched.",
+                "This feeling was pressing on the consciousness, as if someone were here, hiding behind walls or in shadows, held after night."
+              ]
+            },
+            {
+              "id": 15,
+              "isNarration": true,
+              "texts": [
+                "The girl looked down at her hands.",
+                "The earth, mixed with blood, covered her skin.",
+                "The fingers were shaking, and only now did Alice notice how much they had been scratched.",
+                "There were abrasions on her knees and elbows, which were covered with mud, and her clothes were damp and smelled of dampness."
+              ]
+            },
+            {
+              "id": 16,
+              "isNarration": true,
+              "texts": [
+                "The girl looked down at her hands.",
+                "The earth, mixed with blood, covered her skin.",
+                "The fingers were shaking, and only now did Alice notice how much they had been scratched.",
+                "There were abrasions on her knees and elbows, which were covered with mud, and her clothes were damp and smelled of dampness."
+              ]
+            },
+            {
+              "id": 17,
+              "character": "Alice",
+              "choices": [
+                {
+                  "text": "Think about all.",
+                  "actions": [
+                    {
+                      "key": "thinkAbout",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "See if Meruem is back.",
+                  "actions": [
+                    {
+                      "key": "ifMeruemBack",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 18,
+              "conditions": [
+                {
+                  "key": "thinkAbout",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice was thinking about what had happened as if trying to put together pieces of a broken mosaic.",
+                "Her thoughts were confused, not wanting to fold into a whole picture.",
+                "It all started with a normal walk with my brother, who promised to be carefree.",
+                "Now she’s in some strange place, full of danger and lack of meaning."
+              ]
+            },
+            {
+              "id": 19,
+              "conditions": [
+                {
+                  "key": "thinkAbout",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "She remembered the last moments before her loss of consciousness: that bizarre squirrel, the forest filled with silence, and how everything suddenly became unbearably strange.",
+                "Something about it seemed wrong to her from the beginning.",
+                "Why did she go for a squirrel?",
+                "Why didn’t she call her brother?",
+                "These questions kept spinning in her head, creating a sense of guilt and anxiety for him.",
+                "What about him now?",
+                "Is he safe?"
+              ]
+            },
+            {
+              "id": 20,
+              "conditions": [
+                {
+                  "key": "thinkAbout",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "But what she was most upset about was that she had no idea how to get home.",
+                "Every step and every action seemed to lead her further away from the familiar world.",
+                "But in that unknown, there was also a spark of hope."
+              ]
+            },
+            {
+              "id": 21,
+              "conditions": [
+                {
+                  "key": "thinkAbout",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "I must find out...",
+                "I must find the answers to come back."
+              ]
+            },
+            {
+              "id": 22,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice got out of bed and stretched a little to take away the ache in her muscles.",
+                "There was a quiet noise coming from the main room and she realised that Meruem had definitely returned to the house."
+              ]
+            },
+            {
+              "id": 23,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Seeing no point in lingering in the bedroom, Alice headed straight for the other room."
+              ]
+            },
+            {
+              "id": 24,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Meruem stood by the table, breaking a large canvas bag in front of him."
+              ]
+            },
+            {
+              "id": 25,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "This is the first time that Alice has been able to see her night-time passenger in detail.",
+                "Meruem’s appearance seemed to the girl so resonant with the pressing atmosphere of this place, as if he was some alien element that was mistakenly placed in an environment not suitable for him."
+              ]
+            },
+            {
+              "id": 26,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice exhaled internally, trying to relax."
+              ]
+            },
+            {
+              "id": 27,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "Seen enough?"
+              ]
+            },
+            {
+              "id": 28,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Meruem untied the rope on the bag with a smile."
+              ]
+            },
+            {
+              "id": 29,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice was embarrassed, but she kept looking at it as if the phrase didn’t bother her."
+              ]
+            },
+            {
+              "id": 30,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "How are you? Ready to talk?"
+              ]
+            },
+            {
+              "id": 31,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "I've been better, thank you"
+              ]
+            },
+            {
+              "id": 32,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "The girl kept standing, eager to hear any answers to her questions."
+              ]
+            },
+            {
+              "id": 33,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "I’m listening to you."
+              ]
+            },
+            {
+              "id": 34,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "Last night you asked about your brother.",
+                "Do you really remember him?"
+              ]
+            },
+            {
+              "id": 35,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Meruem spoke carefully, running his gaze over the girl's face as if he were going to catch every emotion, even fleeting ones, on her face."
+              ]
+            },
+            {
+              "id": 36,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "I remember.",
+                "Why do you ask that?"
+              ]
+            },
+            {
+              "id": 37,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice sat down on the most unbroken chair, looking at the man perplexedly, frowning her eyebrows slightly."
+              ]
+            },
+            {
+              "id": 38,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "It's amazing.",
+                "Everyone who gets here forgets their ‘past’ life."
+              ]
+            },
+            {
+              "id": 39,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "And you too?"
+              ]
+            },
+            {
+              "id": 39,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "A shadow of regret ran across Meruem's face."
+              ]
+            },
+            {
+              "id": 40,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "Who are you?"
+              ]
+            },
+            {
+              "id": 40,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "People like me are called guides.",
+                "Every year, dozens of people from your world come to our world.",
+                "I meet the arrivals and escort them to the main city, but more on that later."
+              ]
+            },
+            {
+              "id": 41,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice didn't trust Meruem, but she wanted to find out as much information as she could to figure out how to get out of here."
+              ]
+            },
+            {
+              "id": 42,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "Why did I end up here?"
+              ]
+            },
+            {
+              "id": 43,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "That's a question I don't have an answer for."
+              ]
+            },
+            {
+              "id": 44,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice snorted, not knowing how to respond, but accepted his answer."
+              ]
+            },
+            {
+              "id": 45,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "She was no closer to understanding this world.",
+                "A day ago, Alice would have found it hard to believe that other worlds even existed, but where was she now?"
+              ]
+            },
+            {
+              "id": 46,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "What kind of creatures did we hear in the night?"
+              ]
+            },
+            {
+              "id": 47,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "It's the watchers.",
+                "They alert you if anyone moves into the wilderness areas after midnight.",
+                "You are forbidden to leave the city limits."
+              ]
+            },
+            {
+              "id": 47,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "texts": [
+                "Watchers?",
+                "Wilderness areas?",
+                "Why do I have to follow any rules?",
+                "I want to go back."
+              ]
+            },
+            {
+              "id": 48,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice tried to speak calmly and keep her face straight, but there was a desperation in her voice."
+              ]
+            },
+            {
+              "id": 49,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "Look, Alice, I can't tell you everything, but I can tell you one thing: in the end, you have to accept the rules of this place, even if everything inside you resists it.",
+                "Otherwise, you're going to die.",
+                "We'll have to move soon, or we won't make it to the city before nightfall."
+              ]
+            },
+            {
+              "id": 50,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Meruem pointed to the table, where two small packages were already lying on the table."
+              ]
+            },
+            {
+              "id": 51,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Meruem",
+              "texts": [
+                "You can either eat before travelling or change into clean clothes.",
+                "Take your pick and I'll wait for you outside."
+              ]
+            },
+            {
+              "id": 52,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "With that, the man left the house."
+              ]
+            },
+            {
+              "id": 53,
+              "conditions": [
+                {
+                  "key": "thinkAbout",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "choices": [
+                {
+                  "text": "Think about parents.",
+                  "actions": [
+                    {
+                      "key": "thinkAboutParents",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Think about life before.",
+                  "actions": [
+                    {
+                      "key": "thinkAboutLife",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 54,
+              "conditions": [
+                {
+                  "key": "thinkAboutParents",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice was thinking about her parents.",
+                "The memories of that morning conversation, which burst into her dream, stuck firmly in my head.",
+                "The event from childhood stirred up old feelings and misunderstandings."
+              ]
+            },
+            {
+              "id": 55,
+              "conditions": [
+                {
+                  "key": "thinkAboutParents",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Why did my father seem so worried?",
+                "What did his words mean?",
+                "Why did she hear her mother’s voice at the end, as if she knew something about the situation in which Alice was now."
+              ]
+            },
+            {
+              "id": 56,
+              "conditions": [
+                {
+                  "key": "thinkAboutParents",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "She remembered how, as a child, her parents often exchanged such unspoken views, but then she understood nothing.",
+                "Perhaps they were trying to protect her, hiding something important.",
+                "But now, when she was in that strange place, Alice began to wonder: did they protect her or, conversely, knew much more than they said?"
+              ]
+            },
+            {
+              "id": 57,
+              "conditions": [
+                {
+                  "key": "thinkAboutParents",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice suddenly felt a keen desire to see them again, to feel her mother's warm embrace and hear her father's confident voice.",
+                "But what if the dream had been more than an accident?",
+                "What if there was a clue her subconscious wanted to plant in it?"
+              ]
+            },
+            {
+              "id": 58,
+              "conditions": [
+                {
+                  "key": "thinkAboutLife",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice was unwittingly immersed in the memories of her former life.",
+                "Yesterday she thought it was boring and monotonous, full of little worries and routine problems."
+              ]
+            },
+            {
+              "id": 59,
+              "conditions": [
+                {
+                  "key": "thinkAboutLife",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Work, education, rare walks with my brother - all this seemed to be something ordinary, almost insignificant."
+              ]
+            },
+            {
+              "id": 60,
+              "conditions": [
+                {
+                  "key": "thinkAboutLife",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Her thoughts returned to the quiet evenings at home when she and her parents were having tea at the kitchen table.",
+                "Simple conversations, their usual jokes, even quarrels - it all seemed so far away as if they were in another life.",
+                "How strange that it was in this simplicity that her safety."
+              ]
+            },
+            {
+              "id": 61,
+              "conditions": [
+                {
+                  "key": "thinkAboutLife",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice caught herself wanting to go back to a warm home, where her family and the confidence of tomorrow were waiting for her."
+              ]
+            },
+            {
+              "id": 62,
+              "conditions": [
+                {
+                  "key": "thinkAboutLife",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Now, having found itself in this frightening and unknown world, the past has suddenly gained a new meaning for it.",
+                "It’s not just a life «before» - it’s something worth fighting for, it’s something that needs to get out of here."
+              ]
+            },
+            {
+              "id": 63,
+              "conditions": [
+                {
+                  "key": "ifMeruemBack",
+                  "value": true
+                }
+              ],
+              "character": "Alice",
+              "choices": [
+                {
+                  "text": "Change clothes",
+                  "actions": [
+                    {
+                      "key": "changeClothes",
+                      "value": true
+                    }
+                  ]
+                },
+                {
+                  "text": "Have breakfast.",
+                  "actions": [
+                    {
+                      "key": "haveBreakfast",
+                      "value": true
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": 64,
+              "conditions": [
+                {
+                  "key": "changeClothes",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice came to the table and looked at the clothes.",
+                "In the package, she found a simple set of soft dark trousers, and a wide shirt made of thick fabric.",
+                "The materials looked rough but sturdy - clearly adapted to life in the wild."
+              ]
+            },
+            {
+              "id": 65,
+              "conditions": [
+                {
+                  "key": "changeClothes",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "After taking off her dirty clothes, she quickly changed, rejoicing that the new clothes were at least dry and comfortable.",
+                "Changing her worn out clothes to new ones, Alice felt a little more confident.",
+                "She cleaned herself up as much as she could, shook the dust off her hands and walked to the door."
+              ]
+            },
+            {
+              "id": 66,
+              "conditions": [
+                {
+                  "key": "changeClothes",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Taking a deep breath, she opened the door and went outside.",
+                "The morning was cool, the air filled with the smells of damp forest.",
+                "Meruem was waiting for her nearby, leaning calmly against the tree.",
+                "His eyes were focused, but when he saw Alice, he nodded as if she was ready."
+              ]
+            },
+            {
+              "id": 67,
+              "conditions": [
+                {
+                  "key": "haveBreakfast",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Alice took one of the packages that was on the table and untied it.",
+                "Inside were several portions of meat, bread and a few unusual fruits that could not stay fresh for long, judging by the appearance, but still suited such a strange world."
+              ]
+            },
+            {
+              "id": 68,
+              "conditions": [
+                {
+                  "key": "haveBreakfast",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "Her stomach grumbled, reminding her of the hunger she had not felt during the last hours.",
+                "The decision was more than reasonable - food was the most important thing, especially in such a place."
+              ]
+            },
+            {
+              "id": 69,
+              "conditions": [
+                {
+                  "key": "haveBreakfast",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "She sat down at the table, trying not to think about how strange it was.",
+                "As she ate, her thoughts slipped back to Meruem and this world that she could not understand.",
+                "His calm and confidence seemed so alien.",
+                "Why did he help her, but remain a mystery to her?",
+                "Why do this world needs guides, when there are so many secrets hidden around?"
+              ]
+            },
+            {
+              "id": 70,
+              "conditions": [
+                {
+                  "key": "haveBreakfast",
+                  "value": true
+                }
+              ],
+              "isNarration": true,
+              "texts": [
+                "After a quick snack, Alice wrapped up a couple of pieces of fruit back into the package, put them in her pocket, and headed for the door.",
+                "She couldn’t stay here for long, and the sooner she gets out, the sooner her questions are answered.",
+                "Meruem still stood by the tree, waiting for it as if everything was part of the usual plan."
+              ]
+            },
+            {
+              "id": 71,
+              "isNarration": true,
+              "texts": [
+                "The whole way Meruem was short.",
+                "The attempt to get him to talk was met with silence.",
+                "Alice felt the mood of people, taking their emotions and state, each time like wearing a mask."
+              ]
+            },
+            {
+              "id": 72,
+              "isNarration": true,
+              "texts": [
+                "It is not a bad ability, because in ordinary life it has helped many times to avoid conflicts, to be silent in time or to understand the ambiguous actions of people.",
+                "Now, Alice felt that she should not try to get into Meruem’s territory again."
+              ]
+            },
+            {
+              "id": 73,
+              "isNarration": true,
+              "texts": [
+                "The landscapes changed surprisingly quickly, as if the map of the area was compressed many times.",
+                "The dense forests were thinning, and the plain gradually moved into elevation.",
+                "The icy wind blew briskly, cutting to the bone and heartily burning open areas of skin, and the heavy rain gradually gave way to snowfall.",
+                "The sun was occasionally shining in the grey of the dead sky, giving Alice a break, but not a warm one.",
+                "Nature seemed to behave like a living organism, behaving like a place in which it had not been lucky to serve, and at the same time showing its protest everything that is in its power."
+              ]
+            },
+            {
+              "id": 74,
+              "isNarration": true,
+              "texts": [
+                "After a hard time unwinding and lifting the lead head from the table, Alice tried to understand where she was for the first few seconds.",
+                "The body was aching from an uncomfortable position during sleep, and the whiskey gave dull pain."
+              ]
+            },
+            {
+              "id": 75,
+              "character": "Meruem",
+              "texts": [
+                "Already wake up?"
+              ]
+            },
+            {
+              "id": 76,
+              "isNarration": true,
+              "texts": [
+                "Alice shuddered at the surprise and turned to hear Merouem’s voice."
+              ]
+            },
+            {
+              "id": 77,
+              "isNarration": true,
+              "texts": [
+                "The man entered the house, holding in his hand a canvas bag."
+              ]
+            },
+            {
+              "sceneId": 4,
+              "background": "background_forest_deep",
+              "dialogues": [
+                {
+                  "id": 1,
+                  "isNarration": true,
+                  "texts": [
+                    "Alice smiled at her brother and, with her hair gathered in a thick tail, headed into the forest."
+                  ]
+                }
               ]
             }
           ]
         },
         {
-          "sceneId": 4,
-          "background": "background_forest_deep",
-          "dialogues": [
+          "episodeId": 2,
+          "episodeName": "Episode 2: \"Lost in the Unknown\"",
+          "backgroundImage": "Backgrounds/background_mystery",
+          "scenes": [
             {
-              "id": 1,
-              "isNarration": true,
-              "texts": [
-                "Alice smiled at her brother and, with her hair gathered in a thick tail, headed into the forest."
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "episodeId": 2,
-      "episodeName": "Episode 2: \"Lost in the Unknown\"",
-      "backgroundImage": "Backgrounds/background_mystery",
-      "scenes": [
-        {
-          "sceneId": 1,
-          "background": "background_dark_forest",
-          "dialogues": [
-            {
-              "id": 1,
-              "character": "Alice",
-              "animation": "emotionсlosedeyes",
-              "texts": [
-                "..."
+              "sceneId": 1,
+              "background": "background_dark_forest",
+              "dialogues": [
+                {
+                  "id": 1,
+                  "character": "Alice",
+                  "animation": "emotionсlosedeyes",
+                  "texts": [
+                    "..."
+                  ]
+                }
               ]
             }
           ]

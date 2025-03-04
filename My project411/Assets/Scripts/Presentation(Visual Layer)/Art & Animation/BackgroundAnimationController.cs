@@ -37,7 +37,7 @@ public class BackgroundController : MonoBehaviour
 
     private string lastStoredFrame = null; // Храним название последнего кадра
     private bool hasAnimationPlayed = false;
-
+    private DialogueManager dialogueManager;
     public bool IsTransitioning { get; private set; }
     public bool IsAnimatingBackground => isAnimatingBackground;
     public bool IsAnimatingForeground => isAnimatingForeground;
@@ -56,6 +56,13 @@ public class BackgroundController : MonoBehaviour
 
     [SerializeField] private CanvasGroup keysCanvas;
 
+
+    private void Start()
+    {
+
+        dialogueManager = FindFirstObjectByType<DialogueManager>();
+    }
+
     #region Background Management
     public void SetBackgroundSmooth(string backgroundName, bool smoothTransition)
     {
@@ -64,6 +71,7 @@ public class BackgroundController : MonoBehaviour
 
         if (smoothTransition)
         {
+            
             if (currentTransitionCoroutine != null)
             {
                 StopCoroutine(currentTransitionCoroutine);
@@ -76,6 +84,7 @@ public class BackgroundController : MonoBehaviour
             {
                 currentTransitionCoroutine = StartCoroutine(SmoothBackgroundTransitionWithElements(backgroundName));
                 GameStateManager.Instance.SetHasTransited(true);
+
             }
             
             
@@ -86,6 +95,11 @@ public class BackgroundController : MonoBehaviour
             backgroundLastFrame.gameObject.SetActive(false);
 
         }
+
+        if(dialogueManager!= null) {
+            dialogueManager.ClearDialogueHistory();
+        }
+        
     }
 
     private IEnumerator SmoothBackgroundTransitionWithElements(string backgroundName)

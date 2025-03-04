@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -16,7 +17,7 @@ public class RoomExplorationManager : MonoBehaviour
 
     private bool isOpen = false;
     private bool isRoomLit = false;
-
+    private bool isMoved = false;
     [SerializeField] private GameObject keyObject1;
     [SerializeField] private GameObject keyObject2;
 
@@ -57,7 +58,6 @@ public class RoomExplorationManager : MonoBehaviour
             bgSprite.sprite = Resources.Load<Sprite>("Backgrounds/MainRoom/houseMainRoom");
             interactableObjectsContainer.SetActive(true); 
             candle.gameObject.SetActive(false);
-            keyObject1.gameObject.SetActive(true);
         }
     }
 
@@ -83,7 +83,7 @@ public class RoomExplorationManager : MonoBehaviour
             }
         }
 
-        if (!GameStateManager.Instance.IsKeyCollected(slotIndex, "GoldenKey5"))
+        if (!GameStateManager.Instance.IsKeyCollected("GoldenKey5"))
         {
             if (isOpen)
             {
@@ -97,7 +97,21 @@ public class RoomExplorationManager : MonoBehaviour
        
     }
    
-
+    public void OnGlassClick()
+    {
+        isMoved = !isMoved;
+        if (!GameStateManager.Instance.IsKeyCollected( "GoldenKey6"))
+        {
+            if (isMoved)
+            {
+                keyObject1.gameObject.SetActive(true);
+            }
+            else
+            {
+                keyObject1.gameObject.SetActive(false);
+            }
+        }
+    }
     
     
 }
