@@ -790,7 +790,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &148784416
@@ -1698,16 +1698,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1159823849}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &427721209
@@ -2298,6 +2298,9 @@ MonoBehaviour:
     unlockedClothes: 0000000001000000
     isLeftDoorOpened: 0
     isRightDoorOpened: 0
+    collectedKeys: []
+    clothesReceived: 0
+    lastBackgroundFrame: 
   isNewGame: 0
   hasBeenTransited: 0
 --- !u!4 &544834166
@@ -2348,6 +2351,8 @@ RectTransform:
   - {fileID: 1388839896}
   - {fileID: 1608873456}
   - {fileID: 670729840}
+  - {fileID: 1231896075}
+  - {fileID: 869036041}
   m_Father: {fileID: 572613805}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
@@ -3204,6 +3209,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: UIClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &741896053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3987,16 +4004,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1159823849}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &800063806
@@ -4487,6 +4504,144 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867587355}
+  m_CullTransparentMesh: 1
+--- !u!1 &869036040
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 869036041}
+  - component: {fileID: 869036043}
+  - component: {fileID: 869036042}
+  m_Layer: 5
+  m_Name: Text (TMP) (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &869036041
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869036040}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 561131040}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 71.3, y: -26.6}
+  m_SizeDelta: {x: 50, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &869036042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869036040}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 'On
+
+'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4290361785
+  m_fontColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 20
+  m_fontSizeBase: 20
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &869036043
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869036040}
   m_CullTransparentMesh: 1
 --- !u!1 &964729367
 GameObject:
@@ -5389,6 +5544,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: UIClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1109586799
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5830,6 +5997,144 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!1 &1231896074
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1231896075}
+  - component: {fileID: 1231896077}
+  - component: {fileID: 1231896076}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1231896075
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231896074}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 561131040}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -69, y: -25}
+  m_SizeDelta: {x: 50, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1231896076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231896074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: 'Off
+
+'
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4290361785
+  m_fontColor: {r: 0.7254902, g: 0.7254902, b: 0.7254902, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 20
+  m_fontSizeBase: 20
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: 0, y: 0, z: 0, w: -2.8009987}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1231896077
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231896074}
+  m_CullTransparentMesh: 1
 --- !u!1 &1237500515
 GameObject:
   m_ObjectHideFlags: 0
@@ -6496,7 +6801,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1361518865
@@ -6920,7 +7225,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1397185054
@@ -7078,16 +7383,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1159823849}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1437975916
@@ -7251,7 +7556,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1438000008
@@ -7387,7 +7692,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1444886928
@@ -7741,16 +8046,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1159823849}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1509640604
@@ -8255,6 +8560,7 @@ MonoBehaviour:
   slotsParent: {fileID: 1254995333}
   slotButtonPrefab: {fileID: 1645115370984703943, guid: 162ee0f1e21fe8a4a8bb35dd9ecbd093, type: 3}
   settingsCanvas: {fileID: 1136430803}
+  noSavesText: {fileID: 164810621}
   rewriteSlotPanel: {fileID: 769833043}
 --- !u!1 &1592756154
 GameObject:
@@ -8351,16 +8657,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1159823849}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1592756157
@@ -8788,12 +9094,12 @@ MonoBehaviour:
   characterVolume: 1
   sounds:
   - name: rain
-    clip: {fileID: 8300000, guid: bac25a66a21350c4b9c75bf79fe4379f, type: 3}
+    clip: {fileID: 8300000, guid: ce4550c8244011b4d9ad6f07286bbf23, type: 3}
     loop: 1
     category: 1
     source: {fileID: 0}
   - name: owl
-    clip: {fileID: 8300000, guid: f2eb8fb09461c6543ba2f2ce08b225d6, type: 3}
+    clip: {fileID: 8300000, guid: 1ab4486871cb25145a406a519e9049d9, type: 3}
     loop: 1
     category: 1
     source: {fileID: 0}
@@ -8803,17 +9109,17 @@ MonoBehaviour:
     category: 3
     source: {fileID: 0}
   - name: Alice_happy
-    clip: {fileID: 8300000, guid: 78b59b7bf1cd0e348a37ea1aa99a0981, type: 3}
+    clip: {fileID: 8300000, guid: 47a0b9f637e317c4d9375d1dc34082ec, type: 3}
     loop: 0
     category: 2
     source: {fileID: 0}
   - name: Alice_short_laugh
-    clip: {fileID: 8300000, guid: 345f74a35c4c60b40ba7e2cee8bba103, type: 3}
+    clip: {fileID: 8300000, guid: c69d1fe5ae6332b408f8aa8bdb6deea6, type: 3}
     loop: 0
     category: 2
     source: {fileID: 0}
   - name: Chris_sigh
-    clip: {fileID: 8300000, guid: b90cc4fc028462b41aece599c7060994, type: 3}
+    clip: {fileID: 8300000, guid: 38549afe444aeb8449d857ccca8aca4c, type: 3}
     loop: 0
     category: 2
     source: {fileID: 0}
@@ -8833,12 +9139,12 @@ MonoBehaviour:
     category: 3
     source: {fileID: 0}
   - name: thunder
-    clip: {fileID: 8300000, guid: 4b240c6d739c8c9469f7640438fb827c, type: 3}
+    clip: {fileID: 8300000, guid: d3999bde6e8e827488f33f03a9735b28, type: 3}
     loop: 0
     category: 2
     source: {fileID: 0}
   - name: squirrel
-    clip: {fileID: 8300000, guid: 89c9aa7df5663d142ba3507532c8184a, type: 3}
+    clip: {fileID: 8300000, guid: ba89be5b9032e684a94b266089a954e6, type: 3}
     loop: 0
     category: 2
     source: {fileID: 0}
@@ -8847,13 +9153,8 @@ MonoBehaviour:
     loop: 0
     category: 2
     source: {fileID: 0}
-  - name: birds
-    clip: {fileID: 8300000, guid: 00e0301dbae9b2743a46d60d9692d45c, type: 3}
-    loop: 0
-    category: 2
-    source: {fileID: 0}
   - name: StartStorm
-    clip: {fileID: 8300000, guid: bdbdf176597c4f7468773c19a62b0753, type: 3}
+    clip: {fileID: 8300000, guid: e63bc58833bf2fe489384bdd8fd8d26e, type: 3}
     loop: 1
     category: 3
     source: {fileID: 0}
@@ -8863,57 +9164,192 @@ MonoBehaviour:
     category: 3
     source: {fileID: 0}
   - name: StartStorm3
-    clip: {fileID: 8300000, guid: e63bc58833bf2fe489384bdd8fd8d26e, type: 3}
+    clip: {fileID: 8300000, guid: bdbdf176597c4f7468773c19a62b0753, type: 3}
     loop: 1
     category: 3
     source: {fileID: 0}
-  - name: Alice_Scream
-    clip: {fileID: 8300000, guid: c7f1190cdfb8c3548beb266255717218, type: 3}
-    loop: 0
-    category: 2
-    source: {fileID: 0}
-  - name: monsters
-    clip: {fileID: 8300000, guid: c6b475ecb4ff4ef4da34adb9691c0048, type: 3}
-    loop: 0
-    category: 2
-    source: {fileID: 0}
-  - name: monsterGrowl
-    clip: {fileID: 8300000, guid: 679534e9d9a9d4a4989213ef3647da49, type: 3}
-    loop: 0
-    category: 2
-    source: {fileID: 0}
-  - name: earthShaking
-    clip: {fileID: 8300000, guid: 98df078b5d752c24fb0c608a9de211bf, type: 3}
-    loop: 0
-    category: 2
-    source: {fileID: 0}
   - name: lockOpen
-    clip: {fileID: 8300000, guid: 977c39e26ebe6c64c93067f0b7911344, type: 3}
+    clip: {fileID: 8300000, guid: 4f1fe629af2e7064db0f58020d8f431e, type: 3}
     loop: 0
     category: 0
     source: {fileID: 0}
   - name: error
-    clip: {fileID: 8300000, guid: 78f7c93e7bc901d4fbdd36c7d5f7ab92, type: 3}
+    clip: {fileID: 8300000, guid: f875d791860f5db4f97d9944214d08ed, type: 3}
     loop: 0
     category: 0
     source: {fileID: 0}
   - name: door
-    clip: {fileID: 8300000, guid: 508b8b7d353a5d1428751f2b2ba146ed, type: 3}
+    clip: {fileID: 8300000, guid: 22b92450121a4744a86802902b7694e0, type: 3}
     loop: 0
     category: 0
     source: {fileID: 0}
   - name: pullLaggage
-    clip: {fileID: 8300000, guid: 4ecc050f6e0cb264b93d6e9eec6f4fe1, type: 3}
-    loop: 0
-    category: 0
-    source: {fileID: 0}
-  - name: pullLaggage
-    clip: {fileID: 8300000, guid: 4ecc050f6e0cb264b93d6e9eec6f4fe1, type: 3}
+    clip: {fileID: 8300000, guid: 29f37f9c30fa6cc4a9e9be79a28c2688, type: 3}
     loop: 0
     category: 0
     source: {fileID: 0}
   - name: laggageOpen
-    clip: {fileID: 8300000, guid: d6cfcf1dc0592e94ba2af2b6f10b6327, type: 3}
+    clip: {fileID: 8300000, guid: 496bc82510364474196b0a65dbd7a8f4, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: Bloom
+    clip: {fileID: 8300000, guid: c416e8a6d75aeee4eaae68773cba32e7, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: Candle
+    clip: {fileID: 8300000, guid: c9b822559217f5f4e9201bceae27f4cd, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: ChestOpen
+    clip: {fileID: 8300000, guid: a16313b49df1f6747be20e9323056846, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: ChestClose
+    clip: {fileID: 8300000, guid: 23747de14f93f044194b7fa9ab8fc023, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: WindowAnimation
+    clip: {fileID: 8300000, guid: d9ad9badc8571c34382020e1e8968e7c, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: MovingGlass
+    clip: {fileID: 8300000, guid: bc4e3214ed4e8fd49b345797fd48fdb5, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: MovingBack
+    clip: {fileID: 8300000, guid: 4f4351ef69c71f54881d337b759e5b69, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: key
+    clip: {fileID: 8300000, guid: e8b741e4b5706d7419d43109c68f838f, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: parents
+    clip: {fileID: 8300000, guid: ded4e22598901b84ca81bf83865b1f96, type: 3}
+    loop: 1
+    category: 3
+    source: {fileID: 0}
+  - name: FatherCloseDoor
+    clip: {fileID: 8300000, guid: 09dfa1e14820c8d408256018485841a6, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: Creature_Shouting
+    clip: {fileID: 8300000, guid: 004ab47912de070418c033f6616437d1, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: end
+    clip: {fileID: 8300000, guid: 6d99814bc89fe55448b154afeb39cf40, type: 3}
+    loop: 0
+    category: 3
+    source: {fileID: 0}
+  - name: Meruem_happy
+    clip: {fileID: 8300000, guid: 875bcd60c8030b04c887584c97863d63, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: spoon
+    clip: {fileID: 8300000, guid: e8f3ac8e9e9e3a74082dd127e577e559, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: plate
+    clip: {fileID: 8300000, guid: eb6ae9885ada36749bbeb43f232a4389, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: wonder
+    clip: {fileID: 8300000, guid: 6a1a89f49b6381245bb99856ec6000f8, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: mary
+    clip: {fileID: 8300000, guid: 61066297aa60d2047b0def6c91e8915e, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: dontstop
+    clip: {fileID: 8300000, guid: 31dd81e0873f55e4b86c7c022e7d7dc4, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: meadow
+    clip: {fileID: 8300000, guid: 76dd670673fdf6944afa4cd9336b549e, type: 3}
+    loop: 1
+    category: 3
+    source: {fileID: 0}
+  - name: itwasnt
+    clip: {fileID: 8300000, guid: 69066d0b6b8577c4fb8de5298b0be1db, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: again
+    clip: {fileID: 8300000, guid: 344f20033a9e867419032a50bdd880b1, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: go
+    clip: {fileID: 8300000, guid: 9d48a794ef8869947a41887953fd66ec, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: alice
+    clip: {fileID: 8300000, guid: 8d96542215b68d14bbceb0a506686881, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: wouldntadvice
+    clip: {fileID: 8300000, guid: ef8281c91f3a62c41a534823cb1a541e, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: seeyou
+    clip: {fileID: 8300000, guid: bb6babcef77299347ad6d79924804ac4, type: 3}
+    loop: 0
+    category: 2
+    source: {fileID: 0}
+  - name: bloom
+    clip: {fileID: 8300000, guid: c416e8a6d75aeee4eaae68773cba32e7, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: openDoor
+    clip: {fileID: 8300000, guid: f1b97e03dfeeaff4e855b71507fdf1b2, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: closeDoor
+    clip: {fileID: 8300000, guid: ee71e8a03d3c6e442a6ab722b25a36af, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: Case_Clicking
+    clip: {fileID: 8300000, guid: 1e0c2f264d0d5494bbb4feddc3bcdb11, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: books
+    clip: {fileID: 8300000, guid: 7bde61fa78e323c4c904d41b48dc2979, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: wind
+    clip: {fileID: 8300000, guid: 9d4c4b77a0cca3348877abe4fbc3b8b8, type: 3}
+    loop: 0
+    category: 0
+    source: {fileID: 0}
+  - name: pop
+    clip: {fileID: 8300000, guid: 953eec4f25a09454785df1e45650f9f9, type: 3}
     loop: 0
     category: 0
     source: {fileID: 0}
@@ -9124,16 +9560,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1159823849}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1810519612
@@ -9266,6 +9702,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1816914848
@@ -9740,16 +10188,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1159823849}
-        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
-        m_MethodName: Play
-        m_Mode: 1
+      - m_Target: {fileID: 1772688849}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: PlaySoundByName
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: UIClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &2028457617

@@ -45,6 +45,8 @@ public class GameState
     public bool isRightDoorOpened = false;
     public List<string> collectedKeys = new List<string>();
     public bool clothesReceived = false;
+
+    public string lastBackgroundFrame;
 }
 
 public class DialogueState
@@ -217,7 +219,20 @@ public class GameStateManager : MonoBehaviour
                 break;
             case "ui":
                 uiVolume = value;
+
+                // Находим объект даже если он выключен
+                GameObject uiClicksObject = FindInactiveGameObject("UIClicks");
+                if (uiClicksObject != null)
+                {
+                    uiClicksObject.SetActive(value > 0);
+                    Debug.Log($"Объект 'UIClicks' {(value > 0 ? "включен" : "выключен")}");
+                }
+                else
+                {
+                    Debug.LogWarning("Объект 'UIClicks' не найден в сцене, даже если выключен!");
+                }
                 break;
+
             case "background":
                 backgroundVolume = value;
                 break;
@@ -227,8 +242,22 @@ public class GameStateManager : MonoBehaviour
         }
 
         SaveGlobalSettings();
-        //Debug.Log($"Установлена громкость категории '{category}': {value}");
     }
+
+ 
+    private GameObject FindInactiveGameObject(string name)
+    {
+        GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject obj in allObjects)
+        {
+            if (obj.name == name)
+            {
+                return obj; 
+            }
+        }
+        return null; 
+    }
+
 
     #endregion
 
@@ -559,6 +588,19 @@ public class GameStateManager : MonoBehaviour
         Debug.Log($"Foreground Animation Saved: {animationName}");
     }
 
+    public void SaveLastBackgroundFrame(string frameName)
+    {
+        currentState.lastBackgroundFrame = frameName;
+        Debug.Log($"Сохранён последний кадр анимации заднего плана: {frameName}");
+        int selectedSlotIndex = GetSelectedSlotIndex();
+        SaveGameToSlot(selectedSlotIndex);
+        SaveSlotsToFile();
+    }
+
+    public string LoadLastBackgroundFrame()
+    {
+        return currentState.lastBackgroundFrame;
+    }
 
 
     public void ClearBackgroundAnimation()

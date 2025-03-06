@@ -107,6 +107,8 @@ public class BackgroundController : MonoBehaviour
         {
             SetBackground(backgroundName);
             backgroundLastFrame.gameObject.SetActive(false);
+            backgroundLastFrame.sprite= null;
+            GameStateManager.Instance.SaveLastBackgroundFrame(null);
 
         }
 
@@ -141,6 +143,8 @@ public class BackgroundController : MonoBehaviour
         darkOverlay.color = new Color(0, 0, 0, 0.8f);
         animationFrame.gameObject.SetActive(false);
         backgroundLastFrame.gameObject.SetActive(false);
+        backgroundLastFrame.sprite = null;
+        GameStateManager.Instance.SaveLastBackgroundFrame(null);
         // 3. Меняем фон
         SetBackground(backgroundName);
 
@@ -256,6 +260,22 @@ public class BackgroundController : MonoBehaviour
         {
             Debug.LogError($"Фон {backgroundName} не найден в папке Resources/Backgrounds.");
         }
+
+        string lastFrame = GameStateManager.Instance.LoadLastBackgroundFrame();
+        if (!string.IsNullOrEmpty(lastFrame))
+        {
+            Sprite storedFrame = Resources.Load<Sprite>("Backgrounds/" + lastFrame);
+            if (storedFrame != null)
+            {
+                backgroundLastFrame.sprite = storedFrame;
+                backgroundLastFrame.gameObject.SetActive(true);
+                Debug.Log($"Восстановлен сохранённый кадр: {lastFrame}");
+            }
+            else
+            {
+                Debug.LogWarning($"Сохранённый кадр {lastFrame} не найден.");
+            }
+        }
     }
 
 
@@ -264,8 +284,7 @@ public class BackgroundController : MonoBehaviour
     #region Background Animation
     public void StartBackgroundAnimation(string animationFolder, float delay, int repeatCount = -1, bool keepLastFrame = false, string currentSoundName = null, string animationType = "background")
     {
-        Debug.Log($" Получено animationType: {animationType} для {animationFolder}");
-
+        
         Sprite[] sprites = Resources.LoadAll<Sprite>("Backgrounds/" + animationFolder);
         if (sprites.Length == 0)
         {
@@ -320,6 +339,7 @@ public class BackgroundController : MonoBehaviour
         isAnimatingBackground = true;
         currentBackgroundAnimation = animationName; // Сохраняем имя анимации
         backgroundAnimationCoroutine = StartCoroutine(PlayAnimation(animationName, backgroundLastFrame, backgroundSprites, delay, repeatCount, keepLastFrame));
+        backgroundLastFrame.gameObject.SetActive(true);
 
         if (!string.IsNullOrEmpty(soundName))
         {
@@ -372,7 +392,9 @@ public class BackgroundController : MonoBehaviour
         {
             animationImage.sprite = sprites[lastFrameIndex];
             isAnimatingBackground = false;
-            GameStateManager.Instance.ClearForegroundAnimation();///////////
+            lastStoredFrame = sprites[lastFrameIndex].name; // Сохраняем название последнего кадра
+            GameStateManager.Instance.SaveLastBackgroundFrame(animationName + "/" + lastStoredFrame);
+            GameStateManager.Instance.ClearBackgroundAnimation();
             backgroundAnimationCoroutine = null;
         }
         else

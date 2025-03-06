@@ -66,6 +66,15 @@
         "repeatCount": 1
 
       }
+    },
+    {
+      "name": "BirdAnimation",
+      "preset": {
+        "frameDelay": 0.5,
+        "keepLastFrame": true,
+        "repeatCount": 1,
+        "type": "background"
+      }
     }
   ]
 }

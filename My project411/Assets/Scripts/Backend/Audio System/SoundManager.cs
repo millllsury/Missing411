@@ -202,7 +202,7 @@ public class SoundManager : MonoBehaviour
         audioSource.Stop();
         GameStateManager.Instance.RemovePlayingTrack(soundName);
         Debug.Log($"audioSource.name: {soundName}");
-        audioSource.volume = startVolume; // Восстановление начальной громкости для будущих воспроизведений
+        audioSource.volume = startVolume; 
     }
 
 
@@ -263,7 +263,6 @@ public class SoundManager : MonoBehaviour
             if (sound.source != null && sound.source.isPlaying)
             {
                 sound.source.Stop();
-                //GameStateManager.Instance.RemovePlayingTrack(sound.name);
             }
         }
         Debug.Log("All sounds have been stopped.");
@@ -319,24 +318,6 @@ public class SoundManager : MonoBehaviour
     }
 
 
-    private void StopUnderwaterEchoEffect()
-    {
-        Debug.Log("Removing underwater echo effect...");
-
-        foreach (var sound in sounds)
-        {
-            if (sound.source != null)
-            {
-                AudioEchoFilter echoFilter = sound.source.GetComponent<AudioEchoFilter>();
-                if (echoFilter != null)
-                {
-                    Destroy(echoFilter); // Удаляем компонент эха
-                    Debug.Log($"Echo effect removed from: {sound.name}");
-                }
-            }
-        }
-    }
-
     public void UpdateAllVolumes()
     {
         foreach (var sound in sounds)
@@ -356,5 +337,16 @@ public class SoundManager : MonoBehaviour
         PlaySoundByName("UIClick");
     }
 
+
+    public void FadeOutCurrentMusic(float fadeTime)
+    {
+        foreach (var sound in sounds)
+        {
+            if (sound.source != null && sound.category == SoundCategory.Background)
+            {
+                StartCoroutine(FadeOut(sound.source, fadeTime, sound.name));
+            }
+        }
+    }
 
 }

@@ -48,9 +48,32 @@ public class LockSystem : MonoBehaviour
 
     private void ChangeDigit(int index, int change)
     {
-        currentDigits[index] = (currentDigits[index] + change + 10) % 10; 
+       
+        currentDigits[index] = (currentDigits[index] + change + 10) % 10;
         UpdateDigits();
+
+       
+        PlayUIClickSound();
     }
+
+ 
+    private void PlayUIClickSound()
+    {
+        if (SoundManager.Instance != null)
+        {
+            Sound sound = SoundManager.Instance.sounds.Find(s => s.name == "Case_Clicking");
+            if (sound != null && sound.source != null)
+            {
+                sound.source.Stop();  
+                sound.source.Play(); 
+            }
+            else
+            {
+                Debug.LogWarning("Sound 'Case_Clicking' не найден в SoundManager.");
+            }
+        }
+    }
+
 
     public void OnCaseClick()
     {

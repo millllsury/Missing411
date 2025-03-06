@@ -1,6 +1,7 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using System.Collections;
+
 
 public class RoomExplorationManager : MonoBehaviour
 {
@@ -52,6 +53,7 @@ public class RoomExplorationManager : MonoBehaviour
 
         if (!isRoomLit)
         {
+            SoundManager.Instance.PlaySoundByName("Candle");
             isRoomLit = true;
             bgSprite.sprite = Resources.Load<Sprite>("Backgrounds/MainRoom/houseMainRoom");
             interactableObjectsContainer.SetActive(true); 
@@ -68,9 +70,18 @@ public class RoomExplorationManager : MonoBehaviour
 
         if (boxImage != null)
         {
+
+            if (isOpen)
+            {
+                SoundManager.Instance.PlaySoundByName("ChestOpen");
+            }
+            else {
+                SoundManager.Instance.PlaySoundByName("ChestClose");
+
+            }
+
             string spritePath = isOpen ? boxOpenPath : boxClosedPath;
             Sprite newSprite = Resources.Load<Sprite>(spritePath);
-
             if (newSprite != null)
             {
                 boxImage.sprite = newSprite;
@@ -94,23 +105,37 @@ public class RoomExplorationManager : MonoBehaviour
         }
        
     }
-   
+
     public void OnGlassClick()
     {
         isMoved = !isMoved;
-        Debug.Log($"GameStateManager.Instance.IsKeyCollected( \"GoldenKey6\"): {GameStateManager.Instance.IsKeyCollected("GoldenKey6")}");
-        if (!GameStateManager.Instance.IsKeyCollected( "GoldenKey6"))
+        bool isKeyCollected = GameStateManager.Instance.IsKeyCollected("GoldenKey6");
+
+        if (isMoved)
         {
-            if (isMoved)
+            SoundManager.Instance.PlaySoundByName("MovingGlass");
+            if (!isKeyCollected)
             {
                 keyObject1.gameObject.SetActive(true);
             }
-            else
+        }
+        else
+        {
+            SoundManager.Instance.PlaySoundByName("MovingBack");
+            if (!isKeyCollected)
             {
-                keyObject1.gameObject.SetActive(false);
+                StartCoroutine(KeyDisable());
             }
         }
     }
-    
-    
+
+
+
+
+    private IEnumerator KeyDisable()
+    {
+        yield return new WaitForSeconds(0.5f); 
+        keyObject1.gameObject.SetActive(false);
+    }
+
 }

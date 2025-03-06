@@ -30,37 +30,81 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        UpdateSaveButtonState();
+        if (saveGameButton!=null)
+        {
+            UpdateSaveButtonState();
+        }
+        
     }
 
-   
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (QuitConfirmationPanel != null)
+            {
+                HandleEscapeKey();
+            }
+            
+        }
+    }
+
+    private void HandleEscapeKey()
+    {
+        if (QuitConfirmationPanel.activeSelf)
+        {
+           
+            QuitConfirmationPanel.SetActive(false);
+            Time.timeScale = 1;
+            dialogueManager.inputUnavailable = false;
+            return;
+        }
+
+        if (SaveConfirmationPanel.activeSelf)
+        {
+            SaveConfirmationPanel.SetActive(false);
+            Time.timeScale = 1;
+            dialogueManager.inputUnavailable = false;
+            return;
+        }
+
+       
+        if (settingsCanvas.activeSelf)
+        {
+            CloseSettings();
+            return;
+        }
+
+        OnMainMenuClick(toMainMenuButton.gameObject);
+    }
+
 
     public void OpenSettings()
     {
         QuitConfirmationPanel.SetActive(false);
         settingsCanvas.SetActive(true);
-        Time.timeScale = 0; // Останавливаем время при открытии настроек
+        Time.timeScale = 0; 
     }
 
 
     public void CloseSettings()
     {
         settingsCanvas.SetActive(false);
-        Time.timeScale = 1; // Возвращаем нормальное время после закрытия настроек
+        Time.timeScale = 1; 
         dialogueManager.inputUnavailable = false;
     }
 
 
     public void ShowEpisodeScreen(string episodeName, Sprite backgroundImage)
     {
-        if (isDisplaying) return; // Если экран уже отображается, не делаем ничего
+        if (isDisplaying) return; 
 
         isDisplaying = true;
-        episodeNamePanel.SetActive(true);  // Показываем панель
+        episodeNamePanel.SetActive(true); 
 
         if (episodeImage != null && backgroundImage != null)
         {
-            episodeImage.sprite = backgroundImage; // Устанавливаем изображение фона
+            episodeImage.sprite = backgroundImage; 
         }
        
 
@@ -69,11 +113,11 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator ShowTextWithTypingEffect(string text, float typingSpeed)
     {
-        episodeText.text = "";  // Очищаем текст перед началом
+        episodeText.text = ""; 
         foreach (char letter in text.ToCharArray())
         {
-            episodeText.text += letter;  // Добавляем по одной букве
-            yield return new WaitForSeconds(typingSpeed);  // Задержка между буквами
+            episodeText.text += letter; 
+            yield return new WaitForSeconds(typingSpeed);  
         }
 
         StartCoroutine(HideEpisodeScreen());
@@ -81,13 +125,13 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator HideEpisodeScreen()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         episodeNamePanel.SetActive(false);
         isDisplaying = false;
 
         if (dialogueManager != null)
         {
-            dialogueManager.SetEpisodeScreenActive(false); // Устанавливаем флаг
+            dialogueManager.SetEpisodeScreenActive(false);
         }
         else
         {
@@ -98,20 +142,20 @@ public class UIManager : MonoBehaviour
 
     public void OnMainMenuClick(GameObject clickedObject)
     {
-        // Проверяем, является ли клик на объекте кнопкой "Главное меню"
+        
         if (clickedObject == toMainMenuButton.gameObject)
         {
-            // Открываем подтверждение выхода в главное меню
+            
             QuitConfirmationPanel.SetActive(true);
             Time.timeScale = 0;
             dialogueManager.inputUnavailable = true;
             return;
         }
 
-        // Проверяем, можно ли обработать клик на игровом экране
+        
         if (dialogueManager.isChoosing || backgroundController.IsTransitioning || dialogueManager.inputUnavailable) return;
 
-        // Показываем следующий текст
+       
         dialogueManager.ShowNextDialogueText();
     }
 
@@ -195,6 +239,7 @@ public class UIManager : MonoBehaviour
             Debug.LogError($"Ошибка: Слот {selectedSlotIndex} не существует или пуст.");
             return;
         }
+        
 
         if (GameStateManager.Instance.isNewGame)
         {
@@ -213,10 +258,9 @@ public class UIManager : MonoBehaviour
             Debug.Log($"Слот {selectedSlotIndex + 1} был пуст и удален.");
         }
 
-        // Сохраняем изменения в слотах
+        
         GameStateManager.Instance.SaveSlotsToFile();
 
-        // Закрываем панели и возвращаемся в главное меню
         if (QuitConfirmationPanel != null)
         {
             QuitConfirmationPanel.SetActive(false);
@@ -247,13 +291,15 @@ public class UIManager : MonoBehaviour
         SoundManager.Instance.UIClickSound();
     }
 
+    public void UiClickSound(string name)
+    {
+        SoundManager.Instance.PlaySoundByName(name);
+    }
+
     public void OpenWardrobe(GameObject clickedObject)
-    { 
+    {
+       
         int selectedSlotIndex = GameStateManager.Instance.GetSelectedSlotIndex();
-       /* if (!dialogueManager.firstTimeBackClick)
-        {
-            dialogueManager.SaveProgress();
-        }*/
         dialogueManager.SaveProgress();
         SoundManager.Instance.StopAllSounds();
         GameStateManager.Instance.ClearTracksOnSceneChange();

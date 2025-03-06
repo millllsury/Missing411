@@ -90,21 +90,23 @@ public class Animations : MonoBehaviour
         {
             case "laugh":
                 emotion = "happy";
-                eyes = "eyestothesidebase";
+                sound = emotion;
                 break;
             case "sad":
                 emotion = "sad";
                 break;
             case "happy":
                 emotion = "happy";
-                eyes = "eyesToTheSideBase";
-                sound = emotion;
+                eyes = "eyestothesidebase";
                 break;
             case "fall":
                 emotion = "ClosedEyes";
                 leaveLastFrame = true;
                 StartCoroutine(ShakeCharacter(characterTransform, 0.1f, 1f));
                 sound = "body-fall";
+                break;
+            case "eyesToTheSideBase":
+                eyes = "eyesToTheSideBase";
                 break;
             case "moving":
                 GameObject characterObject = null;
@@ -136,6 +138,29 @@ public class Animations : MonoBehaviour
                     Debug.LogError($"Объект персонажа ({characterPosition}) не найден!");
                 }
                 break;
+
+            case "movingback":
+                if (characterPosition == "left")
+                {
+                    characterObject = GameObject.Find("CharacterAvatarLeft");
+                    if (characterObject != null)
+                    {
+                        StartCoroutine(MoveCharacter(characterObject, new Vector3(-3f, characterObject.transform.position.y, characterObject.transform.position.z)));
+                    }
+                }
+                else if (characterPosition == "right")
+                {
+                    characterObject = GameObject.Find("CharacterAvatarRight");
+                    if (characterObject != null)
+                    {
+                        StartCoroutine(MoveCharacter(characterObject, new Vector3(3f, characterObject.transform.position.y, characterObject.transform.position.z)));
+                    }
+                }
+                break;
+            case "shouting":
+                emotion = "Shouting";
+                sound = "Shouting";
+                break;
             default:
                 Debug.LogWarning($"Анимация {animationName} не найдена.");
                 return;
@@ -154,10 +179,24 @@ public class Animations : MonoBehaviour
         else if (characterPosition == "right") isRightAvatarAnimation = true;
 
        
-        StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 3f, character, leaveLastFrame, stopBlinkingPermanently));
+        StartCoroutine(ShowEmotionForDuration(emotionRenderer, eyesRenderer, characterPosition, 2f, character, leaveLastFrame, stopBlinkingPermanently));
     }
 
+    private IEnumerator MoveCharacter(GameObject character, Vector3 targetPosition)
+    {
+        float duration = 0.5f;
+        float elapsedTime = 0f;
+        Vector3 startPosition = character.transform.position;
 
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            character.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / duration);
+            yield return null;
+        }
+
+        character.transform.position = targetPosition;
+    }
     private IEnumerator ShakeCharacter(Transform characterTransform, float shakeAmount, float duration)
     {
         if (characterTransform == null) yield break;
@@ -259,11 +298,11 @@ public class Animations : MonoBehaviour
 
         Debug.Log($"Анимация завершена, эмоция скрыта. Проверка моргания для {characterName}");
 
-        // Проверяем, есть ли персонаж в сохранении
+  
         if (!IsCharacterInSave(characterName))
         {
-            Debug.LogWarning($"[ShowEmotionForDuration] Персонаж {characterName} отсутствует в сохранении. Моргание не запускается.");
-            yield break; // Выходим из корутины, если персонажа нет в сохранении
+            Debug.Log($"[ShowEmotionForDuration] Персонаж {characterName} отсутствует в сохранении. Моргание не запускается.");
+            yield break; 
         }
 
         // Проверка перед запуском моргания

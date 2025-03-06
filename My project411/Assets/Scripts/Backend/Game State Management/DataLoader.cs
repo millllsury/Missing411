@@ -12,7 +12,7 @@ public class DataLoader : MonoBehaviour
 
         if (jsonFile == null)
         {
-            Debug.LogError($"[LoadData] Ошибка: Файл {fileName}.json не найден в Resources!");
+            Debug.Log($"[LoadData] Ошибка: Файл {fileName}.json не найден в Resources!");
             return null;
         }
 

@@ -26,9 +26,9 @@ public class CurtainClick : MonoBehaviour
         windowCanvas.gameObject.SetActive(true);
         yield return StartCoroutine(FadeCanvas(windowCanvas, 0f, 1f, fadeDuration));
 
-        if(scenePlayed )
+        if(scenePlayed)
         {
-            yield return null;
+            yield break;
         }
 
         yield return StartCoroutine(ShowWolfScene());
@@ -37,7 +37,8 @@ public class CurtainClick : MonoBehaviour
 
     private IEnumerator ShowWolfScene()
     {
-     
+        if (scenePlayed) yield break;
+        SoundManager.Instance.PlaySoundByName("WindowAnimation");
         yield return new WaitForSeconds(curtainCloseDelay);
 
         wolfnAnimator.SetTrigger("Run");
